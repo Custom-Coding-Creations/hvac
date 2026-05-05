@@ -154,6 +154,62 @@ describe("Form Validation", () => {
 
     expect(document.activeElement).toBe(nameField);
   });
+
+  test("validates email format", () => {
+    document.body.innerHTML = `
+      <form data-validate="true" novalidate>
+        <div class="form-field">
+          <label for="test-email">Email</label>
+          <input id="test-email" name="email" type="email" required />
+          <span class="form-error" id="test-email-error" aria-live="polite"></span>
+        </div>
+        <button class="btn btn-primary" type="submit">Submit</button>
+        <p class="form-success" aria-live="polite"></p>
+      </form>
+    `;
+    const emailForm = document.querySelector("form");
+    const emailField = document.getElementById("test-email");
+    window.SystemUI.initializeFormValidation();
+
+    emailField.value = "not-an-email";
+    emailForm.dispatchEvent(new Event("submit", { bubbles: true }));
+    expect(emailField.getAttribute("aria-invalid")).toBe("true");
+    expect(document.getElementById("test-email-error").textContent).toBe(
+      "Enter a valid email address."
+    );
+
+    emailField.value = "valid@example.com";
+    emailForm.dispatchEvent(new Event("submit", { bubbles: true }));
+    expect(emailField.getAttribute("aria-invalid")).not.toBe("true");
+  });
+
+  test("validates ZIP code format", () => {
+    document.body.innerHTML = `
+      <form data-validate="true" novalidate>
+        <div class="form-field">
+          <label for="test-zip">ZIP</label>
+          <input id="test-zip" name="zip" type="text" required />
+          <span class="form-error" id="test-zip-error" aria-live="polite"></span>
+        </div>
+        <button class="btn btn-primary" type="submit">Submit</button>
+        <p class="form-success" aria-live="polite"></p>
+      </form>
+    `;
+    const zipForm = document.querySelector("form");
+    const zipField = document.getElementById("test-zip");
+    window.SystemUI.initializeFormValidation();
+
+    zipField.value = "123";
+    zipForm.dispatchEvent(new Event("submit", { bubbles: true }));
+    expect(zipField.getAttribute("aria-invalid")).toBe("true");
+    expect(document.getElementById("test-zip-error").textContent).toBe(
+      "Enter a valid 5-digit ZIP code."
+    );
+
+    zipField.value = "13202";
+    zipForm.dispatchEvent(new Event("submit", { bubbles: true }));
+    expect(zipField.getAttribute("aria-invalid")).not.toBe("true");
+  });
 });
 
 // Accordion tests

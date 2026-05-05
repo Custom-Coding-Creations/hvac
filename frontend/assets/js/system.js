@@ -3,6 +3,10 @@
 const focusableSelector =
   "a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex='-1'])";
 
+// Module-level handler references for idempotent re-initialization
+let _navigationKeydownHandler = null;
+let _navigationResizeHandler = null;
+
 function initializeNavigation() {
   const navToggle = document.querySelector(".nav-toggle");
   const nav = document.querySelector(".primary-nav");
@@ -64,11 +68,11 @@ function initializeNavigation() {
     link.dataset.jsBound = "true";
   });
 
-  if (window.__systemUiNavigationKeydown) {
-    document.removeEventListener("keydown", window.__systemUiNavigationKeydown);
+  if (_navigationKeydownHandler) {
+    document.removeEventListener("keydown", _navigationKeydownHandler);
   }
 
-  window.__systemUiNavigationKeydown = function (event) {
+  _navigationKeydownHandler = function (event) {
     if (!isOpen()) {
       return;
     }
@@ -102,13 +106,13 @@ function initializeNavigation() {
       first.focus();
     }
   };
-  document.addEventListener("keydown", window.__systemUiNavigationKeydown);
+  document.addEventListener("keydown", _navigationKeydownHandler);
 
-  if (window.__systemUiNavigationResize) {
-    window.removeEventListener("resize", window.__systemUiNavigationResize);
+  if (_navigationResizeHandler) {
+    window.removeEventListener("resize", _navigationResizeHandler);
   }
 
-  window.__systemUiNavigationResize = function () {
+  _navigationResizeHandler = function () {
     if (
       typeof window.matchMedia === "function" &&
       window.matchMedia("(min-width: 768px)").matches
@@ -116,7 +120,7 @@ function initializeNavigation() {
       closeMenu(false);
     }
   };
-  window.addEventListener("resize", window.__systemUiNavigationResize);
+  window.addEventListener("resize", _navigationResizeHandler);
 }
 
 function initializeTracking() {
