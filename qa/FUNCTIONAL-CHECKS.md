@@ -5,11 +5,14 @@
 - [x] aria-expanded updates on menu trigger.
 - [x] Escape closes mobile menu.
 - [x] Focus is moved to first nav link on open.
+- [x] Focus is trapped within mobile navigation while open.
+- [x] Homepage nav anchors resolve to existing sections.
 
 ## Forms
 - [x] Required field validation blocks empty submit.
 - [x] Error message appears for missing required fields.
 - [x] Success message appears on valid submit simulation.
+- [x] Success message is cleared before each new validation attempt.
 - [x] Short-form pattern used across templates.
 
 ## CTAs And Click-to-Call

@@ -11,7 +11,13 @@
 ## Keyboard Interaction Notes
 - Mobile menu can be opened with keyboard and closed via Escape.
 - Focus is moved into menu on open and returned to trigger on close.
+- Focus is trapped in mobile navigation while menu is open.
 - Accordion triggers are keyboard operable buttons.
+
+## Form State Notes
+- Invalid required fields are marked with aria-invalid.
+- Forms clear stale success state before running a new validation pass.
+- Forms set aria-busy during submit simulation and restore idle state after completion.
 
 ## Responsive Notes
 - Layout defaults to one-column mobile-first behavior.

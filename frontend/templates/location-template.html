@@ -30,11 +30,15 @@
       <section class="hero">
         <div class="container hero-grid">
           <div>
+            <span class="eyebrow">Syracuse Coverage</span>
             <h1>HVAC Service In Syracuse, NY</h1>
             <p>Fast local dispatch for repair, maintenance, and replacement support.</p>
             <div class="grid-2">
               <a class="btn btn-primary" href="#request" data-track="schedule_click_location">Schedule Visit</a>
               <a class="btn btn-emergency" href="tel:+13155550100" data-track="call_click_location">Call Local Team</a>
+            </div>
+            <div class="callout-bar">
+              <strong>Local proof:</strong> Syracuse-area routing helps reduce wait time, simplify scheduling, and keep follow-up communication local.
             </div>
           </div>
           <aside class="panel" id="request">
@@ -42,17 +46,17 @@
             <form data-validate="true" novalidate>
               <div class="form-field">
                 <label for="loc-name">Name</label>
-                <input id="loc-name" required />
+                <input id="loc-name" name="name" type="text" required />
                 <span class="form-error" id="loc-name-error" aria-live="polite"></span>
               </div>
               <div class="form-field">
                 <label for="loc-phone">Phone</label>
-                <input id="loc-phone" required />
+                <input id="loc-phone" name="phone" type="tel" required placeholder="(315) 555-0100" />
                 <span class="form-error" id="loc-phone-error" aria-live="polite"></span>
               </div>
               <div class="form-field">
-                <label for="loc-neighborhood">Neighborhood</label>
-                <input id="loc-neighborhood" required />
+                <label for="loc-neighborhood">Neighborhood or Zip</label>
+                <input id="loc-neighborhood" name="neighborhood" type="text" required placeholder="e.g., Downtown or 13210" />
                 <span class="form-error" id="loc-neighborhood-error" aria-live="polite"></span>
               </div>
               <button class="btn btn-primary" type="submit" data-track="form_submit_location">Submit</button>
@@ -76,10 +80,53 @@
           <article class="trust-card"><strong>Emergency Coverage</strong><p>Call routing available outside standard hours.</p></article>
         </div>
       </section>
+
+      <section class="section" id="callout">
+        <div class="container panel">
+          <span class="eyebrow">Talk To Dispatch</span>
+          <h2>Need Help Deciding What To Book?</h2>
+          <p>Call for same-day availability, neighborhood coverage confirmation, or help choosing the right service type before you submit a request.</p>
+          <a class="btn btn-emergency" href="tel:+13155550100" data-track="call_strip_location">Call Syracuse Dispatch</a>
+        </div>
+      </section>
+
+      <section class="section" id="faq">
+        <div class="container">
+          <h2>Local Service FAQ</h2>
+          <div class="accordion-item">
+            <button class="accordion-trigger" aria-expanded="false" aria-controls="faq-location-1">Do you cover neighborhoods outside downtown Syracuse?</button>
+            <div id="faq-location-1" class="accordion-panel" hidden>
+              <p>Yes. We routinely serve Syracuse, Liverpool, Cicero, and surrounding neighborhoods, and dispatch can confirm coverage by phone.</p>
+            </div>
+          </div>
+          <div class="accordion-item">
+            <button class="accordion-trigger" aria-expanded="false" aria-controls="faq-location-2">Can I request a specific arrival window?</button>
+            <div id="faq-location-2" class="accordion-panel" hidden>
+              <p>Yes. Let us know your preferred window during intake and we will confirm the closest available schedule.</p>
+            </div>
+          </div>
+        </div>
+      </section>
     </main>
 
     <footer class="site-footer" role="contentinfo">
-      <div class="container"><p>Serving Syracuse and nearby communities with HVAC and plumbing support.</p></div>
+      <div class="container grid-3">
+        <section>
+          <h2>Local Coverage</h2>
+          <p>Serving Syracuse and nearby communities with HVAC and plumbing support.</p>
+        </section>
+        <section>
+          <h2>Area Links</h2>
+          <p><a href="#coverage">Neighborhood Coverage</a></p>
+          <p><a href="#reviews">Local Reviews</a></p>
+          <p><a href="#faq">Local FAQ</a></p>
+        </section>
+        <section>
+          <h2>Contact</h2>
+          <p><a href="tel:+13155550100">(315) 555-0100</a></p>
+          <p>Dispatch available for urgent local routing.</p>
+        </section>
+      </div>
     </footer>
 
     <div class="sticky-mobile-cta" aria-label="Mobile quick actions">
