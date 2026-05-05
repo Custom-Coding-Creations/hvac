@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<!--[if IE 6]>
+<html id="ie6" lang="en-US">
+<![endif]-->
+<!--[if IE 7]>
+<html id="ie7" lang="en-US">
+<![endif]-->
+<!--[if IE 8]>
+<html id="ie8" lang="en-US">
+<![endif]-->
+<!--[if !(IE 6) | !(IE 7) | !(IE 8)  ]><!-->
+<html lang="en-US">
+<!--<![endif]-->
+<head>
+	<meta charset="UTF-8" />
+			
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<link rel="pingback" href="https://potter-perrone.com/xmlrpc.php" />
+
+		<!--[if lt IE 9]>
+	<script src="https://potter-perrone.com/wp-content/themes/Divi/js/html5.js" type="text/javascript"></script>
+	<![endif]-->
+
+	<script type="text/javascript">
+		document.documentElement.className = 'js';
+	</script>
+
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin /><style id="et-builder-googlefonts-cached-inline">/* Original: https://fonts.googleapis.com/css?family=Playfair+Display:regular,500,600,700,800,900,italic,500italic,600italic,700italic,800italic,900italic|Roboto:100,100italic,300,300italic,regular,italic,500,500italic,700,700italic,900,900italic|Bungee:regular&#038;subset=latin,latin-ext&#038;display=swap *//* User Agent: Mozilla/5.0 (Unknown; Linux x86_64) AppleWebKit/538.1 (KHTML, like Gecko) Safari/538.1 Daum/4.1 */@font-face {font-family: 'Bungee';font-style: normal;font-weight: 400;font-display: swap;src: url(https://fonts.gstatic.com/s/bungee/v17/N0bU2SZBIuF2PU_0A3Rw.ttf) format('truetype');}@font-face {font-family: 'Playfair Display';font-style: italic;font-weight: 400;font-display: swap;src: url(https://fonts.gstatic.com/s/playfairdisplay/v40/nuFRD-vYSZviVYUb_rj3ij__anPXDTnCjmHKM4nYO7KN_qiTXt_A_A.ttf) format('truetype');}@font-face {font-family: 'Playfair Display';font-style: italic;font-weight: 500;font-display: swap;src: url(https://fonts.gstatic.com/s/playfairdisplay/v40/nuFRD-vYSZviVYUb_rj3ij__anPXDTnCjmHKM4nYO7KN_pqTXt_A_A.ttf) format('truetype');}@font-face {font-family: 'Playfair Display';font-style: italic;font-weight: 600;font-display: swap;src: url(https://fonts.gstatic.com/s/playfairdisplay/v40/nuFRD-vYSZviVYUb_rj3ij__anPXDTnCjmHKM4nYO7KN_naUXt_A_A.ttf) format('truetype');}@font-face {font-family: 'Playfair Display';font-style: italic;font-weight: 700;font-display: swap;src: url(https://fonts.gstatic.com/s/playfairdisplay/v40/nuFRD-vYSZviVYUb_rj3ij__anPXDTnCjmHKM4nYO7KN_k-UXt_A_A.ttf) format('truetype');}@font-face {font-family: 'Playfair Display';font-style: italic;font-weight: 800;font-display: swap;src: url(https://fonts.gstatic.com/s/playfairdisplay/v40/nuFRD-vYSZviVYUb_rj3ij__anPXDTnCjmHKM4nYO7KN_iiUXt_A_A.ttf) format('truetype');}@font-face {font-family: 'Playfair Display';font-style: italic;font-weight: 900;font-display: swap;src: url(https://fonts.gstatic.com/s/playfairdisplay/v40/nuFRD-vYSZviVYUb_rj3ij__anPXDTnCjmHKM4nYO7KN_gGUXt_A_A.ttf) format('truetype');}@font-face {font-family: 'Playfair Display';font-style: normal;font-weight: 400;font-display: swap;src: url(https://fonts.gstatic.com/s/playfairdisplay/v40/nuFvD-vYSZviVYUb_rj3ij__anPXJzDwcbmjWBN2PKdFvXDZbtY.ttf) format('truetype');}@font-face {font-family: 'Playfair Display';font-style: normal;font-weight: 500;font-display: swap;src: url(https://fonts.gstatic.com/s/playfairdisplay/v40/nuFvD-vYSZviVYUb_rj3ij__anPXJzDwcbmjWBN2PKd3vXDZbtY.ttf) format('truetype');}@font-face {font-family: 'Playfair Display';font-style: normal;font-weight: 600;font-display: swap;src: url(https://fonts.gstatic.com/s/playfairdisplay/v40/nuFvD-vYSZviVYUb_rj3ij__anPXJzDwcbmjWBN2PKebunDZbtY.ttf) format('truetype');}@font-face {font-family: 'Playfair Display';font-style: normal;font-weight: 700;font-display: swap;src: url(https://fonts.gstatic.com/s/playfairdisplay/v40/nuFvD-vYSZviVYUb_rj3ij__anPXJzDwcbmjWBN2PKeiunDZbtY.ttf) format('truetype');}@font-face {font-family: 'Playfair Display';font-style: normal;font-weight: 800;font-display: swap;src: url(https://fonts.gstatic.com/s/playfairdisplay/v40/nuFvD-vYSZviVYUb_rj3ij__anPXJzDwcbmjWBN2PKfFunDZbtY.ttf) format('truetype');}@font-face {font-family: 'Playfair Display';font-style: normal;font-weight: 900;font-display: swap;src: url(https://fonts.gstatic.com/s/playfairdisplay/v40/nuFvD-vYSZviVYUb_rj3ij__anPXJzDwcbmjWBN2PKfsunDZbtY.ttf) format('truetype');}@font-face {font-family: 'Roboto';font-style: italic;font-weight: 100;font-stretch: normal;font-display: swap;src: url(https://fonts.gstatic.com/s/roboto/v51/KFOKCnqEu92Fr1Mu53ZEC9_Vu3r1gIhOszmOClHrs6ljXfMMLoHRuAb-lg.ttf) format('truetype');}@font-face {font-family: 'Roboto';font-style: italic;font-weight: 300;font-stretch: normal;font-display: swap;src: url(https://fonts.gstatic.com/s/roboto/v51/KFOKCnqEu92Fr1Mu53ZEC9_Vu3r1gIhOszmOClHrs6ljXfMMLt_QuAb-lg.ttf) format('truetype');}@font-face {font-family: 'Roboto';font-style: italic;font-weight: 400;font-stretch: normal;font-display: swap;src: url(https://fonts.gstatic.com/s/roboto/v51/KFOKCnqEu92Fr1Mu53ZEC9_Vu3r1gIhOszmOClHrs6ljXfMMLoHQuAb-lg.ttf) format('truetype');}@font-face {font-family: 'Roboto';font-style: italic;font-weight: 500;font-stretch: normal;font-display: swap;src: url(https://fonts.gstatic.com/s/roboto/v51/KFOKCnqEu92Fr1Mu53ZEC9_Vu3r1gIhOszmOClHrs6ljXfMMLrPQuAb-lg.ttf) format('truetype');}@font-face {font-family: 'Roboto';font-style: italic;font-weight: 700;font-stretch: normal;font-display: swap;src: url(https://fonts.gstatic.com/s/roboto/v51/KFOKCnqEu92Fr1Mu53ZEC9_Vu3r1gIhOszmOClHrs6ljXfMMLmbXuAb-lg.ttf) format('truetype');}@font-face {font-family: 'Roboto';font-style: italic;font-weight: 900;font-stretch: normal;font-display: swap;src: url(https://fonts.gstatic.com/s/roboto/v51/KFOKCnqEu92Fr1Mu53ZEC9_Vu3r1gIhOszmOClHrs6ljXfMMLijXuAb-lg.ttf) format('truetype');}@font-face {font-family: 'Roboto';font-style: normal;font-weight: 100;font-stretch: normal;font-display: swap;src: url(https://fonts.gstatic.com/s/roboto/v51/KFOMCnqEu92Fr1ME7kSn66aGLdTylUAMQXC89YmC2DPNWubEbFmaiA8.ttf) format('truetype');}@font-face {font-family: 'Roboto';font-style: normal;font-weight: 300;font-stretch: normal;font-display: swap;src: url(https://fonts.gstatic.com/s/roboto/v51/KFOMCnqEu92Fr1ME7kSn66aGLdTylUAMQXC89YmC2DPNWuaabVmaiA8.ttf) format('truetype');}@font-face {font-family: 'Roboto';font-style: normal;font-weight: 400;font-stretch: normal;font-display: swap;src: url(https://fonts.gstatic.com/s/roboto/v51/KFOMCnqEu92Fr1ME7kSn66aGLdTylUAMQXC89YmC2DPNWubEbVmaiA8.ttf) format('truetype');}@font-face {font-family: 'Roboto';font-style: normal;font-weight: 500;font-stretch: normal;font-display: swap;src: url(https://fonts.gstatic.com/s/roboto/v51/KFOMCnqEu92Fr1ME7kSn66aGLdTylUAMQXC89YmC2DPNWub2bVmaiA8.ttf) format('truetype');}@font-face {font-family: 'Roboto';font-style: normal;font-weight: 700;font-stretch: normal;font-display: swap;src: url(https://fonts.gstatic.com/s/roboto/v51/KFOMCnqEu92Fr1ME7kSn66aGLdTylUAMQXC89YmC2DPNWuYjalmaiA8.ttf) format('truetype');}@font-face {font-family: 'Roboto';font-style: normal;font-weight: 900;font-stretch: normal;font-display: swap;src: url(https://fonts.gstatic.com/s/roboto/v51/KFOMCnqEu92Fr1ME7kSn66aGLdTylUAMQXC89YmC2DPNWuZtalmaiA8.ttf) format('truetype');}/* User Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:27.0) Gecko/20100101 Firefox/27.0 */@font-face {font-family: 'Bungee';font-style: normal;font-weight: 400;font-display: swap;src: url(https://fonts.gstatic.com/l/font?kit=N0bU2SZBIuF2PU_0A3Rz&skey=2e93db42ee6e0e28&v=v17) format('woff');}@font-face {font-family: 'Playfair Display';font-style: italic;font-weight: 400;font-display: swap;src: url(https://fonts.gstatic.com/l/font?kit=nuFRD-vYSZviVYUb_rj3ij__anPXDTnCjmHKM4nYO7KN_qiTXt_A_w&skey=f57a6d1e6bccdd9c&v=v40) format('woff');}@font-face {font-family: 'Playfair Display';font-style: italic;font-weight: 500;font-display: swap;src: url(https://fonts.gstatic.com/l/font?kit=nuFRD-vYSZviVYUb_rj3ij__anPXDTnCjmHKM4nYO7KN_pqTXt_A_w&skey=f57a6d1e6bccdd9c&v=v40) format('woff');}@font-face {font-family: 'Playfair Display';font-style: italic;font-weight: 600;font-display: swap;src: url(https://fonts.gstatic.com/l/font?kit=nuFRD-vYSZviVYUb_rj3ij__anPXDTnCjmHKM4nYO7KN_naUXt_A_w&skey=f57a6d1e6bccdd9c&v=v40) format('woff');}@font-face {font-family: 'Playfair Display';font-style: italic;font-weight: 700;font-display: swap;src: url(https://fonts.gstatic.com/l/font?kit=nuFRD-vYSZviVYUb_rj3ij__anPXDTnCjmHKM4nYO7KN_k-UXt_A_w&skey=f57a6d1e6bccdd9c&v=v40) format('woff');}@font-face {font-family: 'Playfair Display';font-style: italic;font-weight: 800;font-display: swap;src: url(https://fonts.gstatic.com/l/font?kit=nuFRD-vYSZviVYUb_rj3ij__anPXDTnCjmHKM4nYO7KN_iiUXt_A_w&skey=f57a6d1e6bccdd9c&v=v40) format('woff');}@font-face {font-family: 'Playfair Display';font-style: italic;font-weight: 900;font-display: swap;src: url(https://fonts.gstatic.com/l/font?kit=nuFRD-vYSZviVYUb_rj3ij__anPXDTnCjmHKM4nYO7KN_gGUXt_A_w&skey=f57a6d1e6bccdd9c&v=v40) format('woff');}@font-face {font-family: 'Playfair Display';font-style: normal;font-weight: 400;font-display: swap;src: url(https://fonts.gstatic.com/l/font?kit=nuFvD-vYSZviVYUb_rj3ij__anPXJzDwcbmjWBN2PKdFvXDZbtU&skey=f3b68f0152604ed9&v=v40) format('woff');}@font-face {font-family: 'Playfair Display';font-style: normal;font-weight: 500;font-display: swap;src: url(https://fonts.gstatic.com/l/font?kit=nuFvD-vYSZviVYUb_rj3ij__anPXJzDwcbmjWBN2PKd3vXDZbtU&skey=f3b68f0152604ed9&v=v40) format('woff');}@font-face {font-family: 'Playfair Display';font-style: normal;font-weight: 600;font-display: swap;src: url(https://fonts.gstatic.com/l/font?kit=nuFvD-vYSZviVYUb_rj3ij__anPXJzDwcbmjWBN2PKebunDZbtU&skey=f3b68f0152604ed9&v=v40) format('woff');}@font-face {font-family: 'Playfair Display';font-style: normal;font-weight: 700;font-display: swap;src: url(https://fonts.gstatic.com/l/font?kit=nuFvD-vYSZviVYUb_rj3ij__anPXJzDwcbmjWBN2PKeiunDZbtU&skey=f3b68f0152604ed9&v=v40) format('woff');}@font-face {font-family: 'Playfair Display';font-style: normal;font-weight: 800;font-display: swap;src: url(https://fonts.gstatic.com/l/font?kit=nuFvD-vYSZviVYUb_rj3ij__anPXJzDwcbmjWBN2PKfFunDZbtU&skey=f3b68f0152604ed9&v=v40) format('woff');}@font-face {font-family: 'Playfair Display';font-style: normal;font-weight: 900;font-display: swap;src: url(https://fonts.gstatic.com/l/font?kit=nuFvD-vYSZviVYUb_rj3ij__anPXJzDwcbmjWBN2PKfsunDZbtU&skey=f3b68f0152604ed9&v=v40) format('woff');}@font-face {font-family: 'Roboto';font-style: italic;font-weight: 100;font-stretch: normal;font-display: swap;src: url(https://fonts.gstatic.com/l/font?kit=KFOKCnqEu92Fr1Mu53ZEC9_Vu3r1gIhOszmOClHrs6ljXfMMLoHRuAb-lQ&skey=c608c610063635f9&v=v51) format('woff');}@font-face {font-family: 'Roboto';font-style: italic;font-weight: 300;font-stretch: normal;font-display: swap;src: url(https://fonts.gstatic.com/l/font?kit=KFOKCnqEu92Fr1Mu53ZEC9_Vu3r1gIhOszmOClHrs6ljXfMMLt_QuAb-lQ&skey=c608c610063635f9&v=v51) format('woff');}@font-face {font-family: 'Roboto';font-style: italic;font-weight: 400;font-stretch: normal;font-display: swap;src: url(https://fonts.gstatic.com/l/font?kit=KFOKCnqEu92Fr1Mu53ZEC9_Vu3r1gIhOszmOClHrs6ljXfMMLoHQuAb-lQ&skey=c608c610063635f9&v=v51) format('woff');}@font-face {font-family: 'Roboto';font-style: italic;font-weight: 500;font-stretch: normal;font-display: swap;src: url(https://fonts.gstatic.com/l/font?kit=KFOKCnqEu92Fr1Mu53ZEC9_Vu3r1gIhOszmOClHrs6ljXfMMLrPQuAb-lQ&skey=c608c610063635f9&v=v51) format('woff');}@font-face {font-family: 'Roboto';font-style: italic;font-weight: 700;font-stretch: normal;font-display: swap;src: url(https://fonts.gstatic.com/l/font?kit=KFOKCnqEu92Fr1Mu53ZEC9_Vu3r1gIhOszmOClHrs6ljXfMMLmbXuAb-lQ&skey=c608c610063635f9&v=v51) format('woff');}@font-face {font-family: 'Roboto';font-style: italic;font-weight: 900;font-stretch: normal;font-display: swap;src: url(https://fonts.gstatic.com/l/font?kit=KFOKCnqEu92Fr1Mu53ZEC9_Vu3r1gIhOszmOClHrs6ljXfMMLijXuAb-lQ&skey=c608c610063635f9&v=v51) format('woff');}@font-face {font-family: 'Roboto';font-style: normal;font-weight: 100;font-stretch: normal;font-display: swap;src: url(https://fonts.gstatic.com/l/font?kit=KFOMCnqEu92Fr1ME7kSn66aGLdTylUAMQXC89YmC2DPNWubEbFmaiAw&skey=a0a0114a1dcab3ac&v=v51) format('woff');}@font-face {font-family: 'Roboto';font-style: normal;font-weight: 300;font-stretch: normal;font-display: swap;src: url(https://fonts.gstatic.com/l/font?kit=KFOMCnqEu92Fr1ME7kSn66aGLdTylUAMQXC89YmC2DPNWuaabVmaiAw&skey=a0a0114a1dcab3ac&v=v51) format('woff');}@font-face {font-family: 'Roboto';font-style: normal;font-weight: 400;font-stretch: normal;font-display: swap;src: url(https://fonts.gstatic.com/l/font?kit=KFOMCnqEu92Fr1ME7kSn66aGLdTylUAMQXC89YmC2DPNWubEbVmaiAw&skey=a0a0114a1dcab3ac&v=v51) format('woff');}@font-face {font-family: 'Roboto';font-style: normal;font-weight: 500;font-stretch: normal;font-display: swap;src: url(https://fonts.gstatic.com/l/font?kit=KFOMCnqEu92Fr1ME7kSn66aGLdTylUAMQXC89YmC2DPNWub2bVmaiAw&skey=a0a0114a1dcab3ac&v=v51) format('woff');}@font-face {font-family: 'Roboto';font-style: normal;font-weight: 700;font-stretch: normal;font-display: swap;src: url(https://fonts.gstatic.com/l/font?kit=KFOMCnqEu92Fr1ME7kSn66aGLdTylUAMQXC89YmC2DPNWuYjalmaiAw&skey=a0a0114a1dcab3ac&v=v51) format('woff');}@font-face {font-family: 'Roboto';font-style: normal;font-weight: 900;font-stretch: normal;font-display: swap;src: url(https://fonts.gstatic.com/l/font?kit=KFOMCnqEu92Fr1ME7kSn66aGLdTylUAMQXC89YmC2DPNWuZtalmaiAw&skey=a0a0114a1dcab3ac&v=v51) format('woff');}/* User Agent: Mozilla/5.0 (Windows NT 6.3; rv:39.0) Gecko/20100101 Firefox/39.0 */@font-face {font-family: 'Bungee';font-style: normal;font-weight: 400;font-display: swap;src: url(https://fonts.gstatic.com/s/bungee/v17/N0bU2SZBIuF2PU_0A3R1.woff2) format('woff2');}@font-face {font-family: 'Playfair Display';font-style: italic;font-weight: 400;font-display: swap;src: url(https://fonts.gstatic.com/s/playfairdisplay/v40/nuFRD-vYSZviVYUb_rj3ij__anPXDTnCjmHKM4nYO7KN_qiTXt_A-Q.woff2) format('woff2');}@font-face {font-family: 'Playfair Display';font-style: italic;font-weight: 500;font-display: swap;src: url(https://fonts.gstatic.com/s/playfairdisplay/v40/nuFRD-vYSZviVYUb_rj3ij__anPXDTnCjmHKM4nYO7KN_pqTXt_A-Q.woff2) format('woff2');}@font-face {font-family: 'Playfair Display';font-style: italic;font-weight: 600;font-display: swap;src: url(https://fonts.gstatic.com/s/playfairdisplay/v40/nuFRD-vYSZviVYUb_rj3ij__anPXDTnCjmHKM4nYO7KN_naUXt_A-Q.woff2) format('woff2');}@font-face {font-family: 'Playfair Display';font-style: italic;font-weight: 700;font-display: swap;src: url(https://fonts.gstatic.com/s/playfairdisplay/v40/nuFRD-vYSZviVYUb_rj3ij__anPXDTnCjmHKM4nYO7KN_k-UXt_A-Q.woff2) format('woff2');}@font-face {font-family: 'Playfair Display';font-style: italic;font-weight: 800;font-display: swap;src: url(https://fonts.gstatic.com/s/playfairdisplay/v40/nuFRD-vYSZviVYUb_rj3ij__anPXDTnCjmHKM4nYO7KN_iiUXt_A-Q.woff2) format('woff2');}@font-face {font-family: 'Playfair Display';font-style: italic;font-weight: 900;font-display: swap;src: url(https://fonts.gstatic.com/s/playfairdisplay/v40/nuFRD-vYSZviVYUb_rj3ij__anPXDTnCjmHKM4nYO7KN_gGUXt_A-Q.woff2) format('woff2');}@font-face {font-family: 'Playfair Display';font-style: normal;font-weight: 400;font-display: swap;src: url(https://fonts.gstatic.com/s/playfairdisplay/v40/nuFvD-vYSZviVYUb_rj3ij__anPXJzDwcbmjWBN2PKdFvXDZbtM.woff2) format('woff2');}@font-face {font-family: 'Playfair Display';font-style: normal;font-weight: 500;font-display: swap;src: url(https://fonts.gstatic.com/s/playfairdisplay/v40/nuFvD-vYSZviVYUb_rj3ij__anPXJzDwcbmjWBN2PKd3vXDZbtM.woff2) format('woff2');}@font-face {font-family: 'Playfair Display';font-style: normal;font-weight: 600;font-display: swap;src: url(https://fonts.gstatic.com/s/playfairdisplay/v40/nuFvD-vYSZviVYUb_rj3ij__anPXJzDwcbmjWBN2PKebunDZbtM.woff2) format('woff2');}@font-face {font-family: 'Playfair Display';font-style: normal;font-weight: 700;font-display: swap;src: url(https://fonts.gstatic.com/s/playfairdisplay/v40/nuFvD-vYSZviVYUb_rj3ij__anPXJzDwcbmjWBN2PKeiunDZbtM.woff2) format('woff2');}@font-face {font-family: 'Playfair Display';font-style: normal;font-weight: 800;font-display: swap;src: url(https://fonts.gstatic.com/s/playfairdisplay/v40/nuFvD-vYSZviVYUb_rj3ij__anPXJzDwcbmjWBN2PKfFunDZbtM.woff2) format('woff2');}@font-face {font-family: 'Playfair Display';font-style: normal;font-weight: 900;font-display: swap;src: url(https://fonts.gstatic.com/s/playfairdisplay/v40/nuFvD-vYSZviVYUb_rj3ij__anPXJzDwcbmjWBN2PKfsunDZbtM.woff2) format('woff2');}@font-face {font-family: 'Roboto';font-style: italic;font-weight: 100;font-stretch: normal;font-display: swap;src: url(https://fonts.gstatic.com/s/roboto/v51/KFOKCnqEu92Fr1Mu53ZEC9_Vu3r1gIhOszmOClHrs6ljXfMMLoHRuAb-kw.woff2) format('woff2');}@font-face {font-family: 'Roboto';font-style: italic;font-weight: 300;font-stretch: normal;font-display: swap;src: url(https://fonts.gstatic.com/s/roboto/v51/KFOKCnqEu92Fr1Mu53ZEC9_Vu3r1gIhOszmOClHrs6ljXfMMLt_QuAb-kw.woff2) format('woff2');}@font-face {font-family: 'Roboto';font-style: italic;font-weight: 400;font-stretch: normal;font-display: swap;src: url(https://fonts.gstatic.com/s/roboto/v51/KFOKCnqEu92Fr1Mu53ZEC9_Vu3r1gIhOszmOClHrs6ljXfMMLoHQuAb-kw.woff2) format('woff2');}@font-face {font-family: 'Roboto';font-style: italic;font-weight: 500;font-stretch: normal;font-display: swap;src: url(https://fonts.gstatic.com/s/roboto/v51/KFOKCnqEu92Fr1Mu53ZEC9_Vu3r1gIhOszmOClHrs6ljXfMMLrPQuAb-kw.woff2) format('woff2');}@font-face {font-family: 'Roboto';font-style: italic;font-weight: 700;font-stretch: normal;font-display: swap;src: url(https://fonts.gstatic.com/s/roboto/v51/KFOKCnqEu92Fr1Mu53ZEC9_Vu3r1gIhOszmOClHrs6ljXfMMLmbXuAb-kw.woff2) format('woff2');}@font-face {font-family: 'Roboto';font-style: italic;font-weight: 900;font-stretch: normal;font-display: swap;src: url(https://fonts.gstatic.com/s/roboto/v51/KFOKCnqEu92Fr1Mu53ZEC9_Vu3r1gIhOszmOClHrs6ljXfMMLijXuAb-kw.woff2) format('woff2');}@font-face {font-family: 'Roboto';font-style: normal;font-weight: 100;font-stretch: normal;font-display: swap;src: url(https://fonts.gstatic.com/s/roboto/v51/KFOMCnqEu92Fr1ME7kSn66aGLdTylUAMQXC89YmC2DPNWubEbFmaiAo.woff2) format('woff2');}@font-face {font-family: 'Roboto';font-style: normal;font-weight: 300;font-stretch: normal;font-display: swap;src: url(https://fonts.gstatic.com/s/roboto/v51/KFOMCnqEu92Fr1ME7kSn66aGLdTylUAMQXC89YmC2DPNWuaabVmaiAo.woff2) format('woff2');}@font-face {font-family: 'Roboto';font-style: normal;font-weight: 400;font-stretch: normal;font-display: swap;src: url(https://fonts.gstatic.com/s/roboto/v51/KFOMCnqEu92Fr1ME7kSn66aGLdTylUAMQXC89YmC2DPNWubEbVmaiAo.woff2) format('woff2');}@font-face {font-family: 'Roboto';font-style: normal;font-weight: 500;font-stretch: normal;font-display: swap;src: url(https://fonts.gstatic.com/s/roboto/v51/KFOMCnqEu92Fr1ME7kSn66aGLdTylUAMQXC89YmC2DPNWub2bVmaiAo.woff2) format('woff2');}@font-face {font-family: 'Roboto';font-style: normal;font-weight: 700;font-stretch: normal;font-display: swap;src: url(https://fonts.gstatic.com/s/roboto/v51/KFOMCnqEu92Fr1ME7kSn66aGLdTylUAMQXC89YmC2DPNWuYjalmaiAo.woff2) format('woff2');}@font-face {font-family: 'Roboto';font-style: normal;font-weight: 900;font-stretch: normal;font-display: swap;src: url(https://fonts.gstatic.com/s/roboto/v51/KFOMCnqEu92Fr1ME7kSn66aGLdTylUAMQXC89YmC2DPNWuZtalmaiAo.woff2) format('woff2');}</style><meta name='robots' content='index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1' />
+<script type="text/javascript">
+			let jqueryParams=[],jQuery=function(r){return jqueryParams=[...jqueryParams,r],jQuery},$=function(r){return jqueryParams=[...jqueryParams,r],$};window.jQuery=jQuery,window.$=jQuery;let customHeadScripts=!1;jQuery.fn=jQuery.prototype={},$.fn=jQuery.prototype={},jQuery.noConflict=function(r){if(window.jQuery)return jQuery=window.jQuery,$=window.jQuery,customHeadScripts=!0,jQuery.noConflict},jQuery.ready=function(r){jqueryParams=[...jqueryParams,r]},$.ready=function(r){jqueryParams=[...jqueryParams,r]},jQuery.load=function(r){jqueryParams=[...jqueryParams,r]},$.load=function(r){jqueryParams=[...jqueryParams,r]},jQuery.fn.ready=function(r){jqueryParams=[...jqueryParams,r]},$.fn.ready=function(r){jqueryParams=[...jqueryParams,r]};</script>
+	<!-- This site is optimized with the Yoast SEO plugin v27.5 - https://yoast.com/product/yoast-seo-wordpress/ -->
+	<title>Heating &amp; Air Conditioning in Syracuse, NY | Potter Heating &amp; Air Conditioning-Perrone Plumbing</title>
+	<meta name="description" content="Potter Heating &amp; Air Conditioning-Perrone Plumbing in Syracuse, NY provides plumbing, heating, and air conditioning. Call today to schedule an appointment!" />
+	<link rel="canonical" href="https://potter-perrone.com/residential-services/" />
+	<meta property="og:locale" content="en_US" />
+	<meta property="og:type" content="article" />
+	<meta property="og:title" content="Heating &amp; Air Conditioning in Syracuse, NY | Potter Heating &amp; Air Conditioning-Perrone Plumbing" />
+	<meta property="og:description" content="Potter Heating &amp; Air Conditioning-Perrone Plumbing in Syracuse, NY provides plumbing, heating, and air conditioning. Call today to schedule an appointment!" />
+	<meta property="og:url" content="https://potter-perrone.com/residential-services/" />
+	<meta property="og:site_name" content="Potter Heating &amp; AC and Perrone Plumbing" />
+	<meta property="article:modified_time" content="2024-11-21T21:04:36+00:00" />
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:label1" content="Est. reading time" />
+	<meta name="twitter:data1" content="16 minutes" />
+	<script type="application/ld+json" class="yoast-schema-graph">{"@context":"https:\/\/schema.org","@graph":[{"@type":"WebPage","@id":"https:\/\/potter-perrone.com\/residential-services\/","url":"https:\/\/potter-perrone.com\/residential-services\/","name":"Heating & Air Conditioning in Syracuse, NY | Potter Heating & Air Conditioning-Perrone Plumbing","isPartOf":{"@id":"https:\/\/potter-perrone.com\/#website"},"datePublished":"2018-10-02T17:12:10+00:00","dateModified":"2024-11-21T21:04:36+00:00","description":"Potter Heating & Air Conditioning-Perrone Plumbing in Syracuse, NY provides plumbing, heating, and air conditioning. Call today to schedule an appointment!","breadcrumb":{"@id":"https:\/\/potter-perrone.com\/residential-services\/#breadcrumb"},"inLanguage":"en-US","potentialAction":[{"@type":"ReadAction","target":["https:\/\/potter-perrone.com\/residential-services\/"]}]},{"@type":"BreadcrumbList","@id":"https:\/\/potter-perrone.com\/residential-services\/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https:\/\/potter-perrone.com\/"},{"@type":"ListItem","position":2,"name":"Residential Services"}]},{"@type":"WebSite","@id":"https:\/\/potter-perrone.com\/#website","url":"https:\/\/potter-perrone.com\/","name":"Potter Heating &amp; AC and Perrone Plumbing","description":"","potentialAction":[{"@type":"SearchAction","target":{"@type":"EntryPoint","urlTemplate":"https:\/\/potter-perrone.com\/?s={search_term_string}"},"query-input":{"@type":"PropertyValueSpecification","valueRequired":true,"valueName":"search_term_string"}}],"inLanguage":"en-US"}]}</script>
+	<!-- / Yoast SEO plugin. -->
+
+
+<link rel='dns-prefetch' href='//hb.wpmucdn.com' />
+<link href='//hb.wpmucdn.com' rel='preconnect' />
+<link rel="alternate" type="application/rss+xml" title="Potter Heating &amp; AC and Perrone Plumbing &raquo; Feed" href="https://potter-perrone.com/feed/" />
+<link rel="alternate" title="oEmbed (JSON)" type="application/json+oembed" href="https://potter-perrone.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fpotter-perrone.com%2Fresidential-services%2F" />
+<link rel="alternate" title="oEmbed (XML)" type="text/xml+oembed" href="https://potter-perrone.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fpotter-perrone.com%2Fresidential-services%2F&#038;format=xml" />
+		<style>
+			.lazyload,
+			.lazyloading {
+				max-width: 100%;
+			}
+		</style>
+		<meta content="Divi Child v.1.0.0" name="generator"/><style id='wp-img-auto-sizes-contain-inline-css' type='text/css'>
+img:is([sizes=auto i],[sizes^="auto," i]){contain-intrinsic-size:3000px 1500px}
+/*# sourceURL=wp-img-auto-sizes-contain-inline-css */
+</style>
+<link rel='stylesheet' id='wphb-1-css' href='https://hb.wpmucdn.com/potter-perrone.com/29b85406-e82f-47cc-8e17-9152fbc857d6.css' type='text/css' media='all' />
+<script type="text/javascript" src="https://hb.wpmucdn.com/potter-perrone.com/f903df35-128f-4806-a32d-7ff89eb1be2d.js" id="wphb-2-js"></script>
+<script type="text/javascript" id="jquery-js-after">
+/* <![CDATA[ */
+jqueryParams.length&&$.each(jqueryParams,function(e,r){if("function"==typeof r){var n=String(r);n.replace("$","jQuery");var a=new Function("return "+n)();$(document).ready(a)}});
+//# sourceURL=jquery-js-after
+/* ]]> */
+</script>
+<script type="text/javascript" src="https://hb.wpmucdn.com/potter-perrone.com/5bfaeef3-6964-4321-b521-adcb653fb43b.js" id="wphb-3-js"></script>
+<link rel="https://api.w.org/" href="https://potter-perrone.com/wp-json/" /><link rel="alternate" title="JSON" type="application/json" href="https://potter-perrone.com/wp-json/wp/v2/pages/40" /><link rel="EditURI" type="application/rsd+xml" title="RSD" href="https://potter-perrone.com/xmlrpc.php?rsd" />
+<link rel='shortlink' href='https://potter-perrone.com/?p=40' />
+	<style type="text/css">
+		a {
+cursor: pointer !important;
+  
+}
+	</style>
+		<script type="text/javascript">
+		function togglePlayableTags( overlay_id, wait ) {
+		
+			var $ = jQuery;
+			
+			if ( !overlay_id  ) {
+				
+				overlay_id = "";
+			}
+			
+			if ( !wait  ) {
+				
+				wait = 1;
+			}
+			
+			/* Prevent playable tags load content before overlay call */
+			setTimeout(function() {
+				
+				$( overlay_id + ".overlay").find("iframe").not( '[id^="gform"]' ).each(function() { 
+				
+					var iframeParent = $(this).parent();
+					var iframe = $(this).prop("outerHTML");
+					var src = iframe.match(/src=[\'"]?((?:(?!\/>|>|"|\'|\s).)+)"/)[0];
+					
+					src = src.replace("src", "data-src");
+					iframe = iframe.replace(/src=".*?"/i, "src=\"about:blank\" data-src=\"\"" );
+					
+					if ( src != "data-src=\"about:blank\"" ) {
+						iframe = iframe.replace("data-src=\"\"", src );
+					}
+					
+					$( iframe ).insertAfter( $(this) );
+					
+					$(this).remove();
+				});
+				
+			}, wait);
+			
+			$( overlay_id + ".overlay").find("video").each(function() {
+				$(this).get(0).pause();
+			});
+			
+			$( overlay_id + ".overlay").find("audio").each(function() {
+				
+				this.pause();
+				this.currentTime = 0;
+			});
+		}
+		
+		togglePlayableTags( '', 1000 );
+	</script>
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com">
+	<style type="text/css" id="simple-css-output">@media only screen and ( max-width:1100px) {#et_mobile_nav_menu {display: block;}#top-menu-nav {display: none;}.et_header_style_left .mobile_menu_bar {padding-bottom: 30px;}}@media only screen and (max-width: 981px) {#logo {width: 230px;height: 50px;max-width: 300px !important;max-height: 150px!important;padding-bottom:0px;}}.top-phone {width: 392px!important;} .top-phone a {color: white!important;font-size: 14px!important;} .top-phone:before {font-family: 'ETmodules';content: "\e090";font-size: 16px;float: left;}.top-review {width: 135px!important;} .top-review a {color: white!important;font-size: 14px!important;} .top-review:before {font-family: 'ETmodules';content: "\e033";font-size: 16px;float: left;}.et_pb_blurb_content, .et_pb_circle_counter, .et_pb_contact_main_title, .et_pb_countdown_timer_container, .et_pb_counter_title, .et_pb_gallery_item, .et_pb_newsletter_description, .et_pb_number_counter, .et_pb_portfolio_item, .et_pb_post, .et_pb_pricing_content, .et_pb_pricing_heading, .et_pb_promo_description, .et_pb_slide_description, .et_pb_tab, .et_pb_tabs_controls, .et_pb_team_member, .et_pb_testimonial_description_inner,.et_pb_text,.et_pb_toggle_content, .et_pb_toggle_title, .et_pb_widget, .product{word-wrap: normal !important;}.tbox { z-index: 200050 !important;}@media (min-width: 768px) and (max-width: 1024px) {.video-player {width:100%;text-align:center;}}</style><meta name="ti-site-data" content="eyJyIjoiMTowITc6MCEzMDowIiwibyI6Imh0dHBzOlwvXC9wb3R0ZXItcGVycm9uZS5jb20/dGktb25saW5lLXVzZXJzLWdvb2dsZT0xJmFtcDtwPSUyRnJlc2lkZW50aWFsLXNlcnZpY2VzJTJGJmFtcDtfd3Bub25jZT0wMjU2MjFmNzA5In0=" />		<script>
+			document.documentElement.className = document.documentElement.className.replace('no-js', 'js');
+		</script>
+				<style>
+			.no-js img.lazyload {
+				display: none;
+			}
+
+			figure.wp-block-image img.lazyloading {
+				min-width: 150px;
+			}
+
+			.lazyload,
+			.lazyloading {
+				--smush-placeholder-width: 100px;
+				--smush-placeholder-bg-max-width: 120px;
+				--smush-placeholder-aspect-ratio: 1/1;
+				width: var(--smush-image-width, var(--smush-placeholder-width)) !important;
+				aspect-ratio: var(--smush-image-aspect-ratio, var(--smush-placeholder-aspect-ratio)) !important;
+			}
+
+						.lazyload, .lazyloading {
+				opacity: 0;
+			}
+
+			.lazyloaded {
+				opacity: 1;
+				transition: opacity 400ms;
+				transition-delay: 0ms;
+			}
+
+					</style>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" /><!-- opens footer social media links in new tab-->
+<script type="text/javascript">
+jQuery(document).ready(function(){
+jQuery(".et-social-icon a").attr('target', '_blank');
+});
+</script>
+
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-P3V8Z7L');</script>
+<!-- End Google Tag Manager -->
+
+
+<!-- Facebook Pixel Code -->
+<script>
+  !function(f,b,e,v,n,t,s)
+  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+  n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];
+  s.parentNode.insertBefore(t,s)}(window, document,'script',
+  'https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '595118957905110');
+  fbq('track', 'PageView');
+</script>
+<script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Plumber",
+  "name": "Potter Heating & Air Conditioning-Perrone Plumbing",
+  "image": "https://potter-perrone.com/wp-content/uploads/2018/11/logo-new.png",
+  "@id": "",
+  "url": "https://potter-perrone.com/",
+  "telephone": "(315) 472-3557",
+  "priceRange": "$$",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "4004 New Ct Ave",
+    "addressLocality": "Syracuse",
+    "addressRegion": "NY",
+    "postalCode": "13206",
+    "addressCountry": "US"
+  } ,
+  "sameAs": "https://www.facebook.com/PotterPerrone/"
+}
+</script><link rel="icon" href="https://potter-perrone.com/wp-content/uploads/2018/10/fav-150x150.png" sizes="32x32" />
+<link rel="icon" href="https://potter-perrone.com/wp-content/uploads/2018/10/fav.png" sizes="192x192" />
+<link rel="apple-touch-icon" href="https://potter-perrone.com/wp-content/uploads/2018/10/fav.png" />
+<meta name="msapplication-TileImage" content="https://potter-perrone.com/wp-content/uploads/2018/10/fav.png" />
+<link rel="stylesheet" id="et-core-unified-40-cached-inline-styles" href="https://potter-perrone.com/wp-content/et-cache/40/et-core-unified-40.min.css?ver=1748149586" /><link rel="stylesheet" id="et-core-unified-deferred-40-cached-inline-styles" href="https://potter-perrone.com/wp-content/et-cache/40/et-core-unified-deferred-40.min.css?ver=1748149586" />	<style id="egf-frontend-styles" type="text/css">
+		p {} h1 {} h2 {} h3 {} h4 {} h5 {} h6 {} 	</style>
+	<style id='global-styles-inline-css' type='text/css'>
+:root{--wp--preset--aspect-ratio--square: 1;--wp--preset--aspect-ratio--4-3: 4/3;--wp--preset--aspect-ratio--3-4: 3/4;--wp--preset--aspect-ratio--3-2: 3/2;--wp--preset--aspect-ratio--2-3: 2/3;--wp--preset--aspect-ratio--16-9: 16/9;--wp--preset--aspect-ratio--9-16: 9/16;--wp--preset--color--black: #000000;--wp--preset--color--cyan-bluish-gray: #abb8c3;--wp--preset--color--white: #ffffff;--wp--preset--color--pale-pink: #f78da7;--wp--preset--color--vivid-red: #cf2e2e;--wp--preset--color--luminous-vivid-orange: #ff6900;--wp--preset--color--luminous-vivid-amber: #fcb900;--wp--preset--color--light-green-cyan: #7bdcb5;--wp--preset--color--vivid-green-cyan: #00d084;--wp--preset--color--pale-cyan-blue: #8ed1fc;--wp--preset--color--vivid-cyan-blue: #0693e3;--wp--preset--color--vivid-purple: #9b51e0;--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple: linear-gradient(135deg,rgb(6,147,227) 0%,rgb(155,81,224) 100%);--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan: linear-gradient(135deg,rgb(122,220,180) 0%,rgb(0,208,130) 100%);--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange: linear-gradient(135deg,rgb(252,185,0) 0%,rgb(255,105,0) 100%);--wp--preset--gradient--luminous-vivid-orange-to-vivid-red: linear-gradient(135deg,rgb(255,105,0) 0%,rgb(207,46,46) 100%);--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray: linear-gradient(135deg,rgb(238,238,238) 0%,rgb(169,184,195) 100%);--wp--preset--gradient--cool-to-warm-spectrum: linear-gradient(135deg,rgb(74,234,220) 0%,rgb(151,120,209) 20%,rgb(207,42,186) 40%,rgb(238,44,130) 60%,rgb(251,105,98) 80%,rgb(254,248,76) 100%);--wp--preset--gradient--blush-light-purple: linear-gradient(135deg,rgb(255,206,236) 0%,rgb(152,150,240) 100%);--wp--preset--gradient--blush-bordeaux: linear-gradient(135deg,rgb(254,205,165) 0%,rgb(254,45,45) 50%,rgb(107,0,62) 100%);--wp--preset--gradient--luminous-dusk: linear-gradient(135deg,rgb(255,203,112) 0%,rgb(199,81,192) 50%,rgb(65,88,208) 100%);--wp--preset--gradient--pale-ocean: linear-gradient(135deg,rgb(255,245,203) 0%,rgb(182,227,212) 50%,rgb(51,167,181) 100%);--wp--preset--gradient--electric-grass: linear-gradient(135deg,rgb(202,248,128) 0%,rgb(113,206,126) 100%);--wp--preset--gradient--midnight: linear-gradient(135deg,rgb(2,3,129) 0%,rgb(40,116,252) 100%);--wp--preset--font-size--small: 13px;--wp--preset--font-size--medium: 20px;--wp--preset--font-size--large: 36px;--wp--preset--font-size--x-large: 42px;--wp--preset--spacing--20: 0.44rem;--wp--preset--spacing--30: 0.67rem;--wp--preset--spacing--40: 1rem;--wp--preset--spacing--50: 1.5rem;--wp--preset--spacing--60: 2.25rem;--wp--preset--spacing--70: 3.38rem;--wp--preset--spacing--80: 5.06rem;--wp--preset--shadow--natural: 6px 6px 9px rgba(0, 0, 0, 0.2);--wp--preset--shadow--deep: 12px 12px 50px rgba(0, 0, 0, 0.4);--wp--preset--shadow--sharp: 6px 6px 0px rgba(0, 0, 0, 0.2);--wp--preset--shadow--outlined: 6px 6px 0px -3px rgb(255, 255, 255), 6px 6px rgb(0, 0, 0);--wp--preset--shadow--crisp: 6px 6px 0px rgb(0, 0, 0);}:root { --wp--style--global--content-size: 823px;--wp--style--global--wide-size: 1080px; }:where(body) { margin: 0; }.wp-site-blocks > .alignleft { float: left; margin-right: 2em; }.wp-site-blocks > .alignright { float: right; margin-left: 2em; }.wp-site-blocks > .aligncenter { justify-content: center; margin-left: auto; margin-right: auto; }:where(.is-layout-flex){gap: 0.5em;}:where(.is-layout-grid){gap: 0.5em;}.is-layout-flow > .alignleft{float: left;margin-inline-start: 0;margin-inline-end: 2em;}.is-layout-flow > .alignright{float: right;margin-inline-start: 2em;margin-inline-end: 0;}.is-layout-flow > .aligncenter{margin-left: auto !important;margin-right: auto !important;}.is-layout-constrained > .alignleft{float: left;margin-inline-start: 0;margin-inline-end: 2em;}.is-layout-constrained > .alignright{float: right;margin-inline-start: 2em;margin-inline-end: 0;}.is-layout-constrained > .aligncenter{margin-left: auto !important;margin-right: auto !important;}.is-layout-constrained > :where(:not(.alignleft):not(.alignright):not(.alignfull)){max-width: var(--wp--style--global--content-size);margin-left: auto !important;margin-right: auto !important;}.is-layout-constrained > .alignwide{max-width: var(--wp--style--global--wide-size);}body .is-layout-flex{display: flex;}.is-layout-flex{flex-wrap: wrap;align-items: center;}.is-layout-flex > :is(*, div){margin: 0;}body .is-layout-grid{display: grid;}.is-layout-grid > :is(*, div){margin: 0;}body{padding-top: 0px;padding-right: 0px;padding-bottom: 0px;padding-left: 0px;}:root :where(.wp-element-button, .wp-block-button__link){background-color: #32373c;border-width: 0;color: #fff;font-family: inherit;font-size: inherit;font-style: inherit;font-weight: inherit;letter-spacing: inherit;line-height: inherit;padding-top: calc(0.667em + 2px);padding-right: calc(1.333em + 2px);padding-bottom: calc(0.667em + 2px);padding-left: calc(1.333em + 2px);text-decoration: none;text-transform: inherit;}.has-black-color{color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-color{color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-color{color: var(--wp--preset--color--white) !important;}.has-pale-pink-color{color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-color{color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-color{color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-color{color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-color{color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-color{color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-color{color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-color{color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-color{color: var(--wp--preset--color--vivid-purple) !important;}.has-black-background-color{background-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-background-color{background-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-background-color{background-color: var(--wp--preset--color--white) !important;}.has-pale-pink-background-color{background-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-background-color{background-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-background-color{background-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-background-color{background-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-background-color{background-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-background-color{background-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-background-color{background-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-background-color{background-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-background-color{background-color: var(--wp--preset--color--vivid-purple) !important;}.has-black-border-color{border-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-border-color{border-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-border-color{border-color: var(--wp--preset--color--white) !important;}.has-pale-pink-border-color{border-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-border-color{border-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-border-color{border-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-border-color{border-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-border-color{border-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-border-color{border-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-border-color{border-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-border-color{border-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-border-color{border-color: var(--wp--preset--color--vivid-purple) !important;}.has-vivid-cyan-blue-to-vivid-purple-gradient-background{background: var(--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple) !important;}.has-light-green-cyan-to-vivid-green-cyan-gradient-background{background: var(--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan) !important;}.has-luminous-vivid-amber-to-luminous-vivid-orange-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange) !important;}.has-luminous-vivid-orange-to-vivid-red-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-orange-to-vivid-red) !important;}.has-very-light-gray-to-cyan-bluish-gray-gradient-background{background: var(--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray) !important;}.has-cool-to-warm-spectrum-gradient-background{background: var(--wp--preset--gradient--cool-to-warm-spectrum) !important;}.has-blush-light-purple-gradient-background{background: var(--wp--preset--gradient--blush-light-purple) !important;}.has-blush-bordeaux-gradient-background{background: var(--wp--preset--gradient--blush-bordeaux) !important;}.has-luminous-dusk-gradient-background{background: var(--wp--preset--gradient--luminous-dusk) !important;}.has-pale-ocean-gradient-background{background: var(--wp--preset--gradient--pale-ocean) !important;}.has-electric-grass-gradient-background{background: var(--wp--preset--gradient--electric-grass) !important;}.has-midnight-gradient-background{background: var(--wp--preset--gradient--midnight) !important;}.has-small-font-size{font-size: var(--wp--preset--font-size--small) !important;}.has-medium-font-size{font-size: var(--wp--preset--font-size--medium) !important;}.has-large-font-size{font-size: var(--wp--preset--font-size--large) !important;}.has-x-large-font-size{font-size: var(--wp--preset--font-size--x-large) !important;}
+/*# sourceURL=global-styles-inline-css */
+</style>
+<style id='wp-block-library-inline-css' type='text/css'>
+:root{--wp-block-synced-color:#7a00df;--wp-block-synced-color--rgb:122,0,223;--wp-bound-block-color:var(--wp-block-synced-color);--wp-editor-canvas-background:#ddd;--wp-admin-theme-color:#007cba;--wp-admin-theme-color--rgb:0,124,186;--wp-admin-theme-color-darker-10:#006ba1;--wp-admin-theme-color-darker-10--rgb:0,107,160.5;--wp-admin-theme-color-darker-20:#005a87;--wp-admin-theme-color-darker-20--rgb:0,90,135;--wp-admin-border-width-focus:2px}@media (min-resolution:192dpi){:root{--wp-admin-border-width-focus:1.5px}}.wp-element-button{cursor:pointer}:root .has-very-light-gray-background-color{background-color:#eee}:root .has-very-dark-gray-background-color{background-color:#313131}:root .has-very-light-gray-color{color:#eee}:root .has-very-dark-gray-color{color:#313131}:root .has-vivid-green-cyan-to-vivid-cyan-blue-gradient-background{background:linear-gradient(135deg,#00d084,#0693e3)}:root .has-purple-crush-gradient-background{background:linear-gradient(135deg,#34e2e4,#4721fb 50%,#ab1dfe)}:root .has-hazy-dawn-gradient-background{background:linear-gradient(135deg,#faaca8,#dad0ec)}:root .has-subdued-olive-gradient-background{background:linear-gradient(135deg,#fafae1,#67a671)}:root .has-atomic-cream-gradient-background{background:linear-gradient(135deg,#fdd79a,#004a59)}:root .has-nightshade-gradient-background{background:linear-gradient(135deg,#330968,#31cdcf)}:root .has-midnight-gradient-background{background:linear-gradient(135deg,#020381,#2874fc)}:root{--wp--preset--font-size--normal:16px;--wp--preset--font-size--huge:42px}.has-regular-font-size{font-size:1em}.has-larger-font-size{font-size:2.625em}.has-normal-font-size{font-size:var(--wp--preset--font-size--normal)}.has-huge-font-size{font-size:var(--wp--preset--font-size--huge)}.has-text-align-center{text-align:center}.has-text-align-left{text-align:left}.has-text-align-right{text-align:right}.has-fit-text{white-space:nowrap!important}#end-resizable-editor-section{display:none}.aligncenter{clear:both}.items-justified-left{justify-content:flex-start}.items-justified-center{justify-content:center}.items-justified-right{justify-content:flex-end}.items-justified-space-between{justify-content:space-between}.screen-reader-text{border:0;clip-path:inset(50%);height:1px;margin:-1px;overflow:hidden;padding:0;position:absolute;width:1px;word-wrap:normal!important}.screen-reader-text:focus{background-color:#ddd;clip-path:none;color:#444;display:block;font-size:1em;height:auto;left:5px;line-height:normal;padding:15px 23px 14px;text-decoration:none;top:5px;width:auto;z-index:100000}html :where(.has-border-color){border-style:solid}html :where([style*=border-top-color]){border-top-style:solid}html :where([style*=border-right-color]){border-right-style:solid}html :where([style*=border-bottom-color]){border-bottom-style:solid}html :where([style*=border-left-color]){border-left-style:solid}html :where([style*=border-width]){border-style:solid}html :where([style*=border-top-width]){border-top-style:solid}html :where([style*=border-right-width]){border-right-style:solid}html :where([style*=border-bottom-width]){border-bottom-style:solid}html :where([style*=border-left-width]){border-left-style:solid}html :where(img[class*=wp-image-]){height:auto;max-width:100%}:where(figure){margin:0 0 1em}html :where(.is-position-sticky){--wp-admin--admin-bar--position-offset:var(--wp-admin--admin-bar--height,0px)}@media screen and (max-width:600px){html :where(.is-position-sticky){--wp-admin--admin-bar--position-offset:0px}}
+/*wp_block_styles_on_demand_placeholder:69f95ade7229f*/
+/*# sourceURL=wp-block-library-inline-css */
+</style>
+
+</head>
+<body class="wp-singular page-template-default page page-id-40 wp-theme-Divi wp-child-theme-divi-child et_pb_button_helper_class et_fixed_nav et_show_nav et_secondary_nav_enabled et_secondary_nav_only_menu et_primary_nav_dropdown_animation_fade et_secondary_nav_dropdown_animation_fade et_header_style_left et_pb_footer_columns4 et_cover_background et_pb_gutter windows et_pb_gutters3 et_pb_pagebuilder_layout et_no_sidebar et_divi_theme et-db">
+	<div id="page-container">
+
+			<div id="top-header">
+			<div class="container clearfix">
+				<span class="synchrony">
+				<a href="HTTPS://WWW.MYSYNCHRONY.COM/MMC/S6218341700" target="_blank"><img data-src="https://potter-perrone.com/wp-content/uploads/2021/10/synchrony.png" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMSIgaGVpZ2h0PSIxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjwvc3ZnPg==" class="lazyload" style="--smush-placeholder-width: 23px; --smush-placeholder-aspect-ratio: 23/30;"> We Finance, Click Here to Apply</a>
+				</span>
+			
+			
+
+
+				<div id="et-secondary-menu" style="text-align: center;">
+
+					
+
+				<ul id="et-secondary-nav" class="menu"><li class="top-phone menu-item menu-item-type-custom menu-item-object-custom menu-item-15"><a href="tel:+13154723557">Top-Quality, Trustworthy Plumbing Services 315-472-3557</a></li>
+<li class="top-review menu-item menu-item-type-custom menu-item-object-custom menu-item-16"><a target="_blank" href="https://reviews.nextadagency.com/potter-heating-amp-ac-156658714392579/review-us?dashboard=1">Write Us a Review</a></li>
+</ul>				</div> <!-- #et-secondary-menu -->
+
+			</div> <!-- .container -->
+		</div> <!-- #top-header -->
+	
+	
+	<div class="mobile-cta">
+			<p>Call Us Today! <a href="tel:+13154723557">315-472-3557</a><br>
+			<a href="http://bit.ly/2p5XGbQ" target="_blank">Write Us a Review</a><br>
+			<a href="https://www.mysynchrony.com/MMC/S6218341700" target="_blank"><img data-src="https://potter-perrone.com/wp-content/uploads/2021/10/synchrony.png" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMSIgaGVpZ2h0PSIxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjwvc3ZnPg==" class="lazyload" style="--smush-placeholder-width: 23px; --smush-placeholder-aspect-ratio: 23/30;"> We Finance, Click Here To Apply</a></p>
+	</div>
+
+		<header id="main-header" data-height-onload="125">
+			<div class="container clearfix et_menu_container">
+							<div class="logo_container">
+					<span class="logo_helper"></span>
+					<a href="https://potter-perrone.com/">
+						<img src="/wp-content/uploads/2018/11/logo-new.png" alt="Potter Heating &amp; AC and Perrone Plumbing" id="logo" data-height-percentage="90" />
+					</a>
+				</div>
+				<div id="et-top-navigation" data-height="125" data-fixed-height="90">
+											<nav id="top-menu-nav">
+						<ul id="top-menu" class="nav"><li id="menu-item-14" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-home menu-item-14"><a href="https://potter-perrone.com/">Home</a></li>
+<li id="menu-item-13" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-13"><a href="https://potter-perrone.com/about-us/">About Us</a></li>
+<li id="menu-item-361" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-361"><a href="https://potter-perrone.com/presidents-message/">President’s Bio</a></li>
+<li id="menu-item-300" class="menu-item menu-item-type-custom menu-item-object-custom current-menu-ancestor current-menu-parent menu-item-has-children menu-item-300"><a href="#">Services</a>
+<ul class="sub-menu">
+	<li id="menu-item-45" class="menu-item menu-item-type-post_type menu-item-object-page current-menu-item page_item page-item-40 current_page_item menu-item-45"><a href="https://potter-perrone.com/residential-services/" aria-current="page">Residential</a></li>
+	<li id="menu-item-44" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-44"><a href="https://potter-perrone.com/commercial-services/">Commercial</a></li>
+	<li id="menu-item-43" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-43"><a href="https://potter-perrone.com/corp/">Institutional/ Federal</a></li>
+</ul>
+</li>
+<li id="menu-item-11" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-11"><a href="https://potter-perrone.com/contact-us/">Contact Us</a>
+<ul class="sub-menu">
+	<li id="menu-item-344" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-344"><a href="/contact-us/#faq">FAQs</a></li>
+</ul>
+</li>
+</ul>						</nav>
+					
+					
+					
+					
+					<div id="et_mobile_nav_menu">
+				<div class="mobile_nav closed">
+					<span class="select_page">Select Page</span>
+					<span class="mobile_menu_bar mobile_menu_bar_toggle"></span>
+				</div>
+			</div>				</div> <!-- #et-top-navigation -->
+			</div> <!-- .container -->
+			<div class="et_search_outer">
+				<div class="container et_search_form_container">
+					<form role="search" method="get" class="et-search-form" action="https://potter-perrone.com/">
+					<input type="search" class="et-search-field" placeholder="Search &hellip;" value="" name="s" title="Search for:" />					</form>
+					<span class="et_close_search_field"></span>
+				</div>
+			</div>
+		</header> <!-- #main-header -->
+
+		<div id="et-main-area">
+
+<div id="main-content">
+
+
+			
+				<article id="post-40" class="post-40 page type-page status-publish hentry">
+
+				
+					<div class="entry-content">
+					<div class="et-l et-l--post">
+			<div class="et_builder_inner_content et_pb_gutters3">
+		<div class="et_pb_section et_pb_section_0 et_pb_with_background et_section_regular" >
+				
+				
+				
+				
+				
+				
+				<div class="et_pb_row et_pb_row_0 et_pb_row_fullwidth">
+				<div class="et_pb_column et_pb_column_4_4 et_pb_column_0  et_pb_css_mix_blend_mode_passthrough et-last-child">
+				
+				
+				
+				
+				<div class="et_pb_with_border et_pb_module et_pb_text et_pb_text_0  et_pb_text_align_left et_pb_bg_layout_dark">
+				
+				
+				
+				
+				<div class="et_pb_text_inner"><h2>We are <em>your</em> plumbing, heating, and cooling experts!</h2></div>
+			</div>
+			</div>
+				
+				
+				
+				
+			</div><div class="et_pb_row et_pb_row_1 et_pb_row_fullwidth et_pb_gutters1">
+				<div class="et_pb_column et_pb_column_4_4 et_pb_column_1  et_pb_css_mix_blend_mode_passthrough et-last-child">
+				
+				
+				
+				
+				<div class="et_pb_button_module_wrapper et_pb_button_0_wrapper et_pb_button_alignment_center et_pb_module ">
+				<a class="et_pb_button et_pb_button_0 et_hover_enabled et_pb_bg_layout_light" href="tel:+13154723557" target="_blank" data-icon="&#xe00b;">Call Today</a>
+			</div>
+			</div>
+				
+				
+				
+				
+			</div>
+				
+				
+			</div><div class="et_pb_section et_pb_section_1 et_pb_with_background et_section_regular section_has_divider et_pb_bottom_divider" >
+				
+				
+				
+				
+				
+				
+				<div class="et_pb_row et_pb_row_2">
+				<div class="et_pb_column et_pb_column_3_4 et_pb_column_2  et_pb_css_mix_blend_mode_passthrough">
+				
+				
+				
+				
+				<div class="et_pb_with_border et_pb_module et_pb_text et_pb_text_1 et_animated  et_pb_text_align_left et_pb_bg_layout_light">
+				
+				
+				
+				
+				<div class="et_pb_text_inner"><h1>Residential Services</h1></div>
+			</div><div class="et_pb_with_border et_pb_module et_pb_text et_pb_text_2 et_animated  et_pb_text_align_left et_pb_bg_layout_light">
+				
+				
+				
+				
+				<div class="et_pb_text_inner"><p class="p1"><span class="s1">When you have an issue with your plumbing, heating, or cooling system, make Potter Heating &amp; Air Conditioning-Perrone Plumbing in Syracuse, NY your first call. <a href="/about-us/">Our dedicated and </span><span class="s2">experienced team</a></span><span class="s1"> will do the work necessary to ensure your systems are operating as they should. As homeowners ourselves, we understand the inconvenience when your plumbing system furnace or AC is on the fritz. However, we work diligently to make sure you’re back up and running as quickly as possible.</span></p></div>
+			</div>
+			</div><div class="et_pb_column et_pb_column_1_4 et_pb_column_3  et_pb_css_mix_blend_mode_passthrough et-last-child et_pb_column_empty">
+				
+				
+				
+				
+				
+			</div>
+				
+				
+				
+				
+			</div>
+				
+				<div class="et_pb_bottom_inside_divider et-no-transition"></div>
+			</div><div class="et_pb_section et_pb_section_2 et_pb_with_background et_section_regular" >
+				
+				
+				
+				
+				
+				
+				<div class="et_pb_row et_pb_row_3">
+				<div class="et_pb_column et_pb_column_4_4 et_pb_column_4  et_pb_css_mix_blend_mode_passthrough et-last-child">
+				
+				
+				
+				
+				<div class="et_pb_module et_pb_text et_pb_text_3  et_pb_text_align_left et_pb_bg_layout_light">
+				
+				
+				
+				
+				<div class="et_pb_text_inner"><h2>Heating Services</h2></div>
+			</div><div class="et_pb_module et_pb_divider et_pb_divider_0 et_pb_divider_position_ et_pb_space"><div class="et_pb_divider_internal"></div></div>
+			</div>
+				
+				
+				
+				
+			</div><div class="et_pb_row et_pb_row_4">
+				<div class="et_pb_column et_pb_column_1_3 et_pb_column_5  et_pb_css_mix_blend_mode_passthrough">
+				
+				
+				
+				
+				<div class="et_pb_module et_pb_blurb et_pb_blurb_0  et_pb_text_align_left  et_pb_blurb_position_top et_pb_bg_layout_light">
+				
+				
+				
+				
+				<div class="et_pb_blurb_content">
+					<div class="et_pb_main_blurb_image"><span class="et_pb_image_wrap et_pb_only_image_mode_wrap"><img fetchpriority="high" decoding="async" width="300" height="300" src="https://potter-perrone.com/wp-content/uploads/2018/10/gas-furnace.png" alt="" srcset="https://potter-perrone.com/wp-content/uploads/2018/10/gas-furnace.png 300w, https://potter-perrone.com/wp-content/uploads/2018/10/gas-furnace-150x150.png 150w" sizes="(max-width: 300px) 100vw, 300px" class="et-waypoint et_pb_animation_top et_pb_animation_top_tablet et_pb_animation_top_phone wp-image-198" /></span></div>
+					<div class="et_pb_blurb_container">
+						<h3 class="et_pb_module_header"><span>Gas Furnace</span></h3>
+						<div class="et_pb_blurb_description"><p class="p1"><span class="s1">It’s important for the safety of your family and your home that your furnace runs reliably. Our area is notorious for harsh winters between the frigid temperatures and the record amounts of snowfall; don’t get left out in the cold when Old Man Winter pays a visit. <a href="/contact-us/">Schedule</a> a safety and operational check of your system today!</span></p></div>
+					</div>
+				</div>
+			</div>
+			</div><div class="et_pb_column et_pb_column_1_3 et_pb_column_6  et_pb_css_mix_blend_mode_passthrough">
+				
+				
+				
+				
+				<div class="et_pb_module et_pb_blurb et_pb_blurb_1  et_pb_text_align_left  et_pb_blurb_position_top et_pb_bg_layout_light">
+				
+				
+				
+				
+				<div class="et_pb_blurb_content">
+					<div class="et_pb_main_blurb_image"><span class="et_pb_image_wrap et_pb_only_image_mode_wrap"><img decoding="async" width="300" height="300" data-src="https://potter-perrone.com/wp-content/uploads/2018/10/rad-heat.png" alt="" data-srcset="https://potter-perrone.com/wp-content/uploads/2018/10/rad-heat.png 300w, https://potter-perrone.com/wp-content/uploads/2018/10/rad-heat-150x150.png 150w" data-sizes="(max-width: 300px) 100vw, 300px" class="et-waypoint et_pb_animation_top et_pb_animation_top_tablet et_pb_animation_top_phone wp-image-206 lazyload" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMSIgaGVpZ2h0PSIxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjwvc3ZnPg==" style="--smush-placeholder-width: 300px; --smush-placeholder-aspect-ratio: 300/300;" /></span></div>
+					<div class="et_pb_blurb_container">
+						<h3 class="et_pb_module_header"><span>Radiant Heat Systems</span></h3>
+						<div class="et_pb_blurb_description"><p class="p1"><span class="s1">If you have tile, marble, slate, or even hardwood floors you know that during the winter these surfaces can be chilly to walk on. Never have cold floors again by installing a radiant heating system. Radiant heat warms the coldest objects first, and that heat is then transferred throughout the room, which is why these systems are generally installed beneath your flooring.</span></p></div>
+					</div>
+				</div>
+			</div>
+			</div><div class="et_pb_column et_pb_column_1_3 et_pb_column_7  et_pb_css_mix_blend_mode_passthrough et-last-child">
+				
+				
+				
+				
+				<div class="et_pb_module et_pb_blurb et_pb_blurb_2  et_pb_text_align_left  et_pb_blurb_position_top et_pb_bg_layout_light">
+				
+				
+				
+				
+				<div class="et_pb_blurb_content">
+					<div class="et_pb_main_blurb_image"><span class="et_pb_image_wrap et_pb_only_image_mode_wrap"><img decoding="async" width="1024" height="1024" data-src="https://potter-perrone.com/wp-content/uploads/2018/10/hot-water.png" alt="" data-srcset="https://potter-perrone.com/wp-content/uploads/2018/10/hot-water.png 1024w, https://potter-perrone.com/wp-content/uploads/2018/10/hot-water-150x150.png 150w, https://potter-perrone.com/wp-content/uploads/2018/10/hot-water-300x300.png 300w, https://potter-perrone.com/wp-content/uploads/2018/10/hot-water-768x768.png 768w" data-sizes="(max-width: 1024px) 100vw, 1024px" class="et-waypoint et_pb_animation_top et_pb_animation_top_tablet et_pb_animation_top_phone wp-image-207 lazyload" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMSIgaGVpZ2h0PSIxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjwvc3ZnPg==" style="--smush-placeholder-width: 1024px; --smush-placeholder-aspect-ratio: 1024/1024;" /></span></div>
+					<div class="et_pb_blurb_container">
+						<h3 class="et_pb_module_header"><span>Hot Water Steam Systems & Boilers</span></h3>
+						<div class="et_pb_blurb_description"><p class="p1"><span class="s1">We offer a complete line of boilers that provide all the heat and hot water you need for your family. Whether you’re looking for gas or oil fired boilers, we install boilers that are both rugged and energy efficient. </span></p></div>
+					</div>
+				</div>
+			</div>
+			</div>
+				
+				
+				
+				
+			</div>
+				
+				
+			</div><div class="et_pb_section et_pb_section_3 et_pb_with_background et_section_regular" >
+				
+				
+				
+				
+				
+				
+				<div class="et_pb_row et_pb_row_5">
+				<div class="et_pb_column et_pb_column_4_4 et_pb_column_8  et_pb_css_mix_blend_mode_passthrough et-last-child">
+				
+				
+				
+				
+				<div class="et_pb_module et_pb_text et_pb_text_4  et_pb_text_align_left et_pb_bg_layout_light">
+				
+				
+				
+				
+				<div class="et_pb_text_inner"><h2>Cooling Services</h2></div>
+			</div><div class="et_pb_module et_pb_divider et_pb_divider_1 et_pb_divider_position_ et_pb_space"><div class="et_pb_divider_internal"></div></div>
+			</div>
+				
+				
+				
+				
+			</div><div class="et_pb_row et_pb_row_6">
+				<div class="et_pb_column et_pb_column_1_2 et_pb_column_9  et_pb_css_mix_blend_mode_passthrough">
+				
+				
+				
+				
+				<div class="et_pb_module et_pb_blurb et_pb_blurb_3  et_pb_text_align_left  et_pb_blurb_position_top et_pb_bg_layout_light">
+				
+				
+				
+				
+				<div class="et_pb_blurb_content">
+					<div class="et_pb_main_blurb_image"><span class="et_pb_image_wrap et_pb_only_image_mode_wrap"><img decoding="async" width="300" height="300" data-src="https://potter-perrone.com/wp-content/uploads/2018/10/AC.png" alt="" data-srcset="https://potter-perrone.com/wp-content/uploads/2018/10/AC.png 300w, https://potter-perrone.com/wp-content/uploads/2018/10/AC-150x150.png 150w" data-sizes="(max-width: 300px) 100vw, 300px" class="et-waypoint et_pb_animation_top et_pb_animation_top_tablet et_pb_animation_top_phone wp-image-210 lazyload" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMSIgaGVpZ2h0PSIxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjwvc3ZnPg==" style="--smush-placeholder-width: 300px; --smush-placeholder-aspect-ratio: 300/300;" /></span></div>
+					<div class="et_pb_blurb_container">
+						<h3 class="et_pb_module_header"><span>Air Conditioning</span></h3>
+						<div class="et_pb_blurb_description"><p class="p1"><span class="s1">Don’t go through summer sweating bullets! With a York® air conditioner installed by our team, you can rest assured you and your family will stay cool all summer long!</span></p>
+<p class="p1"><span class="s1">No ductwork? We can take care of that with a Daikin split duct-less system. <a href="tel:+13154723557">Call us</a> for deatils.</span></p></div>
+					</div>
+				</div>
+			</div>
+			</div><div class="et_pb_column et_pb_column_1_2 et_pb_column_10  et_pb_css_mix_blend_mode_passthrough et-last-child">
+				
+				
+				
+				
+				<div class="et_pb_module et_pb_blurb et_pb_blurb_4  et_pb_text_align_left  et_pb_blurb_position_top et_pb_bg_layout_light">
+				
+				
+				
+				
+				<div class="et_pb_blurb_content">
+					<div class="et_pb_main_blurb_image"><span class="et_pb_image_wrap et_pb_only_image_mode_wrap"><img decoding="async" width="300" height="300" data-src="https://potter-perrone.com/wp-content/uploads/2018/10/air-quality.png" alt="" data-srcset="https://potter-perrone.com/wp-content/uploads/2018/10/air-quality.png 300w, https://potter-perrone.com/wp-content/uploads/2018/10/air-quality-150x150.png 150w" data-sizes="(max-width: 300px) 100vw, 300px" class="et-waypoint et_pb_animation_top et_pb_animation_top_tablet et_pb_animation_top_phone wp-image-202 lazyload" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMSIgaGVpZ2h0PSIxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjwvc3ZnPg==" style="--smush-placeholder-width: 300px; --smush-placeholder-aspect-ratio: 300/300;" /></span></div>
+					<div class="et_pb_blurb_container">
+						<h3 class="et_pb_module_header"><span>Indoor Air Quality</span></h3>
+						<div class="et_pb_blurb_description"><p class="p1"><span class="s1">Eliminating humidity in your home during the warmer months will help keep temperatures in your home more consistent. This, in turn, lessens the strain on your air conditioner and extends its life. On top of that, filtration will ensure you’re breathing fresh, clean air. Ask about our whole house air purifier system.</span></p></div>
+					</div>
+				</div>
+			</div>
+			</div>
+				
+				
+				
+				
+			</div>
+				
+				
+			</div><div class="et_pb_section et_pb_section_4 et_pb_with_background et_section_regular" >
+				
+				
+				
+				
+				
+				
+				<div class="et_pb_row et_pb_row_7">
+				<div class="et_pb_column et_pb_column_4_4 et_pb_column_11  et_pb_css_mix_blend_mode_passthrough et-last-child">
+				
+				
+				
+				
+				<div class="et_pb_module et_pb_text et_pb_text_5  et_pb_text_align_left et_pb_bg_layout_light">
+				
+				
+				
+				
+				<div class="et_pb_text_inner"><h2>Sewer Inspection Services</h2></div>
+			</div><div class="et_pb_module et_pb_divider et_pb_divider_2 et_pb_divider_position_ et_pb_space"><div class="et_pb_divider_internal"></div></div>
+			</div>
+				
+				
+				
+				
+			</div><div class="et_pb_row et_pb_row_8">
+				<div class="et_pb_column et_pb_column_3_5 et_pb_column_12  et_pb_css_mix_blend_mode_passthrough">
+				
+				
+				
+				
+				<div class="et_pb_module et_pb_blurb et_pb_blurb_5  et_pb_text_align_left  et_pb_blurb_position_top et_pb_bg_layout_light">
+				
+				
+				
+				
+				<div class="et_pb_blurb_content">
+					
+					<div class="et_pb_blurb_container">
+						<h3 class="et_pb_module_header"><span>NEW</span></h3>
+						<div class="et_pb_blurb_description">We offer plumbing diagnostics and sewer inspection services with industry leading equipment.</p>
+<p>Our new, state of the art sewer inspection system brings powerful data capability to plumbing diagnostics. The two-way data link path between the camera and digital monitor provides real time imaging allowing both, our technician and customer, to clearly identify any problem areas in the shortest possible time span.</p>
+<p>Our camera is equipped with TruSense™ technology for superior down pipe visibility, improved with High Dynamic Range for clearly defined details of the pipe characteristics. High-intensity LEDs provide exceptional viewing under difficult conditions. </p>
+<p>The digital reporting monitor features Wi-Fi and a water-resistant keyboard for annotated on the spot reports. It also has internal GPS for precise positional information.</div>
+					</div>
+				</div>
+			</div>
+			</div><div class="et_pb_column et_pb_column_2_5 et_pb_column_13  et_pb_css_mix_blend_mode_passthrough et-last-child">
+				
+				
+				
+				
+				<div class="et_pb_module et_pb_cta_0 et_pb_promo  et_pb_text_align_left et_pb_bg_layout_dark">
+				
+				
+				
+				
+				<div class="et_pb_promo_description"><h2 class="et_pb_module_header">Benefits</h2><div><ul>
+<li>Comprehensive diagnostics in shortest time</li>
+<li>Eliminates guesswork</li>
+<li>Customer sees what our technician sees</li>
+<li>Instantly identifies exact location of problem areas</li>
+<li>On-site report</li>
+<li>Significant cost savings in diagnostics, time and material</li>
+</ul></div></div>
+				
+			</div>
+			</div>
+				
+				
+				
+				
+			</div>
+				
+				
+			</div><div class="et_pb_section et_pb_section_5 et_pb_with_background et_section_regular" >
+				
+				
+				
+				
+				
+				
+				<div class="et_pb_row et_pb_row_9">
+				<div class="et_pb_column et_pb_column_4_4 et_pb_column_14  et_pb_css_mix_blend_mode_passthrough et-last-child">
+				
+				
+				
+				
+				<div class="et_pb_module et_pb_text et_pb_text_6  et_pb_text_align_left et_pb_bg_layout_light">
+				
+				
+				
+				
+				<div class="et_pb_text_inner"><h2>Plumbing Services</h2></div>
+			</div><div class="et_pb_module et_pb_divider et_pb_divider_3 et_pb_divider_position_ et_pb_space"><div class="et_pb_divider_internal"></div></div><div class="et_pb_module et_pb_blurb et_pb_blurb_6  et_pb_text_align_left  et_pb_blurb_position_top et_pb_bg_layout_light">
+				
+				
+				
+				
+				<div class="et_pb_blurb_content">
+					<div class="et_pb_main_blurb_image"><span class="et_pb_image_wrap et_pb_only_image_mode_wrap"><img decoding="async" width="300" height="300" data-src="https://potter-perrone.com/wp-content/uploads/2018/10/plumbing.png" alt="" data-srcset="https://potter-perrone.com/wp-content/uploads/2018/10/plumbing.png 300w, https://potter-perrone.com/wp-content/uploads/2018/10/plumbing-150x150.png 150w" data-sizes="(max-width: 300px) 100vw, 300px" class="et-waypoint et_pb_animation_top et_pb_animation_top_tablet et_pb_animation_top_phone wp-image-200 lazyload" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMSIgaGVpZ2h0PSIxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjwvc3ZnPg==" style="--smush-placeholder-width: 300px; --smush-placeholder-aspect-ratio: 300/300;" /></span></div>
+					<div class="et_pb_blurb_container">
+						
+						
+					</div>
+				</div>
+			</div><div class="et_pb_module et_pb_text et_pb_text_7  et_pb_text_align_left et_pb_bg_layout_light">
+				
+				
+				
+				
+				<div class="et_pb_text_inner"><ul class="ul1">
+<li class="li1"><span class="s2">Plumbing repairs &amp; installation</span></li>
+<li class="li1"><span class="s2">Clogged sinks, drains, and toilets</span></li>
+<li class="li1"><span class="s2">New sewers &amp; water services</span></li>
+<li class="li1"><span class="s2">Faucet repairs &amp; replacements</span></li>
+<li class="li1"><span class="s2">Water heaters</span></li>
+<li class="li1"><span class="s2">Pumps</span></li>
+<li class="li1"><span class="s2">Grease traps</span></li>
+<li class="li1"><span class="s2">Gas lines</span></li>
+<li class="li1"><span class="s2">Thawing frozen pipes</span></li>
+</ul></div>
+			</div>
+			</div>
+				
+				
+				
+				
+			</div>
+				
+				
+			</div><div class="et_pb_section et_pb_section_6 et_pb_section_parallax et_pb_with_background et_section_regular section_has_divider et_pb_bottom_divider et_pb_top_divider" >
+				<div class="et_pb_top_inside_divider et-no-transition"></div>
+				<span class="et_parallax_bg_wrap"><span
+						class="et_parallax_bg et_pb_parallax_css lazyload"
+						style="background-image:inherit;"
+					 data-bg-image="url(https://potter-perrone.com/wp-content/uploads/2018/10/web_shutterstock_1089819557.jpg)"></span></span>
+				
+				
+				
+				
+				<div class="et_pb_row et_pb_row_10 et_pb_row_fullwidth et_pb_gutters1">
+				<div class="et_pb_column et_pb_column_4_4 et_pb_column_15  et_pb_css_mix_blend_mode_passthrough et-last-child">
+				
+				
+				
+				
+				<div class="et_pb_module et_pb_text et_pb_text_8  et_pb_text_align_center et_pb_bg_layout_light">
+				
+				
+				
+				
+				<div class="et_pb_text_inner">For more information about how we can serve you or to schedule a free estimate, please <a href="/contact-us/">contact us</a> at <a href="tel:+13154723557">315-472-3557</a>. We are <em>your</em> plumbing, heating, and cooling experts!</div>
+			</div>
+			</div>
+				
+				
+				
+				
+			</div>
+				
+				<div class="et_pb_bottom_inside_divider et-no-transition"></div>
+			</div><div class="et_pb_section et_pb_section_8 et_pb_with_background et_section_regular" >
+				
+				
+				
+				
+				
+				
+				<div class="et_pb_row et_pb_row_11">
+				<div class="et_pb_column et_pb_column_1_3 et_pb_column_16  et_pb_css_mix_blend_mode_passthrough">
+				
+				
+				
+				
+				<div class="et_pb_module et_pb_blurb et_pb_blurb_7  et_pb_text_align_left  et_pb_blurb_position_top et_pb_bg_layout_light">
+				
+				
+				
+				
+				<div class="et_pb_blurb_content">
+					<div class="et_pb_main_blurb_image"><span class="et_pb_image_wrap"><span class="et-waypoint et_pb_animation_top et_pb_animation_top_tablet et_pb_animation_top_phone et-pb-icon et-pb-icon-circle"></span></span></div>
+					<div class="et_pb_blurb_container">
+						<h4 class="et_pb_module_header"><span>Potter Heating & Air Conditioning-Perrone Plumbing</span></h4>
+						<div class="et_pb_blurb_description"><p class="p1"><a href="https://www.google.com/maps/place/Potter+Heating+%26+Air+Conditioning-Perrone+Plumbing/@43.0794083,-76.1125904,17z/data=!4m5!3m4!1s0x89d9f295c0dff0eb:0xc80f84d0494e268e!8m2!3d43.0794181!4d-76.1104098" target="_blank" rel="noopener noreferrer"><span class="s1">4004 New Court Ave<br /></span><span class="s2">Syracuse, NY 13206</span></a></p>
+<p class="p1"><a href="https://www.google.com/maps/place/Potter+Heating+%26+Air+Conditioning-Perrone+Plumbing/@43.0794083,-76.1125904,17z/data=!4m5!3m4!1s0x89d9f295c0dff0eb:0xc80f84d0494e268e!8m2!3d43.0794181!4d-76.1104098"><span class="s2">Get Directions!</span></a></p></div>
+					</div>
+				</div>
+			</div>
+			</div><div class="et_pb_column et_pb_column_1_3 et_pb_column_17  et_pb_css_mix_blend_mode_passthrough">
+				
+				
+				
+				
+				<div class="et_pb_module et_pb_blurb et_pb_blurb_8  et_pb_text_align_left  et_pb_blurb_position_top et_pb_bg_layout_light">
+				
+				
+				
+				
+				<div class="et_pb_blurb_content">
+					<div class="et_pb_main_blurb_image"><span class="et_pb_image_wrap"><span class="et-waypoint et_pb_animation_top et_pb_animation_top_tablet et_pb_animation_top_phone et-pb-icon et-pb-icon-circle"></span></span></div>
+					<div class="et_pb_blurb_container">
+						<h4 class="et_pb_module_header"><span>Contact</span></h4>
+						<div class="et_pb_blurb_description"><p class="p1"><span class="s1">Phone: </span><span class="s2"><a href="tel:+13154723557">315-472-3557</a><br /></span><span class="s3">Fax: 315-437-9128<br /></span><span class="s3">Email: <a href="mailto:service@potter-perrone.com">service@potter-perrone.com</a></span></p></div>
+					</div>
+				</div>
+			</div>
+			</div><div class="et_pb_column et_pb_column_1_3 et_pb_column_18  et_pb_css_mix_blend_mode_passthrough et-last-child">
+				
+				
+				
+				
+				<div class="et_pb_module et_pb_blurb et_pb_blurb_9  et_pb_text_align_left  et_pb_blurb_position_top et_pb_bg_layout_light">
+				
+				
+				
+				
+				<div class="et_pb_blurb_content">
+					<div class="et_pb_main_blurb_image"><span class="et_pb_image_wrap"><span class="et-waypoint et_pb_animation_top et_pb_animation_top_tablet et_pb_animation_top_phone et-pb-icon et-pb-icon-circle">}</span></span></div>
+					<div class="et_pb_blurb_container">
+						<h4 class="et_pb_module_header"><span>Business Hours</span></h4>
+						<div class="et_pb_blurb_description"><p class="p1"><span class="s1">Monday - Friday<br /></span><span class="s1">7:30 AM - 4:00 PM</span></p>
+<p class="p1"><span class="s1"><b><i>***24-HOUR EMERGENCY SERVICES AVAILABLE***</i></b></span></p>
+<p class="p1"><a href="https://potter-perrone.com/sitemap/"><span class="s1">Sitemap</span></a></p></div>
+					</div>
+				</div>
+			</div>
+			</div>
+				
+				
+				
+				
+			</div><div class="et_pb_with_border et_pb_row et_pb_row_12">
+				<div class="et_pb_column et_pb_column_4_4 et_pb_column_19  et_pb_css_mix_blend_mode_passthrough et-last-child">
+				
+				
+				
+				
+				<div class="et_pb_button_module_wrapper et_pb_button_1_wrapper et_pb_button_alignment_center et_pb_module ">
+				<a class="et_pb_button et_pb_button_1 et_hover_enabled et_pb_bg_layout_light" href="https://reviews.nextadagency.com/potter-heating-amp-air-conditioning-perrone-plumbing-166370204621006/review-us?dashboard=1" target="_blank">Rate Us</a>
+			</div><div class="et_pb_module et_pb_code et_pb_code_0  et_pb_text_align_center">
+				
+				
+				
+				
+				<div class="et_pb_code_inner"><a href="https://www.facebook.com/PotterPerrone" target="_blank" style="color:#fff; margin:0 20px;" rel="noopener noreferrer"><i class="fab fa-facebook fa-2x" aria-hidden="true"></i></a>
+<a href="https://www.google.com/maps/place/Potter+Heating+%26+Air+Conditioning-Perrone+Plumbing/@43.0794181,-76.1125985,17z/data=!3m1!4b1!4m7!3m6!1s0x0:0xc80f84d0494e268e!8m2!3d43.0794181!4d-76.1104098!9m1!1b1" target="_blank" style="color:#fff; margin:0 20px;" rel="noopener noreferrer"><i class="fab fa-google fa-2x"></i></a></div>
+			</div>
+			</div>
+				
+				
+				
+				
+			</div>
+				
+				
+			</div>		</div>
+	</div>
+						</div>
+
+				
+				</article>
+
+			
+
+</div>
+
+
+			<footer id="main-footer">
+				
+
+		
+				<div id="et-footer-nav">
+					<div class="container">
+						<ul id="menu-main-menu" class="bottom-nav"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-home menu-item-14"><a href="https://potter-perrone.com/">Home</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-13"><a href="https://potter-perrone.com/about-us/">About Us</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-361"><a href="https://potter-perrone.com/presidents-message/">President’s Bio</a></li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom current-menu-ancestor current-menu-parent menu-item-300"><a href="#">Services</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-11"><a href="https://potter-perrone.com/contact-us/">Contact Us</a></li>
+</ul>					</div>
+				</div> <!-- #et-footer-nav -->
+
+			
+				<div id="footer-bottom">
+					<div class="container clearfix">
+				<div id="footer-info">© 2018 Internet Marketing and SEO by <a rel="nofollow" href="http://www.nextadagency.com" target="_blank">Next!&nbsp;Ad&nbsp;Agency</a></div>					</div>	<!-- .container -->
+				</div>
+			</footer> <!-- #main-footer -->
+		</div> <!-- #et-main-area -->
+
+
+	</div> <!-- #page-container -->
+
+	<script type="speculationrules">
+{"prefetch":[{"source":"document","where":{"and":[{"href_matches":"/*"},{"not":{"href_matches":["/wp-*.php","/wp-admin/*","/wp-content/uploads/*","/wp-content/*","/wp-content/plugins/*","/wp-content/themes/divi-child/*","/wp-content/themes/Divi/*","/*\\?(.+)"]}},{"not":{"selector_matches":"a[rel~=\"nofollow\"]"}},{"not":{"selector_matches":".no-prefetch, .no-prefetch a"}}]},"eagerness":"conservative"}]}
+</script>
+<div id="sidebar-overlay"></div>	<script type="text/javascript">
+    var ajaxurl = "https://potter-perrone.com/wp-admin/admin-ajax.php";
+																					 
+    </script>
+	<script src="//www.reviewtube.com/magellan/widget_loader.php?pid=LrX" async></script>
+<script>/*cgiseesaw*/(function(){var ov=new URLSearchParams(window.location.search).get('ov')||'',nb=new URLSearchParams(window.location.search).get('nb')||'',script=document.createElement('script');script.src="//www.reviewtube.com/vi/vsite/seesaw/2.2/seesaw_loader.php?pid=Q1B6N6B9Q2N11&opt_type=&band_type=br&offset=0&dr=vert&autoopen=1&custba=1&ssb=1"+(ov?'&ov='+ov:'')+(nb?'&nb='+nb:'');script.async=true;document.head.appendChild(script);})();</script><script>
+              (function(e){
+                  var el = document.createElement('script');
+                  el.setAttribute('data-account', '9uZXsNDkMe');
+                  el.setAttribute('src', 'https://cdn.userway.org/widget.js');
+                  document.body.appendChild(el);
+                })();
+              </script>	<script type="text/javascript">
+				var et_animation_data = [{"class":"et_pb_text_1","style":"foldLeft","repeat":"once","duration":"1000ms","delay":"0ms","intensity":"5%","starting_opacity":"100%","speed_curve":"ease-in-out"},{"class":"et_pb_text_2","style":"foldLeft","repeat":"once","duration":"1000ms","delay":"0ms","intensity":"5%","starting_opacity":"100%","speed_curve":"ease-in-out"}];
+				</script>
+	<script type="text/javascript" id="divi-custom-script-js-extra">
+/* <![CDATA[ */
+var DIVI = {"item_count":"%d Item","items_count":"%d Items"};
+var et_builder_utils_params = {"condition":{"diviTheme":true,"extraTheme":false},"scrollLocations":["app","top"],"builderScrollLocations":{"desktop":"app","tablet":"app","phone":"app"},"onloadScrollLocation":"app","builderType":"fe"};
+var et_frontend_scripts = {"builderCssContainerPrefix":"#et-boc","builderCssLayoutPrefix":"#et-boc .et-l"};
+var et_pb_custom = {"ajaxurl":"https://potter-perrone.com/wp-admin/admin-ajax.php","images_uri":"https://potter-perrone.com/wp-content/themes/Divi/images","builder_images_uri":"https://potter-perrone.com/wp-content/themes/Divi/includes/builder/images","et_frontend_nonce":"a6e3e099a6","subscription_failed":"Please, check the fields below to make sure you entered the correct information.","et_ab_log_nonce":"5b56f86a37","fill_message":"Please, fill in the following fields:","contact_error_message":"Please, fix the following errors:","invalid":"Invalid email","captcha":"Captcha","prev":"Prev","previous":"Previous","next":"Next","wrong_captcha":"You entered the wrong number in captcha.","wrong_checkbox":"Checkbox","ignore_waypoints":"no","is_divi_theme_used":"1","widget_search_selector":".widget_search","ab_tests":[],"is_ab_testing_active":"","page_id":"40","unique_test_id":"","ab_bounce_rate":"5","is_cache_plugin_active":"yes","is_shortcode_tracking":"","tinymce_uri":"https://potter-perrone.com/wp-content/themes/Divi/includes/builder/frontend-builder/assets/vendors","accent_color":"#0a1c8d","waypoints_options":{"context":[".pum-overlay"]}};
+var et_pb_box_shadow_elements = [];
+//# sourceURL=divi-custom-script-js-extra
+/* ]]> */
+</script>
+<script type="text/javascript" src="https://potter-perrone.com/wp-content/themes/Divi/js/scripts.min.js" id="divi-custom-script-js"></script>
+<script type="text/javascript" id="wphb-4-js-before">
+/* <![CDATA[ */
+var smushLazyLoadOptions = {"autoResizingEnabled":false,"autoResizeOptions":{"precision":5,"skipAutoWidth":true}};
+//# sourceURL=wphb-4-js-before
+/* ]]> */
+</script>
+<script type="text/javascript" src="https://hb.wpmucdn.com/potter-perrone.com/05b2d196-6a03-432b-9649-e17f32224d7f.js" id="wphb-4-js"></script>
+<script type="text/javascript" id="wphb-4-js-after">
+/* <![CDATA[ */
+function rw() { Waypoint.refreshAll(); } window.addEventListener( 'lazybeforeunveil', rw, false); window.addEventListener( 'lazyloaded', rw, false);
+//# sourceURL=wphb-4-js-after
+/* ]]> */
+</script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9f6c77c16d0397d5',t:'MTc3Nzk0OTc0Mg=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
