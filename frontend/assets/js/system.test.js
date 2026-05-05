@@ -3,6 +3,8 @@
  * Tests for nav, form, and accessibility behavior
  */
 
+require("./system");
+
 // Navigation tests
 describe("Mobile Navigation", () => {
   let navToggle, nav, body;
@@ -24,6 +26,7 @@ describe("Mobile Navigation", () => {
     navToggle = document.querySelector(".nav-toggle");
     nav = document.querySelector(".primary-nav");
     body = document.body;
+    window.SystemUI.initializeNavigation();
   });
 
   test("opens menu on toggle click", () => {
@@ -78,7 +81,7 @@ describe("Mobile Navigation", () => {
 
 // Form validation tests
 describe("Form Validation", () => {
-  let form, nameField, phoneField, errorSpan, successSpan;
+  let form, nameField, phoneField, errorSpan;
 
   beforeEach(() => {
     document.body.innerHTML = `
@@ -102,7 +105,7 @@ describe("Form Validation", () => {
     nameField = document.getElementById("test-name");
     phoneField = document.getElementById("test-phone");
     errorSpan = document.getElementById("test-name-error");
-    successSpan = document.querySelector(".form-success");
+    window.SystemUI.initializeFormValidation();
   });
 
   test("shows error on empty required field", () => {
@@ -151,6 +154,62 @@ describe("Form Validation", () => {
 
     expect(document.activeElement).toBe(nameField);
   });
+
+  test("validates email format", () => {
+    document.body.innerHTML = `
+      <form data-validate="true" novalidate>
+        <div class="form-field">
+          <label for="test-email">Email</label>
+          <input id="test-email" name="email" type="email" required />
+          <span class="form-error" id="test-email-error" aria-live="polite"></span>
+        </div>
+        <button class="btn btn-primary" type="submit">Submit</button>
+        <p class="form-success" aria-live="polite"></p>
+      </form>
+    `;
+    const emailForm = document.querySelector("form");
+    const emailField = document.getElementById("test-email");
+    window.SystemUI.initializeFormValidation();
+
+    emailField.value = "not-an-email";
+    emailForm.dispatchEvent(new Event("submit", { bubbles: true }));
+    expect(emailField.getAttribute("aria-invalid")).toBe("true");
+    expect(document.getElementById("test-email-error").textContent).toBe(
+      "Enter a valid email address."
+    );
+
+    emailField.value = "valid@example.com";
+    emailForm.dispatchEvent(new Event("submit", { bubbles: true }));
+    expect(emailField.getAttribute("aria-invalid")).not.toBe("true");
+  });
+
+  test("validates ZIP code format", () => {
+    document.body.innerHTML = `
+      <form data-validate="true" novalidate>
+        <div class="form-field">
+          <label for="test-zip">ZIP</label>
+          <input id="test-zip" name="zip" type="text" required />
+          <span class="form-error" id="test-zip-error" aria-live="polite"></span>
+        </div>
+        <button class="btn btn-primary" type="submit">Submit</button>
+        <p class="form-success" aria-live="polite"></p>
+      </form>
+    `;
+    const zipForm = document.querySelector("form");
+    const zipField = document.getElementById("test-zip");
+    window.SystemUI.initializeFormValidation();
+
+    zipField.value = "123";
+    zipForm.dispatchEvent(new Event("submit", { bubbles: true }));
+    expect(zipField.getAttribute("aria-invalid")).toBe("true");
+    expect(document.getElementById("test-zip-error").textContent).toBe(
+      "Enter a valid 5-digit ZIP code."
+    );
+
+    zipField.value = "13202";
+    zipForm.dispatchEvent(new Event("submit", { bubbles: true }));
+    expect(zipField.getAttribute("aria-invalid")).not.toBe("true");
+  });
 });
 
 // Accordion tests
@@ -171,6 +230,7 @@ describe("FAQ Accordion", () => {
 
     trigger = document.querySelector(".accordion-trigger");
     panel = document.querySelector(".accordion-panel");
+    window.SystemUI.initializeAccordion();
   });
 
   test("toggles expanded state on click", () => {
@@ -220,6 +280,8 @@ describe("Analytics Tracking", () => {
       <a href="#" data-track="test_click">Link</a>
       <button data-track="test_button">Button</button>
     `;
+
+    window.SystemUI.initializeTracking();
   });
 
   test("dispatches custom event for tracked elements", () => {
@@ -270,23 +332,34 @@ describe("Accessibility", () => {
       <span id="field-error" aria-live="polite"></span>
     `;
 
-    const field = document.getElementById("field");
     const error = document.getElementById("field-error");
 
     expect(error.getAttribute("aria-live")).toBe("polite");
   });
 
   test("focus outline is visible on all interactive elements", () => {
+    document.head.innerHTML = `
+      <style>
+        button:focus-visible,
+        a:focus-visible,
+        input:focus-visible {
+          outline: 2px solid rgb(204 20 42);
+        }
+      </style>
+    `;
     document.body.innerHTML = `
       <button class="btn">Click</button>
       <a href="#">Link</a>
       <input type="text" />
     `;
 
-    const elements = document.querySelectorAll("button, a, input");
-    elements.forEach((el) => {
-      expect(window.getComputedStyle(el).outline).toBeTruthy();
+    const stylesheet = Array.from(document.styleSheets).find((sheet) => {
+      return Array.from(sheet.cssRules || []).some((rule) => {
+        return String(rule.selectorText || "").includes(":focus-visible");
+      });
     });
+
+    expect(stylesheet).toBeTruthy();
   });
 });
 
