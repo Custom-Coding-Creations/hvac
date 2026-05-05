@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Service Template</title>
+    <link rel="stylesheet" href="../assets/css/system.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to main content</a>
+    <header class="site-header" role="banner">
+      <div class="container header-row">
+        <a class="brand" href="./homepage.html">Potter-Perrone HVAC</a>
+        <button class="nav-toggle" aria-expanded="false" aria-controls="primary-nav">Menu</button>
+        <nav id="primary-nav" class="primary-nav" aria-label="Primary" data-open="false">
+          <ul>
+            <li><a href="#process">Process</a></li>
+            <li><a href="#proof">Trust</a></li>
+            <li><a href="#request">Estimate</a></li>
+          </ul>
+        </nav>
+        <div class="header-cta">
+          <a class="btn btn-secondary" href="tel:+13155550100" data-track="call_click_header">Call</a>
+          <a class="btn btn-primary" href="#request" data-track="estimate_click_header">Request Estimate</a>
+        </div>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="hero">
+        <div class="container hero-grid">
+          <div>
+            <h1>Heating Repair Service</h1>
+            <p>Same-day diagnostics and repair plans with clear recommendations and pricing.</p>
+            <div class="grid-2">
+              <a class="btn btn-primary" href="#request" data-track="estimate_click_service">Request Estimate</a>
+              <a class="btn btn-emergency" href="tel:+13155550100" data-track="call_click_service">Call Technician</a>
+            </div>
+          </div>
+          <aside class="panel" id="request">
+            <h2>Get A Quick Estimate</h2>
+            <form data-validate="true" novalidate>
+              <div class="form-field">
+                <label for="svc-name">Name</label>
+                <input id="svc-name" required />
+                <span class="form-error" id="svc-name-error" aria-live="polite"></span>
+              </div>
+              <div class="form-field">
+                <label for="svc-phone">Phone</label>
+                <input id="svc-phone" required />
+                <span class="form-error" id="svc-phone-error" aria-live="polite"></span>
+              </div>
+              <div class="form-field">
+                <label for="svc-zip">ZIP</label>
+                <input id="svc-zip" required />
+                <span class="form-error" id="svc-zip-error" aria-live="polite"></span>
+              </div>
+              <button class="btn btn-primary" type="submit" data-track="form_submit_service">Submit</button>
+              <p class="form-success" aria-live="polite"></p>
+            </form>
+          </aside>
+        </div>
+      </section>
+
+      <section class="section" id="process">
+        <div class="container grid-3">
+          <article class="panel"><h2>1. Diagnose</h2><p>Technician verifies root cause with clear findings.</p></article>
+          <article class="panel"><h2>2. Recommend</h2><p>Repair and replacement options with financing pathway.</p></article>
+          <article class="panel"><h2>3. Resolve</h2><p>Work completion with verification and follow-up options.</p></article>
+        </div>
+      </section>
+
+      <section class="section" id="proof">
+        <div class="container trust-strip">
+          <article class="trust-card"><strong>Certified Team</strong><p>Licensed and insured field service.</p></article>
+          <article class="trust-card"><strong>Upfront Guidance</strong><p>Options explained before work begins.</p></article>
+          <article class="trust-card"><strong>Financing Available</strong><p>Flexible monthly plans where applicable.</p></article>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer" role="contentinfo">
+      <div class="container"><p>Need immediate support? <a href="tel:+13155550100">Call (315) 555-0100</a>.</p></div>
+    </footer>
+
+    <div class="sticky-mobile-cta" aria-label="Mobile quick actions">
+      <a class="btn btn-emergency" href="tel:+13155550100" data-track="call_click_mobile">Call</a>
+      <a class="btn btn-primary" href="#request" data-track="estimate_click_mobile">Estimate</a>
+    </div>
+
+    <script src="../assets/js/system.js"></script>
+  </body>
+</html>

@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>HVAC Homepage Template</title>
+    <link rel="stylesheet" href="../assets/css/system.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to main content</a>
+    <header class="site-header" role="banner">
+      <div class="container header-row">
+        <a class="brand" href="#">Potter-Perrone HVAC</a>
+        <button class="nav-toggle" aria-expanded="false" aria-controls="primary-nav">Menu</button>
+        <nav id="primary-nav" class="primary-nav" aria-label="Primary" data-open="false">
+          <ul>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#reviews">Reviews</a></li>
+            <li><a href="#financing">Financing</a></li>
+            <li><a href="#faq">FAQ</a></li>
+          </ul>
+        </nav>
+        <div class="header-cta">
+          <a class="btn btn-secondary" href="tel:+13155550100" data-track="call_click_header">Call Now</a>
+          <a class="btn btn-primary" href="#request" data-track="schedule_click_header">Schedule Service</a>
+        </div>
+      </div>
+    </header>
+
+    <main id="main" role="main">
+      <section class="hero">
+        <div class="container hero-grid">
+          <div>
+            <h1>Reliable HVAC and Plumbing Help, Fast</h1>
+            <p>
+              Serving Central New York with urgent repair response, transparent options,
+              and clear next steps for homeowners and facilities teams.
+            </p>
+            <div class="grid-2">
+              <a class="btn btn-primary" href="#request" data-track="schedule_click_hero">Book Service</a>
+              <a class="btn btn-emergency" href="tel:+13155550100" data-track="call_click_hero">Emergency Call</a>
+            </div>
+            <div class="trust-strip">
+              <article class="trust-card"><strong>Since 1944</strong><p>Decades of local service trust.</p></article>
+              <article class="trust-card"><strong>78 Reviews</strong><p>Proven customer confidence.</p></article>
+              <article class="trust-card"><strong>24/7 Coverage</strong><p>Emergency response available.</p></article>
+            </div>
+          </div>
+          <aside class="panel" id="request" aria-label="Quick Request Form">
+            <h2>Request Service</h2>
+            <form data-validate="true" novalidate>
+              <div class="form-field">
+                <label for="home-name">Name</label>
+                <input id="home-name" name="name" required />
+                <span class="form-error" id="home-name-error" aria-live="polite"></span>
+              </div>
+              <div class="form-field">
+                <label for="home-phone">Phone</label>
+                <input id="home-phone" name="phone" required />
+                <span class="form-error" id="home-phone-error" aria-live="polite"></span>
+              </div>
+              <div class="form-field">
+                <label for="home-issue">Issue Type</label>
+                <select id="home-issue" name="issue" required>
+                  <option value="">Select one</option>
+                  <option>Heating</option>
+                  <option>Cooling</option>
+                  <option>Plumbing</option>
+                  <option>Emergency</option>
+                </select>
+                <span class="form-error" id="home-issue-error" aria-live="polite"></span>
+              </div>
+              <button class="btn btn-primary" type="submit" data-track="form_submit_home">Submit Request</button>
+              <p class="form-success" aria-live="polite"></p>
+            </form>
+          </aside>
+        </div>
+      </section>
+
+      <section class="section" id="services">
+        <div class="container">
+          <h2>Core Services</h2>
+          <div class="grid-3">
+            <article class="panel"><h3>Heating Repair</h3><p>Rapid diagnostics and repairs.</p><a class="btn btn-secondary" href="#request">Get Estimate</a></article>
+            <article class="panel"><h3>AC Repair</h3><p>Restore comfort quickly and safely.</p><a class="btn btn-secondary" href="#request">Book Service</a></article>
+            <article class="panel"><h3>Plumbing Support</h3><p>Emergency and scheduled plumbing service.</p><a class="btn btn-secondary" href="tel:+13155550100">Call Plumbing Team</a></article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="faq">
+        <div class="container">
+          <h2>Common Questions</h2>
+          <div class="accordion-item">
+            <button class="accordion-trigger" aria-expanded="false" aria-controls="faq-home-1">Do you provide same-day emergency service?</button>
+            <div id="faq-home-1" class="accordion-panel" hidden>
+              <p>Yes, emergency requests are triaged immediately with on-call routing.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer" role="contentinfo">
+      <div class="container grid-2">
+        <section>
+          <h2>Contact</h2>
+          <p>Phone: <a href="tel:+13155550100">(315) 555-0100</a></p>
+          <p>Email: service@example.com</p>
+        </section>
+        <section>
+          <h2>Hours</h2>
+          <p>Mon-Sat 7am-8pm</p>
+          <p>24/7 emergency dispatch available.</p>
+        </section>
+      </div>
+    </footer>
+
+    <div class="sticky-mobile-cta" aria-label="Mobile quick actions">
+      <a class="btn btn-emergency" href="tel:+13155550100" data-track="call_click_mobile">Call</a>
+      <a class="btn btn-primary" href="#request" data-track="schedule_click_mobile">Schedule</a>
+    </div>
+
+    <script src="../assets/js/system.js"></script>
+  </body>
+</html>
