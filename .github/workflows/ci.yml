@@ -2,11 +2,32 @@ name: CI - Validate Frontend Assets
 
 on:
   push:
-    branches: [main, "Coding-Krakken/**"]
+    branches: [main, "Coding-Krakken/**", "copilot/**"]
   pull_request:
     branches: [main]
 
 jobs:
+  validate-frontend:
+    runs-on: ubuntu-latest
+    name: Frontend Validation Suite
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install frontend dependencies
+        run: npm ci
+
+      - name: Run frontend validation
+        run: npm run validate
+
   validate-structure:
     runs-on: ubuntu-latest
     name: Validate HTML/CSS/JS Structure
@@ -139,7 +160,7 @@ jobs:
   summary:
     runs-on: ubuntu-latest
     name: CI Summary
-    needs: [validate-structure, validate-html, validate-accessibility, validate-conversion, check-documentation]
+    needs: [validate-frontend, validate-structure, validate-html, validate-accessibility, validate-conversion, check-documentation]
     if: always()
     steps:
       - name: Print status
@@ -149,6 +170,7 @@ jobs:
           echo "==================================="
           echo ""
           echo "Validations performed:"
+          echo "  ✓ Frontend lint, stylelint, and Jest"
           echo "  ✓ File structure"
           echo "  ✓ HTML syntax"
           echo "  ✓ CSS structure"
