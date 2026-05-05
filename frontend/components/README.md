@@ -13,7 +13,7 @@ This directory describes reusable component groups used by the template files.
 ```html
 <header class="site-header" role="banner">
   <div class="container header-row">
-    <a class="brand" href="#" data-tracking="brand">Brand Name</a>
+    <a class="brand" href="#" data-track="brand">Brand Name</a>
     <button class="nav-toggle" aria-expanded="false" aria-controls="primary-nav">Menu</button>
     <nav id="primary-nav" class="primary-nav" aria-label="Primary" data-open="false">
       <ul>

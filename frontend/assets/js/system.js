@@ -44,6 +44,16 @@
       });
     });
 
+    const syncMenuForViewport = function () {
+      if (window.matchMedia("(min-width: 768px)").matches) {
+        nav.setAttribute("data-open", "false");
+        navToggle.setAttribute("aria-expanded", "false");
+        body.style.overflow = "";
+      }
+    };
+
+    window.addEventListener("resize", syncMenuForViewport);
+
     document.addEventListener("keydown", function (event) {
       if (!isOpen()) {
         return;
@@ -78,16 +88,19 @@
     });
   }
 
-  // Analytics tracking integration point
-  // Replace trackEvent body with your analytics provider call
+  // Integration hook for analytics providers.
   function trackEvent(eventName) {
-    if (window.console) {
-      console.log("[Analytics]", eventName);
+    if (!eventName) {
+      return;
     }
-    // TODO: Integrate with your analytics provider:
-    // if (window.gtag) gtag('event', eventName);  // Google Analytics 4
-    // if (window._leq) _leq.push(['track', eventName]);  // LeadExec
-    // if (window.amplitude) amplitude.track(eventName);  // Amplitude
+
+    if (typeof window.dispatchEvent === "function") {
+      window.dispatchEvent(
+        new CustomEvent("analytics:track", {
+          detail: { eventName: eventName },
+        })
+      );
+    }
   }
 
   document.querySelectorAll("[data-track]").forEach(function (el) {
