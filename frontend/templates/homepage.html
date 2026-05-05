@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="description" content="Reliable HVAC and plumbing services in Central New York. Fast emergency response, transparent pricing, and 24/7 support." />
+    <meta name="theme-color" content="#122126" />
+    <title>HVAC Homepage Template</title>
+    <link rel="stylesheet" href="../assets/css/system.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to main content</a>
+    <header class="site-header" role="banner">
+      <div class="container header-row">
+        <a class="brand" href="#">Potter-Perrone HVAC</a>
+        <button class="nav-toggle" aria-expanded="false" aria-controls="primary-nav">Menu</button>
+        <nav id="primary-nav" class="primary-nav" aria-label="Primary" data-open="false">
+          <ul>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#reviews">Reviews</a></li>
+            <li><a href="#financing">Financing</a></li>
+            <li><a href="#faq">FAQ</a></li>
+          </ul>
+        </nav>
+        <div class="header-cta">
+          <a class="btn btn-secondary" href="tel:+13155550100" data-track="call_click_header">Call Now</a>
+          <a class="btn btn-primary" href="#request" data-track="schedule_click_header">Schedule Service</a>
+        </div>
+      </div>
+    </header>
+
+    <main id="main" role="main">
+      <section class="hero">
+        <div class="container hero-grid">
+          <div>
+            <h1>Reliable HVAC and Plumbing Help, Fast</h1>
+            <p>
+              Serving Central New York with urgent repair response, transparent options,
+              and clear next steps for homeowners and facilities teams.
+            </p>
+            <div class="grid-2">
+              <a class="btn btn-primary" href="#request" data-track="schedule_click_hero">Book Service</a>
+              <a class="btn btn-emergency" href="tel:+13155550100" data-track="call_click_hero">Emergency Call</a>
+            </div>
+            <div class="trust-strip">
+              <article class="trust-card"><strong>Since 1944</strong><p>Decades of local service trust.</p></article>
+              <article class="trust-card"><strong>78 Reviews</strong><p>Proven customer confidence.</p></article>
+              <article class="trust-card"><strong>24/7 Coverage</strong><p>Emergency response available.</p></article>
+            </div>
+          </div>
+          <aside class="panel" id="request" aria-label="Quick Request Form">
+            <h2>Request Service</h2>
+            <form data-validate="true" novalidate>
+              <div class="form-field">
+                <label for="home-name">Name</label>
+                <input id="home-name" name="name" type="text" required />
+                <span class="form-error" id="home-name-error" aria-live="polite"></span>
+              </div>
+              <div class="form-field">
+                <label for="home-phone">Phone</label>
+                <input id="home-phone" name="phone" type="tel" required placeholder="(315) 555-0100" />
+                <span class="form-error" id="home-phone-error" aria-live="polite"></span>
+              </div>
+              <div class="form-field">
+                <label for="home-issue">Issue Type</label>
+                <select id="home-issue" name="issue" required>
+                  <option value="">Select one</option>
+                  <option>Heating</option>
+                  <option>Cooling</option>
+                  <option>Plumbing</option>
+                  <option>Emergency</option>
+                </select>
+                <span class="form-error" id="home-issue-error" aria-live="polite"></span>
+              </div>
+              <button class="btn btn-primary" type="submit" data-track="form_submit_home">Submit Request</button>
+              <p class="form-success" aria-live="polite"></p>
+            </form>
+          </aside>
+        </div>
+      </section>
+
+      <section class="section" id="services">
+        <div class="container">
+          <h2>Core Services</h2>
+          <div class="grid-3">
+            <article class="panel"><h3>Heating Repair</h3><p>Rapid diagnostics and repairs.</p><a class="btn btn-secondary" href="#request">Get Estimate</a></article>
+            <article class="panel"><h3>AC Repair</h3><p>Restore comfort quickly and safely.</p><a class="btn btn-secondary" href="#request">Book Service</a></article>
+            <article class="panel"><h3>Plumbing Support</h3><p>Emergency and scheduled plumbing service.</p><a class="btn btn-secondary" href="tel:+13155550100">Call Plumbing Team</a></article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="reviews">
+        <div class="container">
+          <h2>Customer Reviews</h2>
+          <div class="trust-strip">
+            <article class="trust-card"><strong>Rapid Response</strong><p>Customers highlight fast scheduling and clear arrival updates.</p></article>
+            <article class="trust-card"><strong>Transparent Guidance</strong><p>Quotes and repair options are explained before work begins.</p></article>
+            <article class="trust-card"><strong>Respectful Service</strong><p>Homeowners report clean, courteous technician visits.</p></article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="financing">
+        <div class="container grid-2">
+          <article class="panel">
+            <h2>Financing Options</h2>
+            <p>Flexible monthly plans are available for qualifying replacements and major repairs.</p>
+            <a class="btn btn-primary" href="#request" data-track="financing_start_home">Check Options</a>
+          </article>
+          <article class="panel">
+            <h2>Estimate Support</h2>
+            <p>Get a quick callback to review project range, timeline, and available payment pathways.</p>
+            <a class="btn btn-secondary" href="tel:+13155550100" data-track="call_click_financing_home">Call Financing Team</a>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" id="faq">
+        <div class="container">
+          <h2>Common Questions</h2>
+          <div class="accordion-item">
+            <button class="accordion-trigger" aria-expanded="false" aria-controls="faq-home-1">Do you provide same-day emergency service?</button>
+            <div id="faq-home-1" class="accordion-panel" hidden>
+              <p>Yes, emergency requests are triaged immediately with on-call routing. Call our 24/7 dispatch line at (315) 555-0100 for urgent issues.</p>
+            </div>
+          </div>
+          <div class="accordion-item">
+            <button class="accordion-trigger" aria-expanded="false" aria-controls="faq-home-2">What areas do you service?</button>
+            <div id="faq-home-2" class="accordion-panel" hidden>
+              <p>We service Syracuse and surrounding communities including Liverpool, Cicero, and nearby neighborhoods. Coverage extends to most central New York areas.</p>
+            </div>
+          </div>
+          <div class="accordion-item">
+            <button class="accordion-trigger" aria-expanded="false" aria-controls="faq-home-3">Do you offer financing options?</button>
+            <div id="faq-home-3" class="accordion-panel" hidden>
+              <p>Yes, we offer flexible monthly payment plans for qualifying repairs and replacements. Ask about financing during your estimate consultation.</p>
+            </div>
+          </div>
+          <div class="accordion-item">
+            <button class="accordion-trigger" aria-expanded="false" aria-controls="faq-home-4">How quickly can you respond?</button>
+            <div id="faq-home-4" class="accordion-panel" hidden>
+              <p>Most emergency calls receive on-call response within 2-4 hours. Standard service requests are typically scheduled within 24-48 hours.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer" role="contentinfo">
+      <div class="container grid-3">
+        <section>
+          <h2>Contact</h2>
+          <p>Phone: <a href="tel:+13155550100">(315) 555-0100</a></p>
+          <p>Email: service@example.com</p>
+        </section>
+        <section>
+          <h2>Hours</h2>
+          <p>Mon-Sat 7am-8pm</p>
+          <p>24/7 emergency dispatch available.</p>
+        </section>
+        <section>
+          <h2>Service & Compliance</h2>
+          <p><a href="#services">Core Services</a></p>
+          <p><a href="#reviews">Customer Reviews</a></p>
+          <p><a href="#financing">Financing Options</a></p>
+        </section>
+      </div>
+    </footer>
+
+    <div class="sticky-mobile-cta" aria-label="Mobile quick actions">
+      <a class="btn btn-emergency" href="tel:+13155550100" data-track="call_click_mobile">Call</a>
+      <a class="btn btn-primary" href="#request" data-track="schedule_click_mobile">Schedule</a>
+    </div>
+
+    <script src="../assets/js/system.js"></script>
+  </body>
+</html>

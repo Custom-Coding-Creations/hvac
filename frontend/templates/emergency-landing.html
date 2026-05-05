@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="description" content="Emergency HVAC and plumbing dispatch. 24/7 urgent response for heating, cooling, and water emergencies." />
+    <meta name="theme-color" content="#122126" />
+    <title>Emergency Landing Template</title>
+    <link rel="stylesheet" href="../assets/css/system.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to main content</a>
+    <header class="site-header" role="banner">
+      <div class="container header-row">
+        <a class="brand" href="./homepage.html">Emergency Dispatch</a>
+        <button class="nav-toggle" aria-expanded="false" aria-controls="primary-nav">Menu</button>
+        <nav id="primary-nav" class="primary-nav" aria-label="Primary" data-open="false">
+          <ul>
+            <li><a href="#request">Request Help</a></li>
+            <li><a href="#coverage">Coverage</a></li>
+          </ul>
+        </nav>
+        <div class="header-cta">
+          <a class="btn btn-emergency" href="tel:+13155550100" data-track="call_click_header_emergency">Call 24/7</a>
+        </div>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="hero">
+        <div class="container hero-grid">
+          <div>
+            <span class="eyebrow">Emergency Dispatch</span>
+            <h1>Emergency HVAC And Plumbing Support</h1>
+            <p>Call now for immediate dispatch and triage. Average response updates provided during intake, with priority routing for no-heat, no-cooling, and active leak calls.</p>
+            <div class="grid-2">
+              <a class="btn btn-emergency" href="tel:+13155550100" data-track="call_click_hero_emergency">Call Dispatch</a>
+              <a class="btn btn-primary" href="#request" data-track="form_start_emergency">Request Callback</a>
+            </div>
+            <div class="callout-bar">
+              <strong>Response-time promise:</strong> urgent requests are triaged immediately and ETA updates are shared during intake whenever dispatch capacity allows.
+            </div>
+            <div class="trust-strip">
+              <article class="trust-card"><strong>24/7 Intake</strong><p>Emergency routing is always available.</p></article>
+              <article class="trust-card"><strong>Licensed Team</strong><p>Qualified technicians for urgent failures.</p></article>
+              <article class="trust-card"><strong>Clear Follow-Up</strong><p>Status and ETA updates after intake.</p></article>
+            </div>
+          </div>
+          <aside class="panel" id="request">
+            <h2>Emergency Request</h2>
+            <form data-validate="true" novalidate>
+              <div class="form-field">
+                <label for="em-name">Name</label>
+                <input id="em-name" name="name" type="text" required />
+                <span class="form-error" id="em-name-error" aria-live="polite"></span>
+              </div>
+              <div class="form-field">
+                <label for="em-phone">Phone</label>
+                <input id="em-phone" name="phone" type="tel" required placeholder="(315) 555-0100" />
+                <span class="form-error" id="em-phone-error" aria-live="polite"></span>
+              </div>
+              <div class="form-field">
+                <label for="em-issue">Urgent Issue (Heating, Cooling, Plumbing, Other)</label>
+                <textarea id="em-issue" name="issue" required placeholder="Describe the problem (e.g., No heat, water leak, AC not running)"></textarea>
+                <span class="form-error" id="em-issue-error" aria-live="polite"></span>
+              </div>
+              <button class="btn btn-primary" type="submit" data-track="form_submit_emergency">Send Emergency Request</button>
+              <p class="form-success" aria-live="polite"></p>
+            </form>
+          </aside>
+        </div>
+      </section>
+
+      <section class="section" id="coverage">
+        <div class="container panel">
+          <h2>Coverage</h2>
+          <p>Emergency service across Syracuse and surrounding service areas with dispatch updates by phone.</p>
+        </div>
+      </section>
+
+      <section class="section" id="backup-cta">
+        <div class="container grid-2">
+          <article class="panel">
+            <span class="eyebrow">Before We Arrive</span>
+            <h2>Prepare For The Callback</h2>
+            <p>Keep your phone nearby, note the issue location, and be ready to describe any shutdowns, leaks, or safety concerns.</p>
+          </article>
+          <article class="panel">
+            <span class="eyebrow">Need Immediate Contact?</span>
+            <h2>Call Instead Of Waiting</h2>
+            <p>If the issue is active or worsening, call dispatch directly instead of relying only on the form.</p>
+            <a class="btn btn-emergency" href="tel:+13155550100" data-track="call_backup_emergency">Call Dispatch Now</a>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer" role="contentinfo">
+      <div class="container grid-3">
+        <section>
+          <h2>Emergency Guidance</h2>
+          <p>For life-safety risks, contact emergency services first.</p>
+        </section>
+        <section>
+          <h2>Quick Links</h2>
+          <p><a href="#request">Emergency Request</a></p>
+          <p><a href="#coverage">Coverage Area</a></p>
+          <p><a href="#backup-cta">Backup Contact</a></p>
+        </section>
+        <section>
+          <h2>Call Dispatch</h2>
+          <p><a href="tel:+13155550100">(315) 555-0100</a></p>
+          <p>24/7 intake for urgent HVAC and plumbing issues.</p>
+        </section>
+      </div>
+    </footer>
+
+    <div class="sticky-mobile-cta" aria-label="Mobile emergency actions">
+      <a class="btn btn-emergency" href="tel:+13155550100" data-track="call_click_mobile_emergency">Call Dispatch</a>
+      <a class="btn btn-primary" href="#request" data-track="form_start_mobile_emergency">Callback</a>
+    </div>
+
+    <script src="../assets/js/system.js"></script>
+  </body>
+</html>
