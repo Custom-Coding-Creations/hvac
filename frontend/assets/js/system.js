@@ -144,6 +144,19 @@
           }
         } else {
           field.removeAttribute("aria-describedby");
+          if (field.type === "email") {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(field.value.trim())) {
+              valid = false;
+              field.setAttribute("aria-invalid", "true");
+              field.setAttribute("aria-describedby", field.id + "-error");
+              const message = document.getElementById(field.id + "-error");
+              if (message) {
+                message.textContent = "Enter a valid email address.";
+                message.setAttribute("role", "alert");
+              }
+            }
+          }
         }
       });
 
