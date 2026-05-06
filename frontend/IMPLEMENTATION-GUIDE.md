@@ -75,6 +75,20 @@ frontend/
 </form>
 ```
 
+For urgent symptom prioritization, add these attributes on the form and CTA targets:
+```html
+<form
+  data-validate="true"
+  data-urgent-source="svc-issue"
+  data-urgent-call-cta="#svc-call-cta"
+  data-urgent-form-cta="#svc-estimate-cta"
+  data-urgent-live="#svc-urgency-note"
+  novalidate
+>
+```
+
+When an urgent issue is selected, SystemUI promotes the call CTA and downgrades the form CTA to a secondary action.
+
 System.js handles:
 - Required field validation
 - Error message population
@@ -85,20 +99,28 @@ System.js handles:
 
 ### CTA Tracking (data-track attribute)
 ```html
-<a class="btn btn-primary" href="#target" data-track="button_name_action">Submit</a>
+<a class="btn btn-primary" href="#target" data-track="click_schedule_header_homepage">Submit</a>
 ```
 
-System.js logs all data-track values. Replace `console.log` with your analytics provider:
+System.js dispatches `analytics:track` with normalized `eventName` and `sourceEventName` detail values.
+Use canonical event names in this format:
+`action_object_context_template`
+
+Set `data-template` on the `body` tag (`homepage`, `service`, `location`, `emergency`) so tracking can derive template context and expand three-part names automatically.
+
+Recommended patterns:
+- `click_call_header_homepage`
+- `click_schedule_sticky_mobile_service`
+- `submit_form_request_location`
+- `click_callback_hero_emergency`
+
+Legacy values are mapped to canonical names in `system.js`, but new templates should only use canonical format.
+
+To forward events to your analytics provider:
 ```javascript
-// In system.js, replace the tracking section:
-document.querySelectorAll("[data-track]").forEach(function (el) {
-  el.addEventListener("click", function () {
-    const eventName = el.getAttribute("data-track");
-    // Call your analytics provider:
-    gtag('event', eventName);  // Google Analytics
-    // OR
-    _leq.push(['track', eventName]);  // LeadExec
-  });
+window.addEventListener("analytics:track", function (event) {
+  const eventName = event.detail.eventName;
+  gtag("event", eventName);
 });
 ```
 
@@ -246,16 +268,19 @@ Ensure every template has at least 2 distinct user journeys:
 Optional third path: CTA to chat, scheduling widget, etc.
 
 ### Analytics Event Structure
-Standard tracking event names:
-- `{action}_click_{location}` for link clicks
-- `{action}_start_{location}` for form starts
-- `{action}_submit_{page}` for form submissions
-- `{action}_view_{location}` for section views
+Canonical tracking event names:
+- `action_object_context_template`
 
 Examples:
-- `schedule_click_header`
-- `call_click_mobile`
-- `form_submit_homepage`
+- `click_call_header_homepage`
+- `click_estimate_hero_service`
+- `submit_form_request_location`
+- `click_call_sticky_mobile_emergency`
+
+### Sticky Mobile CTA Behavior
+- Sticky CTA remains visible on mobile viewports below 768px.
+- When a form field is focused on mobile, sticky CTA enters compact mode to reduce keyboard overlap.
+- Compact mode exits automatically when focus leaves form controls or viewport changes to desktop.
 
 ## Troubleshooting
 

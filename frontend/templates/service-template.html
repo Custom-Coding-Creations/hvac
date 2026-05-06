@@ -9,7 +9,7 @@
     <title>Service Template</title>
     <link rel="stylesheet" href="../assets/css/system.css" />
   </head>
-  <body>
+  <body data-template="service">
     <a class="skip-link" href="#main">Skip to main content</a>
     <header class="site-header" role="banner">
       <div class="container header-row">
@@ -23,8 +23,8 @@
           </ul>
         </nav>
         <div class="header-cta">
-          <a class="btn btn-secondary" href="tel:+13155550100" data-track="call_click_header">Call</a>
-          <a class="btn btn-primary" href="#request" data-track="estimate_click_header">Request Estimate</a>
+          <a class="btn btn-secondary" href="tel:+13155550100" data-track="click_call_header_service">Call</a>
+          <a class="btn btn-primary" href="#request" data-track="click_estimate_header_service">Request Estimate</a>
         </div>
       </div>
     </header>
@@ -43,16 +43,17 @@
             <h1>Heating Repair Service</h1>
             <p>Same-day diagnostics and repair plans with clear recommendations and pricing.</p>
             <div class="grid-2">
-              <a class="btn btn-primary" href="#request" data-track="estimate_click_service">Request Estimate</a>
-              <a class="btn btn-emergency" href="tel:+13155550100" data-track="call_click_service">Call Technician</a>
+              <a id="svc-estimate-cta" class="btn btn-primary" href="#request" data-track="click_estimate_hero_service">Request Estimate</a>
+              <a id="svc-call-cta" class="btn btn-emergency" href="tel:+13155550100" data-track="click_call_hero_service">Call Technician</a>
             </div>
+            <p id="svc-urgency-note" class="form-success" aria-live="polite"></p>
             <div class="callout-bar">
               <strong>Response window:</strong> Most urgent heating calls are triaged within minutes and routed for same-day support when capacity is available.
             </div>
           </div>
           <aside class="panel" id="request">
             <h2>Get A Quick Estimate</h2>
-            <form data-validate="true" novalidate>
+            <form data-validate="true" data-urgent-source="svc-issue" data-urgent-call-cta="#svc-call-cta" data-urgent-form-cta="#svc-estimate-cta" data-urgent-live="#svc-urgency-note" novalidate>
               <div class="form-field">
                 <label for="svc-name">Name</label>
                 <input id="svc-name" name="name" type="text" required />
@@ -68,7 +69,20 @@
                 <input id="svc-zip" name="zip" type="text" pattern="[0-9]{5}" placeholder="13210" required />
                 <span class="form-error" id="svc-zip-error" aria-live="polite"></span>
               </div>
-              <button class="btn btn-primary" type="submit" data-track="form_submit_service">Submit</button>
+              <div class="form-field">
+                <label for="svc-issue">Current Issue</label>
+                <select id="svc-issue" name="issue" required>
+                  <option value="">Select one</option>
+                  <option value="no-heat">No heat</option>
+                  <option value="no-cooling">No cooling</option>
+                  <option value="active-leak">Active leak</option>
+                  <option value="gas-odor">Gas odor</option>
+                  <option value="maintenance">Routine maintenance</option>
+                  <option value="estimate">General estimate request</option>
+                </select>
+                <span class="form-error" id="svc-issue-error" aria-live="polite"></span>
+              </div>
+              <button class="btn btn-primary" type="submit" data-track="submit_form_request_service">Submit</button>
               <p class="form-success" aria-live="polite"></p>
             </form>
           </aside>
@@ -98,7 +112,7 @@
             <span class="eyebrow">What To Expect</span>
             <h2>Clear Next Steps</h2>
             <p>We inspect the equipment, isolate root cause, explain the recommendation, and confirm the repair plan before work begins.</p>
-            <a class="btn btn-secondary" href="#request" data-track="symptom_cta_service">Talk Through Your Symptoms</a>
+            <a class="btn btn-secondary" href="#request" data-track="click_symptoms_cta_service">Talk Through Your Symptoms</a>
           </article>
         </div>
       </section>
@@ -117,13 +131,13 @@
             <span class="eyebrow">Financing</span>
             <h2>Payment Paths For Larger Repairs</h2>
             <p>Flexible monthly options can help you move forward on qualifying system repairs or replacements without delaying service.</p>
-            <a class="btn btn-primary" href="#request" data-track="financing_cta_service">Review Options</a>
+            <a class="btn btn-primary" href="#request" data-track="click_financing_options_service">Review Options</a>
           </article>
           <article class="panel">
             <span class="eyebrow">Quick Questions</span>
             <h2>Need Immediate Guidance?</h2>
             <p>Call for help comparing repair versus replacement cost, timing, and financing availability.</p>
-            <a class="btn btn-secondary" href="tel:+13155550100" data-track="financing_call_service">Call For Help</a>
+            <a class="btn btn-secondary" href="tel:+13155550100" data-track="click_call_financing_service">Call For Help</a>
           </article>
         </div>
       </section>
@@ -168,8 +182,8 @@
     </footer>
 
     <div class="sticky-mobile-cta" aria-label="Mobile quick actions">
-      <a class="btn btn-emergency" href="tel:+13155550100" data-track="call_click_mobile">Call</a>
-      <a class="btn btn-primary" href="#request" data-track="estimate_click_mobile">Estimate</a>
+      <a class="btn btn-emergency" href="tel:+13155550100" data-track="click_call_sticky_mobile_service">Call</a>
+      <a class="btn btn-primary" href="#request" data-track="click_estimate_sticky_mobile_service">Estimate</a>
     </div>
 
     <script src="../assets/js/system.js"></script>
