@@ -62,14 +62,20 @@ jobs:
           echo "🔍 Scanning for hardcoded secrets..."
           set +e
           
-          # Check for common secret patterns
-          grep -r "api[_-]?key\s*=" frontend/ --include="*.js" --include="*.ts" --include="*.html" && echo "❌ Found potential hardcoded API key" && exit 1
-          grep -r "password\s*=" frontend/ --include="*.js" --include="*.ts" --include="*.html" && echo "❌ Found potential hardcoded password" && exit 1
+          # Check for common secret patterns (use -E for extended regex)
+          grep -rE "api[_-]?key\s*=" frontend/ --include="*.js" --include="*.ts" --include="*.html" && echo "❌ Found potential hardcoded API key" && exit 1
+          grep -rE "password\s*=" frontend/ --include="*.js" --include="*.ts" --include="*.html" && echo "❌ Found potential hardcoded password" && exit 1
           grep -r "VERCEL_TOKEN" frontend/ && echo "❌ Found VERCEL_TOKEN in code" && exit 1
           grep -r "aws_secret" frontend/ && echo "❌ Found AWS secret in code" && exit 1
           
           set -e
           echo "✅ No hardcoded secrets detected"
+
+      - name: Verify Vercel configuration
+        run: |
+          echo "🔍 Verifying Vercel deployment configuration..."
+          test -f vercel.json || (echo "❌ vercel.json not found — deployment configuration missing" && exit 1)
+          echo "✅ vercel.json present"
 
       - name: Prepare deployment
         id: prepare
@@ -143,13 +149,13 @@ jobs:
         with:
           github-token: ${{ github.token }}
           script: |
-            github.rest.git.createCommit({
+            github.rest.repos.createCommitComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              message: '📦 Deployed to Staging',
-              tree: context.payload.after
-            }).catch(() => {
-              console.log('Commit comment skipped (not available for this event)');
+              commit_sha: context.sha,
+              body: '📦 Deployed to Staging successfully'
+            }).catch((err) => {
+              console.log('Commit comment skipped:', err.message);
             });
 
   # ==================== PRODUCTION APPROVAL GATE ====================
@@ -252,13 +258,13 @@ jobs:
         with:
           github-token: ${{ github.token }}
           script: |
-            github.rest.issues.createComment({
+            github.rest.repos.createCommitComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              issue_number: context.issue.number || 1,
-              body: `🚀 Production deployment successful!\n\n- **URL**: ${{ steps.deploy-prod.outputs.url }}\n- **Commit**: ${{ github.sha }}\n- **Time**: $(date -u +'%Y-%m-%dT%H:%M:%SZ')`
-            }).catch(() => {
-              console.log('Notification skipped');
+              commit_sha: context.sha,
+              body: `🚀 Production deployment successful!\n\n- **URL**: ${{ steps.deploy-prod.outputs.url }}\n- **Commit**: \`${{ github.sha }}\`\n- **Deployed by**: ${{ github.actor }}\n- **Time**: ${new Date().toISOString()}`
+            }).catch((err) => {
+              console.log('Production notification skipped:', err.message);
             });
 
   # ==================== DEPLOYMENT FAILED ROLLBACK ====================

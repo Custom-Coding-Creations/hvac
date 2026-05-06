@@ -141,6 +141,21 @@ jobs:
           done
           echo "✓ Conversion validation complete"
 
+  validate-workflows:
+    runs-on: ubuntu-latest
+    name: Validate Workflow YAML
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install yamllint
+        run: pip install yamllint
+
+      - name: Lint workflow files
+        run: |
+          echo "Linting GitHub Actions workflow files..."
+          yamllint -d "{extends: relaxed, rules: {line-length: {max: 200}, truthy: {allowed-values: ['true', 'false', 'on', 'off']}}}" .github/workflows/
+          echo "✓ All workflow YAML files are valid"
+
   check-documentation:
     runs-on: ubuntu-latest
     name: Documentation Completeness
@@ -153,6 +168,7 @@ jobs:
           required_docs=(
             "ACCEPTANCE-CRITERIA.md"
             "SECURITY.md"
+            "vercel.json"
             "frontend/IMPLEMENTATION-GUIDE.md"
             "frontend/components/README.md"
             "docs/program/README.md"
@@ -163,6 +179,10 @@ jobs:
             "docs/program/CICD-WORKFLOW.md"
             "docs/program/SECURITY-BASELINE.md"
             "docs/program/ESCALATION-PROCEDURES.md"
+            "docs/program/ADR-0002-hosting-platform-selection.md"
+            "docs/program/ADR-0003-monitoring-and-alerting-stack.md"
+            "docs/program/ADR-0004-secrets-management.md"
+            "docs/program/ADR-0005-rollback-strategy.md"
             "design-system/TOKENS.md"
           )
           missing=0
@@ -180,7 +200,7 @@ jobs:
   summary:
     runs-on: ubuntu-latest
     name: CI Summary
-    needs: [validate-frontend, validate-structure, validate-html, validate-accessibility, validate-conversion, check-documentation]
+    needs: [validate-frontend, validate-structure, validate-html, validate-accessibility, validate-conversion, validate-workflows, check-documentation]
     if: always()
     steps:
       - name: Print status
@@ -200,6 +220,7 @@ jobs:
           echo "  ✓ No debug artifacts"
           echo "  ✓ Accessibility patterns"
           echo "  ✓ Conversion paths"
+          echo "  ✓ Workflow YAML lint"
           echo "  ✓ Documentation"
           echo ""
           echo "Status: All checks passed ✅"
