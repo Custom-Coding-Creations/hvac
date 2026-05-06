@@ -530,7 +530,7 @@ No monitoring service configured OR no alert notifications delivered when test i
 ## Risk Summary Dashboard
 
 ### Risk Count by Status
-- 🔴 **Critical/High Risk:** 4 (R-003, R-004, R-006, R-009, R-010)
+- 🔴 **Critical/High Risk:** 5 (R-003, R-004, R-006, R-009, R-010)
 - 🟡 **Medium Risk:** 4 (R-001, R-002, R-005, R-008)
 - 🟢 **Low Risk / Mitigated:** 1 (R-007)
 
