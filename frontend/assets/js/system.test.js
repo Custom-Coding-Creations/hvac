@@ -269,15 +269,18 @@ describe("FAQ Accordion", () => {
 describe("Analytics Tracking", () => {
   let trackingEvents = [];
   let trackingPayloads = [];
+  let trackingHandler = null;
 
   beforeEach(() => {
     trackingEvents = [];
     trackingPayloads = [];
+    document.body.removeAttribute("data-template");
 
-    window.addEventListener("analytics:track", (event) => {
+    trackingHandler = function (event) {
       trackingEvents.push(event.detail.eventName);
       trackingPayloads.push(event.detail);
-    });
+    };
+    window.addEventListener("analytics:track", trackingHandler);
 
     document.body.innerHTML = `
       <a href="#" data-track="call_click_header">Link</a>
@@ -285,6 +288,13 @@ describe("Analytics Tracking", () => {
     `;
 
     window.SystemUI.initializeTracking();
+  });
+
+  afterEach(() => {
+    if (trackingHandler) {
+      window.removeEventListener("analytics:track", trackingHandler);
+      trackingHandler = null;
+    }
   });
 
   test("maps legacy tracking names to canonical event names", () => {
@@ -300,7 +310,9 @@ describe("Analytics Tracking", () => {
     button.click();
 
     expect(trackingEvents).toContain("click_call_header_homepage");
-    expect(trackingPayloads[1].sourceEventName).toBe("click_call_header_homepage");
+    expect(trackingPayloads[trackingPayloads.length - 1].sourceEventName).toBe(
+      "click_call_header_homepage"
+    );
   });
 
   test("expands three-part names using template context", () => {
@@ -314,6 +326,51 @@ describe("Analytics Tracking", () => {
     expect(trackingPayloads[trackingPayloads.length - 1].templateContext).toBe(
       "service"
     );
+  });
+
+  test("ignores malformed tracking names", () => {
+    document.body.innerHTML = `<a href="#" data-track="Bad Event Name">Link</a>`;
+    window.SystemUI.initializeTracking();
+
+    document.querySelector("a").click();
+
+    expect(trackingEvents).toHaveLength(0);
+  });
+
+  test("tracks submit event when form is submitted without click", () => {
+    document.body.innerHTML = `
+      <form id="track-form">
+        <input id="form-name" name="name" type="text" value="Test User" />
+        <button type="submit" data-track="submit_form_request_homepage">Submit</button>
+      </form>
+    `;
+    window.SystemUI.initializeTracking();
+
+    const form = document.getElementById("track-form");
+    form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
+
+    expect(trackingEvents).toContain("submit_form_request_homepage");
+  });
+
+  test("does not double-track submit button click plus submit event", () => {
+    document.body.innerHTML = `
+      <form id="track-form">
+        <button id="track-submit" type="submit" data-track="submit_form_request_homepage">Submit</button>
+      </form>
+    `;
+    window.SystemUI.initializeTracking();
+
+    const form = document.getElementById("track-form");
+    const button = document.getElementById("track-submit");
+
+    button.dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true }));
+    form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
+
+    const submitEvents = trackingEvents.filter((name) => {
+      return name === "submit_form_request_homepage";
+    });
+
+    expect(submitEvents).toHaveLength(1);
   });
 });
 

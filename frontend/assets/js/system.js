@@ -182,26 +182,61 @@ function initializeNavigation() {
 function initializeTracking() {
   const templateContext = getTemplateContext();
 
+  function isCanonicalTrackName(name) {
+    return trackEventPattern.test(name);
+  }
+
+  function isSubmitControl(element) {
+    if (!element || !element.tagName) {
+      return false;
+    }
+
+    const tagName = String(element.tagName).toUpperCase();
+    if (tagName === "BUTTON") {
+      return String(element.getAttribute("type") || "submit").toLowerCase() === "submit";
+    }
+
+    if (tagName === "INPUT") {
+      const inputType = String(element.getAttribute("type") || "").toLowerCase();
+      return inputType === "submit" || inputType === "image";
+    }
+
+    return false;
+  }
+
+  function getTrackedSubmitControl(form) {
+    if (!form || typeof form.querySelector !== "function") {
+      return null;
+    }
+
+    return form.querySelector(
+      "button[type='submit'][data-track], button:not([type])[data-track], input[type='submit'][data-track], input[type='image'][data-track]"
+    );
+  }
+
   function normalizeTrackName(eventName) {
     if (!eventName) {
       return eventName;
     }
 
     const withTemplateToken = eventName.replace(/\{template\}/g, templateContext);
+    let normalized = withTemplateToken;
 
-    if (trackEventPattern.test(withTemplateToken)) {
-      return withTemplateToken;
+    if (isCanonicalTrackName(normalized)) {
+      return normalized;
     }
 
-    if (legacyTrackMap[withTemplateToken]) {
-      return legacyTrackMap[withTemplateToken];
+    if (legacyTrackMap[normalized]) {
+      normalized = legacyTrackMap[normalized];
+    } else if (trackEventThreePartPattern.test(normalized)) {
+      normalized = normalized + "_" + templateContext;
     }
 
-    if (trackEventThreePartPattern.test(withTemplateToken)) {
-      return withTemplateToken + "_" + templateContext;
+    if (!isCanonicalTrackName(normalized)) {
+      return null;
     }
 
-    return withTemplateToken;
+    return normalized;
   }
 
   function trackEvent(eventName) {
@@ -210,6 +245,9 @@ function initializeTracking() {
     }
 
     const normalizedEventName = normalizeTrackName(eventName);
+    if (!normalizedEventName) {
+      return;
+    }
 
     if (typeof window.dispatchEvent === "function") {
       window.dispatchEvent(
@@ -231,9 +269,50 @@ function initializeTracking() {
 
     el.addEventListener("click", function () {
       const eventName = el.getAttribute("data-track");
+
+      if (isSubmitControl(el)) {
+        const ownerForm = el.form || el.closest("form");
+        if (ownerForm && ownerForm.dataset) {
+          ownerForm.dataset.trackSubmitClickName = String(eventName || "");
+          ownerForm.dataset.trackSubmitClickAt = String(Date.now());
+        }
+      }
+
       trackEvent(eventName);
     });
     el.dataset.trackBound = "true";
+  });
+
+  document.querySelectorAll("form").forEach(function (form) {
+    if (form.dataset.trackSubmitBound) {
+      return;
+    }
+
+    form.addEventListener("submit", function (event) {
+      let submitControl = null;
+      if (event.submitter && event.submitter.getAttribute("data-track")) {
+        submitControl = event.submitter;
+      } else {
+        submitControl = getTrackedSubmitControl(form);
+      }
+
+      if (!submitControl) {
+        return;
+      }
+
+      const eventName = submitControl.getAttribute("data-track");
+      const lastClickName = String(form.dataset.trackSubmitClickName || "");
+      const lastClickAt = Number(form.dataset.trackSubmitClickAt || "0");
+      const isRecentClick = Date.now() - lastClickAt < 400;
+
+      if (isRecentClick && lastClickName === String(eventName || "")) {
+        return;
+      }
+
+      trackEvent(eventName);
+    });
+
+    form.dataset.trackSubmitBound = "true";
   });
 }
 
