@@ -130,16 +130,21 @@ Evaluated solutions: Datadog, New Relic, CloudWatch, Grafana + Prometheus, Uptim
 3. Generate Sentry DSN (Data Source Name)
 4. Add Sentry SDK to `frontend/assets/js/system.js`:
    ```javascript
-   if (window.ENV === 'production') {
+   // Sentry DSN is injected by Vercel as a build-time env var via vercel.json or
+   // a small inline <script> that sets window.SENTRY_DSN before this file loads.
+   if (window.ENV === 'production' && window.SENTRY_DSN) {
      import('https://cdn.sentry-cdn.com/sentry.js').then(() => {
        Sentry.init({
-         dsn: process.env.SENTRY_DSN,
-         environment: process.env.ENV,
+         dsn: window.SENTRY_DSN,
+         environment: window.ENV,
          tracesSampleRate: 0.1,
        });
      });
    }
    ```
+   > **Note:** `process.env` is a Node.js concept and is not available in browser JavaScript.
+   > Inject the DSN at the HTML template level via a `<script>window.SENTRY_DSN = '...'</script>`
+   > block populated by Vercel environment variables at deploy time.
 5. Store Sentry DSN in GitHub Secrets (per environment)
 6. Configure Sentry alerts:
    - Alert on error spike (>10 errors/min)

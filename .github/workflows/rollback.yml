@@ -93,7 +93,7 @@ jobs:
             echo "Deploying to Staging..."
           fi
 
-          deployment_output=$(vercel deploy --token $VERCEL_TOKEN --prod 2>&1)
+          deployment_output=$(vercel deploy --prod 2>&1)
           echo "$deployment_output"
 
           # Extract URL

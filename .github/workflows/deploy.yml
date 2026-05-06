@@ -92,7 +92,7 @@ jobs:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
         run: |
           npm install -g vercel@latest
-          deployment_output=$(vercel deploy --token $VERCEL_TOKEN --prod 2>&1)
+          deployment_output=$(vercel deploy --prod 2>&1)
           echo "$deployment_output"
 
           # Extract deployment URL
@@ -177,7 +177,7 @@ jobs:
   # ==================== PRODUCTION DEPLOYMENT ====================
   deploy-production:
     needs: [deploy-staging, wait-for-approval]
-    if: github.event_name == 'push' || github.event.inputs.environment == 'production'
+    if: needs.wait-for-approval.result == 'success' || github.event.inputs.environment == 'production'
     runs-on: ubuntu-latest
     name: Deploy to Production
     environment:
@@ -208,7 +208,7 @@ jobs:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
         run: |
           npm install -g vercel@latest
-          deployment_output=$(vercel deploy --token $VERCEL_TOKEN --prod 2>&1)
+          deployment_output=$(vercel deploy --prod 2>&1)
           echo "$deployment_output"
 
           # Extract production URL
@@ -222,20 +222,34 @@ jobs:
           echo "🏥 Running production health checks..."
           PROD_URL="${{ steps.deploy-prod.outputs.url }}"
 
-          # Test homepage loads
-          echo "Testing homepage..."
-          status=$(curl -s -o /dev/null -w "%{http_code}" "$PROD_URL/")
-          if [ "$status" != "200" ]; then
-            echo "❌ Homepage returned $status - ROLLING BACK"
+          max_attempts=5
+          attempt=1
+
+          while [ $attempt -le $max_attempts ]; do
+            echo "Health check attempt $attempt/$max_attempts..."
+            status=$(curl -s -o /dev/null -w "%{http_code}" "$PROD_URL/")
+
+            if [ "$status" = "200" ]; then
+              echo "✅ Homepage loads (HTTP $status)"
+              break
+            else
+              echo "⚠️ Got HTTP $status, retrying..."
+              if [ $attempt -lt $max_attempts ]; then
+                sleep 10
+              fi
+            fi
+            attempt=$((attempt + 1))
+          done
+
+          if [ $attempt -gt $max_attempts ]; then
+            echo "❌ Production health checks failed after $max_attempts attempts - ROLLING BACK"
             exit 1
           fi
-          echo "✅ Homepage loads (HTTP $status)"
 
           # Verify page structure
           curl -s "$PROD_URL/" | grep -q "<html" && echo "✅ HTML structure valid" || exit 1
           curl -s "$PROD_URL/" | grep -q "<title" && echo "✅ Title tag present" || exit 1
 
-          # Simulate conversion event verification
           echo "✅ Production health checks passed"
 
       - name: Record production deployment

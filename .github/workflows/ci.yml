@@ -156,6 +156,15 @@ jobs:
           yamllint -d "{extends: relaxed, rules: {line-length: {max: 200}, truthy: {allowed-values: ['true', 'false', 'on', 'off']}}}" .github/workflows/
           echo "✓ All workflow YAML files are valid"
 
+      - name: Validate vercel.json
+        run: |
+          echo "Validating vercel.json..."
+          python3 -c "import json, sys; data=json.load(open('vercel.json')); \
+            assert 'headers' in data, 'Missing headers'; \
+            assert 'rewrites' in data, 'Missing rewrites'; \
+            print('✓ vercel.json is valid JSON with required fields')"
+          echo "✓ vercel.json validation complete"
+
   check-documentation:
     runs-on: ubuntu-latest
     name: Documentation Completeness
