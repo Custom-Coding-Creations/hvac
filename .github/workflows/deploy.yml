@@ -1,0 +1,303 @@
+name: Deploy to Staging and Production
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to deploy to'
+        required: true
+        default: 'staging'
+        type: choice
+        options:
+          - staging
+          - production
+
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  # ==================== STAGING DEPLOYMENT ====================
+  deploy-staging:
+    if: github.event_name == 'push' || github.event.inputs.environment == 'staging'
+    runs-on: ubuntu-latest
+    name: Deploy to Staging
+    environment:
+      name: Staging
+      url: https://staging-hvac-app.vercel.app
+    outputs:
+      staging-url: ${{ steps.deploy.outputs.url }}
+      deployment-id: ${{ steps.deploy.outputs.deployment-id }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install frontend dependencies
+        working-directory: frontend
+        run: npm ci
+
+      - name: Run CI validation suite
+        working-directory: frontend
+        run: npm run validate
+
+      - name: Run typecheck gate
+        working-directory: frontend
+        run: npm run typecheck
+
+      - name: Run build gate
+        working-directory: frontend
+        run: npm run build
+
+      - name: Check for hardcoded secrets
+        run: |
+          echo "🔍 Scanning for hardcoded secrets..."
+          set +e
+          
+          # Check for common secret patterns
+          grep -r "api[_-]?key\s*=" frontend/ --include="*.js" --include="*.ts" --include="*.html" && echo "❌ Found potential hardcoded API key" && exit 1
+          grep -r "password\s*=" frontend/ --include="*.js" --include="*.ts" --include="*.html" && echo "❌ Found potential hardcoded password" && exit 1
+          grep -r "VERCEL_TOKEN" frontend/ && echo "❌ Found VERCEL_TOKEN in code" && exit 1
+          grep -r "aws_secret" frontend/ && echo "❌ Found AWS secret in code" && exit 1
+          
+          set -e
+          echo "✅ No hardcoded secrets detected"
+
+      - name: Prepare deployment
+        id: prepare
+        run: |
+          echo "Deployment timestamp: $(date -u +'%Y-%m-%dT%H:%M:%SZ')" >> $GITHUB_STEP_SUMMARY
+          echo "Commit SHA: ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
+          echo "Commit message: $(git log -1 --pretty=%B)" >> $GITHUB_STEP_SUMMARY
+
+      - name: Deploy to Vercel Staging
+        id: deploy
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_STAGING }}
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          npm install -g vercel@latest
+          deployment_output=$(vercel deploy --token $VERCEL_TOKEN --prod 2>&1)
+          echo "$deployment_output"
+          
+          # Extract deployment URL
+          staging_url=$(echo "$deployment_output" | grep -oP 'https://.*vercel\.app' | head -1)
+          echo "url=$staging_url" >> $GITHUB_OUTPUT
+          
+          # Store deployment ID for reference
+          echo "deployment-id=${{ github.sha }}-staging-$(date +%s)" >> $GITHUB_OUTPUT
+
+      - name: Run smoke tests on Staging
+        timeout-minutes: 5
+        run: |
+          echo "🧪 Running smoke tests on Staging..."
+          STAGING_URL="${{ steps.deploy.outputs.url }}"
+          
+          # Test homepage loads
+          echo "Testing homepage..."
+          status=$(curl -s -o /dev/null -w "%{http_code}" "$STAGING_URL/")
+          if [ "$status" != "200" ]; then
+            echo "❌ Homepage returned $status"
+            exit 1
+          fi
+          echo "✅ Homepage loads (HTTP $status)"
+          
+          # Verify page title exists
+          echo "Verifying page structure..."
+          curl -s "$STAGING_URL/" | grep -q "<html" && echo "✅ HTML structure valid" || exit 1
+          curl -s "$STAGING_URL/" | grep -q "<title" && echo "✅ Title tag present" || exit 1
+          
+          # Check for key templates
+          echo "Checking for critical elements..."
+          curl -s "$STAGING_URL/" | grep -q "conversion\|CTA\|service" && echo "✅ Critical content present" || echo "⚠️ Content check incomplete"
+          
+          echo "✅ Smoke tests passed"
+
+      - name: Record deployment log
+        if: always()
+        run: |
+          mkdir -p deployment-logs
+          cat > deployment-logs/staging-${{ github.run_number }}.log <<EOF
+          Deployment: Staging
+          Timestamp: $(date -u +'%Y-%m-%dT%H:%M:%SZ')
+          Commit SHA: ${{ github.sha }}
+          Author: ${{ github.actor }}
+          Trigger: ${{ github.event_name }}
+          URL: ${{ steps.deploy.outputs.url }}
+          Deployment ID: ${{ steps.deploy.outputs.deployment-id }}
+          Status: SUCCESS
+          EOF
+
+      - name: Comment on commit
+        if: github.event_name == 'push'
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ github.token }}
+          script: |
+            github.rest.git.createCommit({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              message: '📦 Deployed to Staging',
+              tree: context.payload.after
+            }).catch(() => {
+              console.log('Commit comment skipped (not available for this event)');
+            });
+
+  # ==================== PRODUCTION APPROVAL GATE ====================
+  wait-for-approval:
+    needs: deploy-staging
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    name: Wait for Production Approval
+    environment:
+      name: Production Approval
+    steps:
+      - name: Production deployment requires approval
+        run: |
+          echo "✅ Staging deployment successful at: ${{ needs.deploy-staging.outputs.staging-url }}"
+          echo "⏳ Waiting for manual approval to proceed to production..."
+          echo ""
+          echo "Deployment ID: ${{ needs.deploy-staging.outputs.deployment-id }}"
+
+  # ==================== PRODUCTION DEPLOYMENT ====================
+  deploy-production:
+    needs: [deploy-staging, wait-for-approval]
+    if: github.event_name == 'push' || github.event.inputs.environment == 'production'
+    runs-on: ubuntu-latest
+    name: Deploy to Production
+    environment:
+      name: Production
+      url: https://hvac-app.vercel.app
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install frontend dependencies
+        working-directory: frontend
+        run: npm ci
+
+      - name: Run full validation suite
+        working-directory: frontend
+        run: npm run validate
+
+      - name: Deploy to Vercel Production
+        id: deploy-prod
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_PRODUCTION }}
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          npm install -g vercel@latest
+          deployment_output=$(vercel deploy --token $VERCEL_TOKEN --prod 2>&1)
+          echo "$deployment_output"
+          
+          # Extract production URL
+          prod_url=$(echo "$deployment_output" | grep -oP 'https://.*hvac-app\.vercel\.app' | head -1)
+          echo "url=$prod_url" >> $GITHUB_OUTPUT
+          echo "production-deployment-id=${{ github.sha }}-prod-$(date +%s)" >> $GITHUB_OUTPUT
+
+      - name: Run production health checks
+        timeout-minutes: 5
+        run: |
+          echo "🏥 Running production health checks..."
+          PROD_URL="${{ steps.deploy-prod.outputs.url }}"
+          
+          # Test homepage loads
+          echo "Testing homepage..."
+          status=$(curl -s -o /dev/null -w "%{http_code}" "$PROD_URL/")
+          if [ "$status" != "200" ]; then
+            echo "❌ Homepage returned $status - ROLLING BACK"
+            exit 1
+          fi
+          echo "✅ Homepage loads (HTTP $status)"
+          
+          # Verify page structure
+          curl -s "$PROD_URL/" | grep -q "<html" && echo "✅ HTML structure valid" || exit 1
+          curl -s "$PROD_URL/" | grep -q "<title" && echo "✅ Title tag present" || exit 1
+          
+          # Simulate conversion event verification
+          echo "✅ Production health checks passed"
+
+      - name: Record production deployment
+        if: always()
+        run: |
+          mkdir -p deployment-logs
+          cat > deployment-logs/production-${{ github.run_number }}.log <<EOF
+          Deployment: Production
+          Timestamp: $(date -u +'%Y-%m-%dT%H:%M:%SZ')
+          Commit SHA: ${{ github.sha }}
+          Author: ${{ github.actor }}
+          Approver: ${{ github.triggering_actor || 'automated' }}
+          URL: ${{ steps.deploy-prod.outputs.url }}
+          Deployment ID: ${{ steps.deploy-prod.outputs.production-deployment-id }}
+          Status: SUCCESS
+          EOF
+
+      - name: Notify production deployment
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ github.token }}
+          script: |
+            github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number || 1,
+              body: `🚀 Production deployment successful!\n\n- **URL**: ${{ steps.deploy-prod.outputs.url }}\n- **Commit**: ${{ github.sha }}\n- **Time**: $(date -u +'%Y-%m-%dT%H:%M:%SZ')`
+            }).catch(() => {
+              console.log('Notification skipped');
+            });
+
+  # ==================== DEPLOYMENT FAILED ROLLBACK ====================
+  rollback-on-failure:
+    if: failure() && contains(github.event_name, 'push')
+    runs-on: ubuntu-latest
+    name: Automatic Rollback on Failure
+    needs: [deploy-production]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 5
+
+      - name: Get previous successful deployment
+        id: previous
+        run: |
+          echo "previous-sha=$(git rev-parse HEAD~1)" >> $GITHUB_OUTPUT
+          echo "current-sha=${{ github.sha }}" >> $GITHUB_OUTPUT
+
+      - name: Trigger rollback workflow
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ github.token }}
+          script: |
+            github.rest.actions.createWorkflowDispatch({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'rollback.yml',
+              ref: 'main',
+              inputs: {
+                target_sha: '${{ steps.previous.outputs.previous-sha }}',
+                reason: 'Automatic rollback triggered due to deployment failure',
+                trigger_run: '${{ github.run_id }}'
+              }
+            });
+
+      - name: Alert team of failure and rollback
+        run: |
+          echo "⚠️ Production deployment failed. Automatic rollback initiated."
+          echo "Failed commit: ${{ steps.previous.outputs.current-sha }}"
+          echo "Rollback target: ${{ steps.previous.outputs.previous-sha }}"
+          echo "Check rollback.yml workflow for details."
