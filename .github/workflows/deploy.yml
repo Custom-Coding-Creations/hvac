@@ -61,13 +61,13 @@ jobs:
         run: |
           echo "🔍 Scanning for hardcoded secrets..."
           set +e
-          
+
           # Check for common secret patterns (use -E for extended regex)
           grep -rE "api[_-]?key\s*=" frontend/ --include="*.js" --include="*.ts" --include="*.html" && echo "❌ Found potential hardcoded API key" && exit 1
           grep -rE "password\s*=" frontend/ --include="*.js" --include="*.ts" --include="*.html" && echo "❌ Found potential hardcoded password" && exit 1
           grep -r "VERCEL_TOKEN" frontend/ && echo "❌ Found VERCEL_TOKEN in code" && exit 1
           grep -r "aws_secret" frontend/ && echo "❌ Found AWS secret in code" && exit 1
-          
+
           set -e
           echo "✅ No hardcoded secrets detected"
 
@@ -94,11 +94,11 @@ jobs:
           npm install -g vercel@latest
           deployment_output=$(vercel deploy --token $VERCEL_TOKEN --prod 2>&1)
           echo "$deployment_output"
-          
+
           # Extract deployment URL
           staging_url=$(echo "$deployment_output" | grep -oP 'https://.*vercel\.app' | head -1)
           echo "url=$staging_url" >> $GITHUB_OUTPUT
-          
+
           # Store deployment ID for reference
           echo "deployment-id=${{ github.sha }}-staging-$(date +%s)" >> $GITHUB_OUTPUT
 
@@ -107,7 +107,7 @@ jobs:
         run: |
           echo "🧪 Running smoke tests on Staging..."
           STAGING_URL="${{ steps.deploy.outputs.url }}"
-          
+
           # Test homepage loads
           echo "Testing homepage..."
           status=$(curl -s -o /dev/null -w "%{http_code}" "$STAGING_URL/")
@@ -116,16 +116,16 @@ jobs:
             exit 1
           fi
           echo "✅ Homepage loads (HTTP $status)"
-          
+
           # Verify page title exists
           echo "Verifying page structure..."
           curl -s "$STAGING_URL/" | grep -q "<html" && echo "✅ HTML structure valid" || exit 1
           curl -s "$STAGING_URL/" | grep -q "<title" && echo "✅ Title tag present" || exit 1
-          
+
           # Check for key templates
           echo "Checking for critical elements..."
           curl -s "$STAGING_URL/" | grep -q "conversion\|CTA\|service" && echo "✅ Critical content present" || echo "⚠️ Content check incomplete"
-          
+
           echo "✅ Smoke tests passed"
 
       - name: Record deployment log
@@ -210,7 +210,7 @@ jobs:
           npm install -g vercel@latest
           deployment_output=$(vercel deploy --token $VERCEL_TOKEN --prod 2>&1)
           echo "$deployment_output"
-          
+
           # Extract production URL
           prod_url=$(echo "$deployment_output" | grep -oP 'https://.*hvac-app\.vercel\.app' | head -1)
           echo "url=$prod_url" >> $GITHUB_OUTPUT
@@ -221,7 +221,7 @@ jobs:
         run: |
           echo "🏥 Running production health checks..."
           PROD_URL="${{ steps.deploy-prod.outputs.url }}"
-          
+
           # Test homepage loads
           echo "Testing homepage..."
           status=$(curl -s -o /dev/null -w "%{http_code}" "$PROD_URL/")
@@ -230,11 +230,11 @@ jobs:
             exit 1
           fi
           echo "✅ Homepage loads (HTTP $status)"
-          
+
           # Verify page structure
           curl -s "$PROD_URL/" | grep -q "<html" && echo "✅ HTML structure valid" || exit 1
           curl -s "$PROD_URL/" | grep -q "<title" && echo "✅ Title tag present" || exit 1
-          
+
           # Simulate conversion event verification
           echo "✅ Production health checks passed"
 
@@ -262,7 +262,14 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               commit_sha: context.sha,
-              body: `🚀 Production deployment successful!\n\n- **URL**: ${{ steps.deploy-prod.outputs.url }}\n- **Commit**: \`${{ github.sha }}\`\n- **Deployed by**: ${{ github.actor }}\n- **Time**: ${new Date().toISOString()}`
+              body: [
+                '\ud83d\ude80 Production deployment successful!',
+                '',
+                `- **URL**: ${{ steps.deploy-prod.outputs.url }}`,
+                `- **Commit**: \`${{ github.sha }}\``,
+                `- **Deployed by**: ${{ github.actor }}`,
+                `- **Time**: ${new Date().toISOString()}`,
+              ].join('\n')
             }).catch((err) => {
               console.log('Production notification skipped:', err.message);
             });
