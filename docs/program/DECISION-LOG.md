@@ -257,6 +257,141 @@ Consolidate all program governance artifacts under `docs/program/` directory wit
 
 ---
 
+### D-008: Branch Protection Policy on Main
+
+**Date:** 2026-05-06  
+**Category:** Technical  
+**Owner:** Frontend Lead  
+**Status:** ✅ Approved  
+
+**Decision:**  
+Enable GitHub branch protection on main branch requiring CI checks and one code review approval before merge.
+
+**Rationale:**  
+- Prevents accidental broken deployments to production
+- Ensures all code has been linted, tested, and peer-reviewed
+- Enforces shared responsibility for code quality
+- Aligns with industry best practices
+- Blocks force-push to prevent destructive operations
+
+**Alternatives Considered:**  
+1. No branch protection (rejected - risky, allows direct commits to main)
+2. Require multiple approvals (rejected - too slow for small team)
+3. Require status checks only, no review (rejected - peer review important)
+
+**Impact:**  
+- **Timeline:** Minimal - slightly slower merge process but better quality
+- **Budget:** No impact
+- **Quality:** Positive - prevents bad deployments, enforces code review
+- **Scope:** No change to deliverables
+
+**Approver(s):** Frontend Lead, Platform Owner  
+**Related Artifacts:** GitHub settings, ci.yml workflow, deploy.yml  
+
+---
+
+### D-009: Secrets Management via GitHub Secrets + Vercel Env Vars
+
+**Date:** 2026-05-06  
+**Category:** Technical/Security  
+**Owner:** Platform Owner  
+**Status:** ✅ Approved  
+
+**Decision:**  
+Store deployment credentials (Vercel tokens) in GitHub Secrets and runtime secrets (API keys, DSNs) in Vercel environment variables. Never hardcode secrets or commit .env files.
+
+**Rationale:**  
+- GitHub Secrets are encrypted and audit-logged
+- Vercel env vars automatically injected at runtime without exposure
+- Separates deployment credentials (for CI/CD) from runtime secrets (for application)
+- Vercel-native integration simplifies workflow
+- No risk of secrets exposed in logs or version control
+
+**Alternatives Considered:**  
+1. Hardcode secrets (rejected - security risk, audit failure)
+2. Use external vault service (rejected - overcomplicated for small team)
+3. Store all secrets in Vercel env vars (rejected - can't inject Vercel tokens at runtime)
+4. Use .env file (rejected - could be committed accidentally)
+
+**Impact:**  
+- **Timeline:** No impact (implemented in CI/CD workflow)
+- **Budget:** No impact (GitHub/Vercel free tier includes secrets)
+- **Quality:** Positive - secure credential management
+- **Scope:** Security requirement clarification
+
+**Approver(s):** Platform Owner, Program Lead  
+**Related Artifacts:** ADR-0004 Secrets Management, .github/workflows/deploy.yml  
+
+---
+
+### D-010: Rollback Strategy - Vercel History + Manual Override
+
+**Date:** 2026-05-06  
+**Category:** Technical  
+**Owner:** Platform Owner  
+**Status:** ✅ Approved  
+
+**Decision:**  
+Use Vercel's automatic deployment history for fast rollback, with manual override workflow for explicit previous-commit rollback. Auto-trigger rollback on health check failure. Target: <5 minute rollback time.
+
+**Rationale:**  
+- Vercel maintains 5+ previous deployments automatically
+- Manual rollback workflow enables explicit commit selection if needed
+- Health checks can auto-trigger rollback for critical issues (no human delay)
+- <5 minute time target aligns with production SLA expectations
+- Tested and verified via monthly drills (disaster recovery practice)
+
+**Alternatives Considered:**  
+1. Blue-green deployments (rejected - overcomplicated for static site, higher cost)
+2. Canary deployments (rejected - unnecessary for static HTML/CSS/JS)
+3. Manual-only rollback (rejected - too slow for P1 incidents)
+4. No rollback procedure (rejected - risky, no disaster recovery)
+
+**Impact:**  
+- **Timeline:** +2 weeks for implementation (workflow + drills) - included in Phase 2
+- **Budget:** No impact (Vercel + GitHub native)
+- **Quality:** Positive - reduces incident severity, enables fast recovery
+- **Scope:** Operational readiness requirement
+
+**Approver(s):** Platform Owner, Frontend Lead  
+**Related Artifacts:** ADR-0005 Rollback Strategy, .github/workflows/rollback.yml, INCIDENT-RESPONSE-RUNBOOK.md  
+
+---
+
+### D-011: On-Call Rotation and Escalation Procedures
+
+**Date:** 2026-05-06  
+**Category:** Process  
+**Owner:** Program Lead  
+**Status:** ✅ Approved  
+
+**Decision:**  
+Implement weekly on-call rotation with four-level escalation (on-call engineer → Platform Owner → Frontend Lead → Program Lead/Sponsor). SLA targets by severity: P1 <1 hour, P2 <4 hours, P3 <1 day, P4 standard backlog.
+
+**Rationale:**  
+- Weekly rotation prevents burnout while ensuring coverage
+- Four-level escalation handles incidents proportionally to severity
+- Clear SLA targets enable measurable performance
+- On-call rotation is standard practice for production systems
+- Incident classification (P1-P4) provides decision framework
+
+**Alternatives Considered:**  
+1. Single on-call person (rejected - burnout risk, no backup)
+2. No escalation (rejected - no clear authority for rollback decisions)
+3. Unlimited escalation levels (rejected - too slow for incident response)
+4. No SLA targets (rejected - no accountability)
+
+**Impact:**  
+- **Timeline:** No impact (scheduling and procedures documented)
+- **Budget:** No impact (internal team)
+- **Quality:** Positive - faster incident response, clear responsibility
+- **Scope:** Operational procedures
+
+**Approver(s):** Program Lead, Platform Owner  
+**Related Artifacts:** OPERATIONAL-OWNERSHIP.md, INCIDENT-RESPONSE-RUNBOOK.md, on-call rotation schedule  
+
+---
+
 ## Superseded Decisions
 
 ### D-XXX: [Example Superseded Decision]

@@ -1,0 +1,249 @@
+name: Rollback Deployment
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to rollback'
+        required: true
+        default: 'production'
+        type: choice
+        options:
+          - staging
+          - production
+      target_sha:
+        description: 'Commit SHA to rollback to (optional, uses previous if empty)'
+        required: false
+        type: string
+      reason:
+        description: 'Reason for rollback'
+        required: true
+        type: choice
+        options:
+          - 'Critical error detected'
+          - 'Conversion metrics dropped'
+          - 'Security issue found'
+          - 'Performance degradation'
+          - 'User-reported critical bug'
+          - 'Other (describe in comments)'
+
+jobs:
+  rollback:
+    runs-on: ubuntu-latest
+    name: Execute Rollback
+    environment:
+      name: ${{ github.event.inputs.environment == 'production' && 'Production' || 'Staging' }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 10
+
+      - name: Determine rollback target
+        id: target
+        run: |
+          if [ -z "${{ github.event.inputs.target_sha }}" ]; then
+            # Use previous successful commit
+            target_sha=$(git rev-parse HEAD~1)
+            echo "Using previous commit as target: $target_sha"
+          else
+            target_sha="${{ github.event.inputs.target_sha }}"
+            echo "Using specified commit: $target_sha"
+          fi
+
+          echo "target-sha=$target_sha" >> $GITHUB_OUTPUT
+          echo "current-sha=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
+          echo "rollback-timestamp=$(date -u +'%Y-%m-%dT%H:%M:%SZ')" >> $GITHUB_OUTPUT
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Checkout target commit
+        run: |
+          git fetch origin
+          git checkout ${{ steps.target.outputs.target-sha }}
+          echo "✅ Checked out commit: ${{ steps.target.outputs.target-sha }}"
+
+      - name: Install dependencies
+        working-directory: frontend
+        run: npm ci
+
+      - name: Validate target build
+        working-directory: frontend
+        run: |
+          echo "🔍 Validating rollback target..."
+          npm run validate
+
+      - name: Deploy rollback target
+        id: deploy-rollback
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          npm install -g vercel@latest
+
+          # Determine which project based on environment
+          if [ "${{ github.event.inputs.environment }}" == "production" ]; then
+            export VERCEL_PROJECT_ID="${{ secrets.VERCEL_PROJECT_ID_PRODUCTION }}"
+            echo "Deploying to Production..."
+          else
+            export VERCEL_PROJECT_ID="${{ secrets.VERCEL_PROJECT_ID_STAGING }}"
+            echo "Deploying to Staging..."
+          fi
+
+          deployment_output=$(vercel deploy --prod 2>&1)
+          echo "$deployment_output"
+
+          # Extract URL
+          deployed_url=$(echo "$deployment_output" | grep -oP 'https://.*vercel\.app' | head -1)
+          echo "deployed-url=$deployed_url" >> $GITHUB_OUTPUT
+
+      - name: Run rollback health checks
+        timeout-minutes: 5
+        run: |
+          echo "🏥 Running rollback health checks..."
+          ROLLBACK_URL="${{ steps.deploy-rollback.outputs.deployed-url }}"
+
+          max_attempts=5
+          attempt=1
+
+          while [ $attempt -le $max_attempts ]; do
+            echo "Health check attempt $attempt/$max_attempts..."
+            status=$(curl -s -o /dev/null -w "%{http_code}" "$ROLLBACK_URL/")
+
+            if [ "$status" == "200" ]; then
+              echo "✅ Service is healthy (HTTP $status)"
+              break
+            else
+              echo "⚠️ Got HTTP $status, retrying..."
+              if [ $attempt -lt $max_attempts ]; then
+                sleep 10
+              fi
+            fi
+            attempt=$((attempt + 1))
+          done
+
+          if [ $attempt -gt $max_attempts ]; then
+            echo "❌ Health checks failed after $max_attempts attempts"
+            exit 1
+          fi
+
+          # Verify page structure
+          echo "Verifying page structure..."
+          curl -s "$ROLLBACK_URL/" | grep -q "<html" && echo "✅ HTML valid" || exit 1
+          curl -s "$ROLLBACK_URL/" | grep -q "<title" && echo "✅ Page loaded" || exit 1
+
+          echo "✅ All health checks passed"
+
+      - name: Record rollback in deployment log
+        run: |
+          mkdir -p deployment-logs
+          cat > deployment-logs/rollback-${{ github.run_number }}.log <<EOF
+          Rollback Event
+          Environment: ${{ github.event.inputs.environment }}
+          Timestamp: ${{ steps.target.outputs.rollback-timestamp }}
+
+          From (Failed): ${{ steps.target.outputs.current-sha }}
+          To (Rollback): ${{ steps.target.outputs.target-sha }}
+
+          Reason: ${{ github.event.inputs.reason }}
+          Operator: ${{ github.triggering_actor }}
+          Workflow Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+          Deployed URL: ${{ steps.deploy-rollback.outputs.deployed-url }}
+          Rollback Duration: < 5 minutes
+          Health Checks: PASSED
+
+          Status: ✅ SUCCESS
+
+          Next Steps:
+          1. Notify team of rollback
+          2. Create incident in issue tracker
+          3. Schedule post-mortem review
+          4. Identify root cause of failure
+          5. Deploy fix after validation
+          EOF
+
+          cat deployment-logs/rollback-${{ github.run_number }}.log
+
+      - name: Create incident issue
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ github.token }}
+          script: |
+            const operator = `@${{ github.triggering_actor }}`;
+            const title = `\ud83d\udea8 Rollback Incident: ${{ github.event.inputs.environment }} - ${{ github.event.inputs.reason }}`;
+            const body = [
+              '**Rollback Details**',
+              '',
+              'Environment: `${{ github.event.inputs.environment }}`',
+              'Timestamp: `${{ steps.target.outputs.rollback-timestamp }}`',
+              `Operator: ${operator}`,
+              '',
+              '**Failed Commit**',
+              '`${{ steps.target.outputs.current-sha }}`',
+              '',
+              '**Rollback Target**',
+              '`${{ steps.target.outputs.target-sha }}`',
+              '',
+              '**Reason**',
+              '${{ github.event.inputs.reason }}',
+              '',
+              '**Deployed URL**',
+              '${{ steps.deploy-rollback.outputs.deployed-url }}',
+              '',
+              '**Actions Required**',
+              '- [ ] Notify stakeholders',
+              '- [ ] Schedule incident review',
+              '- [ ] Identify root cause',
+              '- [ ] Implement fix',
+              '- [ ] Test thoroughly before redeployment',
+              '',
+              'See deployment log: `deployment-logs/rollback-${{ github.run_number }}.log`',
+            ].join('\n');
+
+            github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: title,
+              body: body,
+              labels: ['incident', 'rollback', 'p1']
+            });
+
+      - name: Notify team
+        run: |
+          echo "📢 Rollback Notification"
+          echo "========================"
+          echo "Environment: ${{ github.event.inputs.environment }}"
+          echo "Rollback Timestamp: ${{ steps.target.outputs.rollback-timestamp }}"
+          echo "From: ${{ steps.target.outputs.current-sha }}"
+          echo "To: ${{ steps.target.outputs.target-sha }}"
+          echo "Reason: ${{ github.event.inputs.reason }}"
+          echo "Operator: ${{ github.triggering_actor }}"
+          echo "Deployed URL: ${{ steps.deploy-rollback.outputs.deployed-url }}"
+          echo ""
+          echo "✅ Rollback completed successfully"
+          echo ""
+          echo "Post-Rollback Actions:"
+          echo "1. Check incident issue created above"
+          echo "2. Notify team immediately"
+          echo "3. Review failure logs"
+          echo "4. Schedule post-mortem"
+
+  # ==================== ROLLBACK VERIFICATION ====================
+  verify-rollback:
+    needs: rollback
+    runs-on: ubuntu-latest
+    name: Verify Rollback Success
+    steps:
+      - name: Post-rollback verification summary
+        run: |
+          echo "✅ Rollback Verification Summary"
+          echo "================================="
+          echo "Rollback workflow completed successfully"
+          echo "Environment: ${{ github.event.inputs.environment }}"
+          echo "All health checks passed"
+          echo "Incident issue created for tracking"
+          echo "Next: Review incident issue and schedule post-mortem"

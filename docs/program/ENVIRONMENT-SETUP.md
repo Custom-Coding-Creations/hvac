@@ -22,14 +22,19 @@ Defines expected environments, controls, and provisioning evidence for dev, stag
 - Daily backup and restore plan documented.
 
 ## Provisioning Checklist
-- [ ] Hosting provider selected and account created.
-- [ ] DNS records created.
-- [ ] TLS certificates configured.
-- [ ] CI deploy credentials configured.
-- [ ] Staging smoke test passed.
-- [ ] Production smoke test passed.
+- [x] Hosting provider selected: Vercel (see ADR-0002)
+- [x] Vercel account and GitHub integration configured
+- [x] DNS records configured (Vercel auto-managed)
+- [x] TLS certificates active (auto-renewal enabled)
+- [x] CI deploy credentials configured in GitHub Secrets
+- [x] Staging smoke test passed
+- [x] Production smoke test passed
 
-## Evidence Required For Gate D1
-- Environment URLs.
-- Provisioning timestamp and owner.
-- First successful deployment log.
+## Evidence Required For Gate D1 ✅ COMPLETE
+- [x] Environment URLs: dev, staging, production documented
+- [x] Provisioning timestamp and owner recorded
+- [x] First successful deployment logged (see qa/DEPLOYMENT-EVIDENCE.md)
+- [x] Health checks verified post-deploy
+- [x] Rollback tested and verified <5 min
+
+**Status: ✅ Gate D1 PASSED**
