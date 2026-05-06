@@ -162,6 +162,7 @@ jobs:
             "docs/program/ENVIRONMENT-SETUP.md"
             "docs/program/CICD-WORKFLOW.md"
             "docs/program/SECURITY-BASELINE.md"
+            "docs/program/ESCALATION-PROCEDURES.md"
             "design-system/TOKENS.md"
           )
           missing=0

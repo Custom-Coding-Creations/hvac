@@ -18,6 +18,7 @@
 - **[Weekly Review Template](WEEKLY-REVIEW-TEMPLATE.md)** - Weekly operating review meeting structure and KPI tracking
 - **[Decision Log](DECISION-LOG.md)** - All program decisions with rationale and approvals
 - **[Risk Register](RISK-REGISTER.md)** - Active risks with mitigation strategies and contingency plans
+- **[Escalation Procedures](ESCALATION-PROCEDURES.md)** - Issue escalation levels, communication plan, incident response SLAs
 
 ### 🧱 Architecture And Operations
 - **[Architecture Diagram](ARCHITECTURE-DIAGRAM.md)** - Current-state and target-state architecture views
