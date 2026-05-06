@@ -155,12 +155,26 @@ jobs:
             "SECURITY.md"
             "frontend/IMPLEMENTATION-GUIDE.md"
             "frontend/components/README.md"
-            "governance/PROGRAM-CHARTER-v1.md"
+            "docs/program/README.md"
+            "docs/program/PROGRAM-CHARTER.md"
+            "docs/program/KPI-BASELINE-SHEET.md"
+            "docs/program/GO-NO-GO-CRITERIA.md"
+            "docs/program/ENVIRONMENT-SETUP.md"
+            "docs/program/CICD-WORKFLOW.md"
+            "docs/program/SECURITY-BASELINE.md"
+            "docs/program/ESCALATION-PROCEDURES.md"
             "design-system/TOKENS.md"
           )
+          missing=0
           for doc in "${required_docs[@]}"; do
-            test -f "$doc" && echo "✓ $doc" || echo "⚠ Missing $doc"
+            if test -f "$doc"; then
+              echo "✓ $doc"
+            else
+              echo "✗ Missing $doc"
+              missing=1
+            fi
           done
+          test $missing -eq 0
           echo "✓ Documentation check complete"
 
   summary:
