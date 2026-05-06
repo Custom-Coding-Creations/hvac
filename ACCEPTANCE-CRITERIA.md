@@ -1,4 +1,4 @@
-# PR #13 Acceptance Criteria And Completion Gates
+# PR #17 Acceptance Criteria And Completion Gates
 
 ## Original Scope (Issue #5)
 
@@ -15,7 +15,24 @@
 - [x] frontend/templates/location-template.html - 139 lines, includes all sections
 - [x] frontend/templates/emergency-landing.html - 123 lines, includes all sections
 
-**Status:** ✅ COMPLETE
+**Status:** ⚠️ PARTIAL (implementation complete; production CWV validation pending)
+
+### Gate 7: Infrastructure And Operational Readiness
+**Acceptance Criteria:**
+- [ ] Staging and production environments provisioned and documented
+- [ ] End-to-end deployment reproducible from main branch
+- [ ] Rollback procedure tested at least once
+- [ ] Monitoring and alerting configured and verified
+
+**Evidence:**
+- [x] docs/program/GO-NO-GO-CRITERIA.md - Gate D framework and thresholds defined
+- [x] docs/program/ENVIRONMENT-SETUP.md - environment topology, controls, and runbook template
+- [x] docs/program/CICD-WORKFLOW.md - deployment and rollback workflow and verification steps
+- [x] docs/program/SECURITY-BASELINE.md - security controls and evidence checklist
+- [ ] Platform provisioning evidence (staging/prod URLs, deploy logs, rollback test log)
+- [ ] Monitoring evidence (uptime checks, alert tests, on-call routing)
+
+**Status:** ❌ NOT COMPLETE (critical blocker)
 
 ### Requirement 2: Shared Frontend System
 **Acceptance Criteria:**
@@ -255,7 +272,8 @@
 | Security Hardening | ✅ Complete | No |
 | Code Quality | ✅ Complete | No |
 | Documentation | ✅ Complete | No |
-| Performance | ✅ Complete | No |
+| Performance | ⚠️ Partial | Yes |
+| Infrastructure/Ops | ❌ Not Complete | Yes |
 | Functional Correctness | ✅ Complete | No |
 | Accessibility | ✅ Complete | No |
 | Responsive Design | ✅ Complete | No |
@@ -263,9 +281,11 @@
 
 ## Overall PR Status
 
-**All acceptance criteria: ✅ SATISFIED**
+**All acceptance criteria: ⚠️ PARTIALLY SATISFIED**
 
-**Merge Readiness: ✅ READY FOR MERGE**
+**Merge Readiness: ❌ NOT READY FOR MERGE**
+
+**Blocking criteria:** Infrastructure provisioning, deployment reproducibility, rollback validation, and monitoring/alerting verification.
 
 ### What Changed In This PR
 
@@ -277,6 +297,7 @@
 - Added 40+ unit tests for interaction behavior
 - Added security hardening (meta tags, input validation, security guide)
 - Added comprehensive governance artifacts
+- Added architecture-operation documentation set (ADR index, environment setup, CI/CD workflow, security baseline)
 - Added UX and IA blueprint documentation
 - Added design system documentation (tokens, components, accessibility)
 - Added QA and traceability documentation
@@ -289,7 +310,7 @@
 - **CI/CD:** 1 new workflow file (~125 lines)
 - **Tests:** 1 new test file (~200 lines)
 
-**Total lines added:** ~3600 lines of production + documentation + automation
+**Total lines added:** ~3600+ lines of production + documentation + automation
 
 ### Quality Metrics
 
@@ -298,9 +319,10 @@
 - Test coverage: 9.0/10 (40+ interaction tests)
 - Documentation: 9.1/10 (comprehensive guides included)
 - Security: 8.8/10 (input validation, meta tags, security guide)
+- Operational readiness: 7.2/10 (documentation complete, runtime infrastructure still pending)
 
-**Overall weighted score: 9.02/10** ✅ Exceeds 9.0 threshold
+**Overall weighted score: 8.78/10** ⚠️ Below merge threshold due to unresolved operational gates
 
 ---
 
-**PR is ready for merge. All gates passed. All acceptance criteria satisfied.**
+**PR is not ready for merge. Documentation and frontend implementation are complete, but operational gates remain open.**

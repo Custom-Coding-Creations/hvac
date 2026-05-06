@@ -139,6 +139,10 @@
 | R-004 | Accessibility | Keyboard/SR issues | Yes/No | H/M/L | H/M/L | On Track/At Risk/Blocked | Yes/No |
 | R-005 | Frontend | CSS drift | Yes/No | H/M/L | H/M/L | On Track/At Risk/Blocked | Yes/No |
 | R-006 | Technical | JS error budget | Yes/No | H/M/L | H/M/L | On Track/At Risk/Blocked | Yes/No |
+| R-007 | Documentation | UX/design artifact traceability | Yes/No | H/M/L | H/M/L | On Track/At Risk/Blocked | Yes/No |
+| R-008 | Platform | Architecture decision delay | Yes/No | H/M/L | H/M/L | On Track/At Risk/Blocked | Yes/No |
+| R-009 | Operations | Deployment/rollback untested | Yes/No | H/M/L | H/M/L | On Track/At Risk/Blocked | Yes/No |
+| R-010 | Operations | Monitoring not configured | Yes/No | H/M/L | H/M/L | On Track/At Risk/Blocked | Yes/No |
 
 ### New Risks Identified
 | Risk ID | Category | Description | Likelihood | Impact | Proposed Mitigation | Owner |

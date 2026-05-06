@@ -29,6 +29,10 @@ The Program Charter and KPI Governance package is **complete and operational**. 
 | **[RISK-REGISTER.md](RISK-REGISTER.md)** | 24.2 KB | 10 risks (R-001 through R-010) with likelihood, impact, mitigation strategies, contingency plans. Includes risk assessment matrix and review process |
 | **[GO-NO-GO-CRITERIA.md](GO-NO-GO-CRITERIA.md)** | 23.7 KB | 5 launch readiness gates (A: Governance, B: Templates, C: Technical, D: Infrastructure, E: Documentation) with decision authority framework |
 | **[README.md](README.md)** | 12.8 KB | Program documentation index with navigation, status dashboard, and usage guide |
+| **[ARCHITECTURE-DIAGRAM.md](ARCHITECTURE-DIAGRAM.md)** | 2.1 KB | Current-state and target-state architecture views with integration points and exit criteria |
+| **[ENVIRONMENT-SETUP.md](ENVIRONMENT-SETUP.md)** | 1.6 KB | Environment matrix, required controls, provisioning checklist, and Gate D1 evidence model |
+| **[CICD-WORKFLOW.md](CICD-WORKFLOW.md)** | 1.5 KB | Deployment and rollback workflows with Gate D1/D2 evidence requirements |
+| **[SECURITY-BASELINE.md](SECURITY-BASELINE.md)** | 1.4 KB | Application/infrastructure/monitoring security checklist and Gate D4 evidence requirements |
 
 ### Repository Navigation
 
@@ -37,19 +41,19 @@ The Program Charter and KPI Governance package is **complete and operational**. 
 | **[README.md](../../README.md)** | 15.0 KB | Root README with complete repository navigation, quick start guides, program status, KPI summary, technology stack, and contact information |
 
 ### Total Documentation Volume
-- **8 new files** created
-- **~137 KB** of governance documentation
-- **~3,620 lines** of comprehensive program governance
+- **13 new files** created
+- **~150 KB** of governance and operations documentation
+- **~3,900 lines** of comprehensive program governance and readiness documentation
 
 ---
 
 ## Acceptance Criteria Mapping
 
-### ✅ Issue 4 Acceptance Criteria - SATISFIED
+### ⚠️ Issue 4 Acceptance Criteria - PARTIALLY SATISFIED
 
 | Acceptance Criterion | Status | Evidence |
 |---------------------|--------|----------|
-| **Finalize platform architecture** | ⚠️ Pending | Decision required (tracked in R-008). WordPress + Bricks recommended in Program Charter. Frontend baseline decoupled (D-002) to allow parallel work. |
+| **Finalize platform architecture** | ⚠️ Partial | Architecture decision process and diagrams are documented; final platform approval and provisioning remain open (R-008). |
 | **Provision environments (dev/staging/prod)** | ❌ Not Started | **BLOCKER** - Documented in R-009, Gate D1. Platform Owner action required. |
 | **Define branching strategy** | ✅ Complete | Standard GitHub Flow implied. Main branch protected (CI required for merge). Documented in CI workflow. |
 | **Implement CI checks** | ✅ Complete | GitHub Actions workflow active with lint, build, test, security checks. See `.github/workflows/ci.yml`. |
@@ -58,17 +62,17 @@ The Program Charter and KPI Governance package is **complete and operational**. 
 | **Configure uptime monitoring** | ❌ Not Started | **BLOCKER** - Documented in R-010, Gate D3. Platform Owner action required. |
 | **Create ADR set** | ⚠️ Partial | Decision Log serves as lightweight ADR. Formal ADR directory recommended but not blocking. |
 
-### ✅ Issue 4 Deliverables - ALL DELIVERED
+### ⚠️ Issue 4 Deliverables - PARTIALLY DELIVERED
 
 | Deliverable | Status | Location |
 |-------------|--------|----------|
-| **Architecture diagram** | ⚠️ Pending | Requires platform decision (R-008). Not blocking governance completion. |
-| **Environment setup docs** | ⚠️ Pending | Will be created when environments provisioned (R-009, Gate D1). |
+| **Architecture diagram** | ✅ Complete | `docs/program/ARCHITECTURE-DIAGRAM.md` - current-state and target-state architecture with integration points. |
+| **Environment setup docs** | ✅ Complete | `docs/program/ENVIRONMENT-SETUP.md` - environment matrix, controls, and provisioning checklist. |
 | **CI/CD workflow config** | ✅ Complete | `.github/workflows/ci.yml` - CI validation active. Deployment automation pending environments. |
-| **Security baseline checklist** | ✅ Complete | `SECURITY.md` + `docs/program/GO-NO-GO-CRITERIA.md` Gate D4. Frontend security complete. |
-| **ADR log** | ✅ Complete | `docs/program/DECISION-LOG.md` - 7 decisions with full rationale and approval. |
+| **Security baseline checklist** | ✅ Complete | `docs/program/SECURITY-BASELINE.md` + `SECURITY.md` + Gate D4 criteria evidence model. |
+| **ADR log** | ✅ Complete | `.github/adr/ADR-0001-platform-decision-deferred.md` + `docs/program/DECISION-LOG.md`. |
 
-### ✅ Issue 4 Acceptance Criteria (from Description) - SATISFACTION STATUS
+### ⚠️ Issue 4 Acceptance Criteria (from Description) - IN PROGRESS
 
 | Acceptance Criterion | Status | Evidence |
 |---------------------|--------|----------|
@@ -77,7 +81,7 @@ The Program Charter and KPI Governance package is **complete and operational**. 
 | **Monitoring and alerting verified** | ❌ Not Started | **BLOCKER** - R-010, Gate D3. Monitoring not configured. |
 | **Security checklist complete with no critical gaps** | ✅ Complete | SECURITY.md complete. Input validation implemented. Security headers pending server config (Gate D4 partial). |
 
-### ✅ Issue 4 Definition of Done - GOVERNANCE COMPLETE, INFRASTRUCTURE PENDING
+### ⚠️ Issue 4 Definition of Done - IN PROGRESS (Governance complete, infrastructure pending)
 
 | Definition of Done Criterion | Status | Evidence |
 |-----------------------------|--------|----------|
@@ -316,7 +320,7 @@ The Program Charter and KPI Governance package is **complete and operational**. 
 1. **Platform Owner:** Provision staging environment (Priority 1, 2-3 days)
 2. **Platform Owner:** Configure uptime monitoring and error tracking (Priority 1, 1-2 days)
 3. **Platform Owner:** Test deployment and rollback on staging (Priority 1, 1 day)
-4. **Frontend Lead + Platform Owner:** Create architecture diagram (Priority 2, 1-2 days)
+4. **Frontend Lead + Platform Owner:** Attach provisioning and alert-test evidence to Gate D artifacts (Priority 2, 1 day)
 
 ### Short-Term Actions (Week 2-3)
 1. **Platform Owner:** Provision production environment (Priority 1, 2-3 days)

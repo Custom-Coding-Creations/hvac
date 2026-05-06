@@ -208,17 +208,20 @@ See **[Go/No-Go Criteria](docs/program/GO-NO-GO-CRITERIA.md)** Gate D for infras
 - ✅ Go/No-Go criteria with decision authority
 - ✅ All artifacts cross-linked from README
 
-#### ⚠️ Pending (Infrastructure Provisioning Required)
-- ⚠️ Architecture diagram (pending platform decision - R-008)
-- ⚠️ Environment setup docs (pending provisioning - R-009)
-- ⚠️ CI/CD workflow config (baseline exists, deployment pending - R-009)
-- ⚠️ Security baseline checklist (frontend complete, infrastructure pending)
-- ⚠️ End-to-end deploy works reproducibly (pending provisioning - R-009)
-- ⚠️ Rollback procedure tested (pending provisioning - R-009)
-- ⚠️ Monitoring and alerting verified (not configured - R-010)
-- ⚠️ Pipeline active and required for merges (CI active, deployment pending)
-- ⚠️ Environments stable and documented (not provisioned)
-- ⚠️ Team can release safely (requires deployment + rollback + monitoring)
+#### ✅ Documentation Complete
+- ✅ Architecture diagram — `docs/program/ARCHITECTURE-DIAGRAM.md` (current-state + target-state)
+- ✅ Environment setup docs — `docs/program/ENVIRONMENT-SETUP.md` (matrix, controls, provisioning checklist)
+- ✅ CI/CD workflow config — `docs/program/CICD-WORKFLOW.md` + `.github/workflows/ci.yml` (validation active)
+- ✅ Security baseline checklist — `docs/program/SECURITY-BASELINE.md` (app controls complete, infra pending)
+- ✅ ADR log — `.github/adr/ADR-0001-platform-decision-deferred.md`
+- ✅ Pipeline active and required for merges (CI validation enforced on all PRs)
+
+#### ❌ Infrastructure Blockers (Require Platform Provisioning)
+- ❌ End-to-end deploy works reproducibly (pending provisioning - R-009)
+- ❌ Rollback procedure tested (pending provisioning - R-009)
+- ❌ Monitoring and alerting verified (not configured - R-010)
+- ❌ Environments stable and provisioned (not yet provisioned - R-009)
+- ❌ Team can release safely (requires deploy + rollback + monitoring — R-009, R-010)
 
 ### Issue 5: Frontend Implementation
 - ✅ Core templates (homepage, service, location, emergency)
@@ -249,8 +252,9 @@ See **[ACCEPTANCE-CRITERIA.md](ACCEPTANCE-CRITERIA.md)** for full details.
 
 2. View templates:
    ```bash
-   # Open templates directly in browser (no build required)
-   open frontend/templates/homepage.html
+   # Start a local server from repository root
+   python -m http.server 8000
+   # Then open http://localhost:8000/frontend/templates/homepage.html
    ```
 
 3. For local development with live reload:

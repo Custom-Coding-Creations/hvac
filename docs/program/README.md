@@ -19,6 +19,12 @@
 - **[Decision Log](DECISION-LOG.md)** - All program decisions with rationale and approvals
 - **[Risk Register](RISK-REGISTER.md)** - Active risks with mitigation strategies and contingency plans
 
+### 🧱 Architecture And Operations
+- **[Architecture Diagram](ARCHITECTURE-DIAGRAM.md)** - Current-state and target-state architecture views
+- **[Environment Setup](ENVIRONMENT-SETUP.md)** - Environment matrix, controls, and provisioning checklist
+- **[CI/CD Workflow](CICD-WORKFLOW.md)** - Deployment and rollback workflow with evidence requirements
+- **[Security Baseline](SECURITY-BASELINE.md)** - Security controls and operational verification checklist
+
 ---
 
 ## Program Status Dashboard
@@ -42,7 +48,7 @@
 1. ⚠️ **Provision staging and production environments** (Platform Owner, 2-3 days)
 2. ⚠️ **Configure monitoring and alerting** (Platform Owner, 1-2 days)
 3. ⚠️ **Test deployment and rollback procedures** (Platform Owner, 1 day)
-4. ⚠️ **Create architecture documentation** (Frontend Lead, 1-2 days)
+4. ⚠️ **Attach operational evidence to Gate D artifacts** (Platform Owner + Frontend Lead, 1 day)
 
 ---
 
@@ -186,10 +192,10 @@ Located in repository root:
 - [x] Documentation cross-linking (this index + root README)
 
 ### ⚠️ Pending Criteria (Infrastructure Provisioning Required)
-- [ ] **Architecture diagram** - requires platform decision (see R-008 in Risk Register)
-- [ ] **Environment setup docs** - pending environment provisioning (see R-009, D1 gate)
-- [ ] **CI/CD workflow config** - baseline CI exists, deployment automation pending (see D2 gate)
-- [ ] **Security baseline checklist** - frontend complete, infrastructure pending (see D4 gate)
+- [x] **Architecture diagram** - documented in `ARCHITECTURE-DIAGRAM.md`; platform implementation details remain pending (see R-008 in Risk Register)
+- [x] **Environment setup docs** - documented in `ENVIRONMENT-SETUP.md`; provisioning evidence pending (see R-009, D1 gate)
+- [x] **CI/CD workflow config** - documented in `CICD-WORKFLOW.md`; deployment automation pending platform provisioning (see D2 gate)
+- [x] **Security baseline checklist** - documented in `SECURITY-BASELINE.md`; infrastructure execution evidence pending (see D4 gate)
 - [ ] **End-to-end deploy works reproducibly** - pending environment provisioning (see D1 gate)
 - [ ] **Rollback procedure tested** - pending environment provisioning (see D2 gate)
 - [ ] **Monitoring and alerting verified** - not configured (see R-010, D3 gate)

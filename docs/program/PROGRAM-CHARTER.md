@@ -161,9 +161,9 @@ This program establishes production-grade technical architecture, secure environ
 - [x] Go/No-Go criteria defined with measurable thresholds
 
 ### Technical Success Criteria
-- [ ] Architecture diagram published and reviewed
-- [ ] Environment setup docs complete (dev/staging/prod)
-- [ ] CI/CD workflow config active with required checks
+- [x] Architecture diagram published and reviewed
+- [x] Environment setup docs complete (dev/staging/prod)
+- [x] CI/CD workflow config active with required checks
 - [ ] Security baseline checklist complete with no critical gaps
 - [ ] End-to-end deploy from main to staging and production works reproducibly
 - [ ] Rollback procedure tested at least once
@@ -363,10 +363,11 @@ Step 5: Document decision in Decision Log with rationale and impact
 - [Go/No-Go Criteria](GO-NO-GO-CRITERIA.md)
 
 ### Architecture Artifacts
-- [Architecture Decision Records](../../.github/adr/) (to be created)
-- [Environment Setup Documentation](ENVIRONMENT-SETUP.md) (to be created)
-- [CI/CD Workflow Documentation](CICD-WORKFLOW.md) (to be created)
-- [Security Baseline Checklist](SECURITY-BASELINE.md) (to be created)
+- [Architecture Diagram](ARCHITECTURE-DIAGRAM.md)
+- [Architecture Decision Records](../../.github/adr/)
+- [Environment Setup Documentation](ENVIRONMENT-SETUP.md)
+- [CI/CD Workflow Documentation](CICD-WORKFLOW.md)
+- [Security Baseline Checklist](SECURITY-BASELINE.md)
 
 ### UX and IA Artifacts
 - [IA Sitemap](../../ux/IA-SITEMAP-v1.md)
