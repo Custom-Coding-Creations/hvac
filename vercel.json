@@ -1,7 +1,7 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "version": 2,
-  "buildCommand": null,
+  "buildCommand": "cp frontend/templates/homepage.html frontend/index.html",
   "outputDirectory": "frontend",
   "cleanUrls": true,
   "trailingSlash": false,
@@ -68,15 +68,15 @@
   "rewrites": [
     {
       "source": "/service/:slug",
-      "destination": "/templates/service-template.html"
+      "destination": "/templates/service-template"
     },
     {
       "source": "/location/:slug",
-      "destination": "/templates/location-template.html"
+      "destination": "/templates/location-template"
     },
     {
       "source": "/emergency",
-      "destination": "/templates/emergency-landing.html"
+      "destination": "/templates/emergency-landing"
     }
   ]
 }
