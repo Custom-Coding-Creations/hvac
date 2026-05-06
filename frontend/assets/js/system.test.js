@@ -268,34 +268,224 @@ describe("FAQ Accordion", () => {
 // Analytics tracking tests
 describe("Analytics Tracking", () => {
   let trackingEvents = [];
+  let trackingPayloads = [];
+  let trackingHandler = null;
+  let requestSubmitSpy = null;
 
   beforeEach(() => {
     trackingEvents = [];
+    trackingPayloads = [];
+    document.body.removeAttribute("data-template");
 
-    window.addEventListener("analytics:track", (event) => {
+    trackingHandler = function (event) {
       trackingEvents.push(event.detail.eventName);
-    });
+      trackingPayloads.push(event.detail);
+    };
+    window.addEventListener("analytics:track", trackingHandler);
+
+    requestSubmitSpy = jest
+      .spyOn(HTMLFormElement.prototype, "requestSubmit")
+      .mockImplementation(function () {
+        return undefined;
+      });
 
     document.body.innerHTML = `
-      <a href="#" data-track="test_click">Link</a>
-      <button data-track="test_button">Button</button>
+      <a href="#" data-track="call_click_header">Link</a>
+      <button data-track="click_call_header_homepage">Button</button>
     `;
 
     window.SystemUI.initializeTracking();
   });
 
-  test("dispatches custom event for tracked elements", () => {
+  afterEach(() => {
+    if (requestSubmitSpy) {
+      requestSubmitSpy.mockRestore();
+      requestSubmitSpy = null;
+    }
+
+    if (trackingHandler) {
+      window.removeEventListener("analytics:track", trackingHandler);
+      trackingHandler = null;
+    }
+  });
+
+  test("maps legacy tracking names to canonical event names", () => {
     const link = document.querySelector("a");
     link.click();
 
-    expect(trackingEvents).toContain("test_click");
+    expect(trackingEvents).toContain("click_call_header_homepage");
+    expect(trackingPayloads[0].sourceEventName).toBe("call_click_header");
   });
 
-  test("tracks button clicks", () => {
+  test("preserves canonical tracking names", () => {
     const button = document.querySelector("button");
     button.click();
 
-    expect(trackingEvents).toContain("test_button");
+    expect(trackingEvents).toContain("click_call_header_homepage");
+    expect(trackingPayloads[trackingPayloads.length - 1].sourceEventName).toBe(
+      "click_call_header_homepage"
+    );
+  });
+
+  test("expands three-part names using template context", () => {
+    document.body.dataset.template = "service";
+    document.body.innerHTML = `<a href="#" data-track="click_call_header">Link</a>`;
+    window.SystemUI.initializeTracking();
+
+    document.querySelector("a").click();
+
+    expect(trackingEvents).toContain("click_call_header_service");
+    expect(trackingPayloads[trackingPayloads.length - 1].templateContext).toBe(
+      "service"
+    );
+  });
+
+  test("ignores malformed tracking names", () => {
+    document.body.innerHTML = `<a href="#" data-track="Bad Event Name">Link</a>`;
+    window.SystemUI.initializeTracking();
+
+    document.querySelector("a").click();
+
+    expect(trackingEvents).toHaveLength(0);
+  });
+
+  test("tracks submit event when form is submitted without click", () => {
+    document.body.innerHTML = `
+      <form id="track-form">
+        <input id="form-name" name="name" type="text" value="Test User" />
+        <button type="submit" data-track="submit_form_request_homepage">Submit</button>
+      </form>
+    `;
+    window.SystemUI.initializeTracking();
+
+    const form = document.getElementById("track-form");
+    form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
+
+    expect(trackingEvents).toContain("submit_form_request_homepage");
+  });
+
+  test("does not double-track submit button click plus submit event", () => {
+    const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation(() => {});
+
+    document.body.innerHTML = `
+      <form id="track-form">
+        <button id="track-submit" type="submit" data-track="submit_form_request_homepage">Submit</button>
+      </form>
+    `;
+    window.SystemUI.initializeTracking();
+
+    const form = document.getElementById("track-form");
+    const button = document.getElementById("track-submit");
+
+    button.dispatchEvent(new Event("click", { bubbles: true, cancelable: true }));
+    form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
+
+    const submitEvents = trackingEvents.filter((name) => {
+      return name === "submit_form_request_homepage";
+    });
+
+    expect(submitEvents).toHaveLength(1);
+    expect(consoleErrorSpy).not.toHaveBeenCalled();
+
+    consoleErrorSpy.mockRestore();
+  });
+});
+
+describe("Urgent CTA Prioritization", () => {
+  beforeEach(() => {
+    document.body.innerHTML = `
+      <a id="svc-estimate-cta" class="btn btn-primary" href="#request">Request Estimate</a>
+      <a id="svc-call-cta" class="btn btn-emergency" href="tel:+13155550100">Call Technician</a>
+      <p id="svc-urgency-note" aria-live="polite"></p>
+      <form data-urgent-source="svc-issue" data-urgent-call-cta="#svc-call-cta" data-urgent-form-cta="#svc-estimate-cta" data-urgent-live="#svc-urgency-note">
+        <select id="svc-issue">
+          <option value="">Select</option>
+          <option value="no-heat">No heat</option>
+          <option value="maintenance">Maintenance</option>
+        </select>
+      </form>
+    `;
+    window.SystemUI.initializeUrgentCtaPrioritization();
+  });
+
+  test("prioritizes call CTA for urgent symptoms", () => {
+    const source = document.getElementById("svc-issue");
+    const callCta = document.getElementById("svc-call-cta");
+    const estimateCta = document.getElementById("svc-estimate-cta");
+
+    source.value = "no-heat";
+    source.dispatchEvent(new Event("change", { bubbles: true }));
+
+    expect(callCta.classList.contains("btn-primary")).toBe(true);
+    expect(estimateCta.classList.contains("btn-secondary")).toBe(true);
+    expect(callCta.textContent).toBe("Call Technician Now");
+  });
+
+  test("restores default CTA state for non-urgent symptoms", () => {
+    const source = document.getElementById("svc-issue");
+    const callCta = document.getElementById("svc-call-cta");
+    const estimateCta = document.getElementById("svc-estimate-cta");
+
+    source.value = "no-heat";
+    source.dispatchEvent(new Event("change", { bubbles: true }));
+
+    source.value = "maintenance";
+    source.dispatchEvent(new Event("change", { bubbles: true }));
+
+    expect(callCta.classList.contains("btn-emergency")).toBe(true);
+    expect(estimateCta.classList.contains("btn-primary")).toBe(true);
+    expect(callCta.textContent).toBe("Call Technician");
+    expect(estimateCta.textContent).toBe("Request Estimate");
+  });
+});
+
+describe("Sticky Mobile CTA", () => {
+  beforeEach(() => {
+    window.matchMedia = jest.fn().mockImplementation((query) => {
+      return {
+        matches: query === "(max-width: 767px)",
+        media: query,
+        onchange: null,
+        addListener: jest.fn(),
+        removeListener: jest.fn(),
+        addEventListener: jest.fn(),
+        removeEventListener: jest.fn(),
+        dispatchEvent: jest.fn(),
+      };
+    });
+
+    document.body.innerHTML = `
+      <div class="sticky-mobile-cta"></div>
+      <form>
+        <input id="mobile-input" type="text" />
+      </form>
+    `;
+    window.SystemUI.initializeStickyMobileCta();
+  });
+
+  test("applies compact mode on mobile form focus", () => {
+    const sticky = document.querySelector(".sticky-mobile-cta");
+    const input = document.getElementById("mobile-input");
+
+    input.focus();
+    input.dispatchEvent(new FocusEvent("focusin", { bubbles: true }));
+
+    expect(sticky.classList.contains("is-compact")).toBe(true);
+  });
+
+  test("removes compact mode when focus leaves controls", () => {
+    const sticky = document.querySelector(".sticky-mobile-cta");
+    const input = document.getElementById("mobile-input");
+
+    input.focus();
+    input.dispatchEvent(new FocusEvent("focusin", { bubbles: true }));
+    expect(sticky.classList.contains("is-compact")).toBe(true);
+
+    input.blur();
+    document.body.focus();
+    window.dispatchEvent(new Event("resize"));
+
+    expect(sticky.classList.contains("is-compact")).toBe(false);
   });
 });
 

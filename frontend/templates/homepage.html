@@ -9,7 +9,7 @@
     <title>HVAC Homepage Template</title>
     <link rel="stylesheet" href="../assets/css/system.css" />
   </head>
-  <body>
+  <body data-template="homepage">
     <a class="skip-link" href="#main">Skip to main content</a>
     <header class="site-header" role="banner">
       <div class="container header-row">
@@ -24,8 +24,8 @@
           </ul>
         </nav>
         <div class="header-cta">
-          <a class="btn btn-secondary" href="tel:+13155550100" data-track="call_click_header">Call Now</a>
-          <a class="btn btn-primary" href="#request" data-track="schedule_click_header">Schedule Service</a>
+          <a class="btn btn-secondary" href="tel:+13155550100" data-track="click_call_header_homepage">Call Now</a>
+          <a class="btn btn-primary" href="#request" data-track="click_schedule_header_homepage">Schedule Service</a>
         </div>
       </div>
     </header>
@@ -40,8 +40,8 @@
               and clear next steps for homeowners and facilities teams.
             </p>
             <div class="grid-2">
-              <a class="btn btn-primary" href="#request" data-track="schedule_click_hero">Book Service</a>
-              <a class="btn btn-emergency" href="tel:+13155550100" data-track="call_click_hero">Emergency Call</a>
+              <a class="btn btn-primary" href="#request" data-track="click_schedule_hero_homepage">Book Service</a>
+              <a class="btn btn-emergency" href="tel:+13155550100" data-track="click_call_hero_homepage">Emergency Call</a>
             </div>
             <div class="trust-strip">
               <article class="trust-card"><strong>Since 1944</strong><p>Decades of local service trust.</p></article>
@@ -73,7 +73,7 @@
                 </select>
                 <span class="form-error" id="home-issue-error" aria-live="polite"></span>
               </div>
-              <button class="btn btn-primary" type="submit" data-track="form_submit_home">Submit Request</button>
+              <button class="btn btn-primary" type="submit" data-track="submit_form_request_homepage">Submit Request</button>
               <p class="form-success" aria-live="polite"></p>
             </form>
           </aside>
@@ -107,12 +107,12 @@
           <article class="panel">
             <h2>Financing Options</h2>
             <p>Flexible monthly plans are available for qualifying replacements and major repairs.</p>
-            <a class="btn btn-primary" href="#request" data-track="financing_start_home">Check Options</a>
+            <a class="btn btn-primary" href="#request" data-track="click_financing_options_homepage">Check Options</a>
           </article>
           <article class="panel">
             <h2>Estimate Support</h2>
             <p>Get a quick callback to review project range, timeline, and available payment pathways.</p>
-            <a class="btn btn-secondary" href="tel:+13155550100" data-track="call_click_financing_home">Call Financing Team</a>
+            <a class="btn btn-secondary" href="tel:+13155550100" data-track="click_call_financing_homepage">Call Financing Team</a>
           </article>
         </div>
       </section>
@@ -170,8 +170,8 @@
     </footer>
 
     <div class="sticky-mobile-cta" aria-label="Mobile quick actions">
-      <a class="btn btn-emergency" href="tel:+13155550100" data-track="call_click_mobile">Call</a>
-      <a class="btn btn-primary" href="#request" data-track="schedule_click_mobile">Schedule</a>
+      <a class="btn btn-emergency" href="tel:+13155550100" data-track="click_call_sticky_mobile_homepage">Call</a>
+      <a class="btn btn-primary" href="#request" data-track="click_schedule_sticky_mobile_homepage">Schedule</a>
     </div>
 
     <script src="../assets/js/system.js"></script>

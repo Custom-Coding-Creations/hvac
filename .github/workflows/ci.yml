@@ -28,6 +28,12 @@ jobs:
       - name: Run frontend validation
         run: npm run validate
 
+      - name: Run frontend typecheck gate
+        run: npm run typecheck
+
+      - name: Run frontend build gate
+        run: npm run build
+
   validate-structure:
     runs-on: ubuntu-latest
     name: Validate HTML/CSS/JS Structure
@@ -171,6 +177,8 @@ jobs:
           echo ""
           echo "Validations performed:"
           echo "  ✓ Frontend lint, stylelint, and Jest"
+          echo "  ✓ Frontend typecheck"
+          echo "  ✓ Frontend build validation"
           echo "  ✓ File structure"
           echo "  ✓ HTML syntax"
           echo "  ✓ CSS structure"

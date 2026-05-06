@@ -9,7 +9,7 @@
     <title>Emergency Landing Template</title>
     <link rel="stylesheet" href="../assets/css/system.css" />
   </head>
-  <body>
+  <body data-template="emergency">
     <a class="skip-link" href="#main">Skip to main content</a>
     <header class="site-header" role="banner">
       <div class="container header-row">
@@ -22,7 +22,7 @@
           </ul>
         </nav>
         <div class="header-cta">
-          <a class="btn btn-emergency" href="tel:+13155550100" data-track="call_click_header_emergency">Call 24/7</a>
+          <a class="btn btn-emergency" href="tel:+13155550100" data-track="click_call_header_emergency">Call 24/7</a>
         </div>
       </div>
     </header>
@@ -35,8 +35,8 @@
             <h1>Emergency HVAC And Plumbing Support</h1>
             <p>Call now for immediate dispatch and triage. Average response updates provided during intake, with priority routing for no-heat, no-cooling, and active leak calls.</p>
             <div class="grid-2">
-              <a class="btn btn-emergency" href="tel:+13155550100" data-track="call_click_hero_emergency">Call Dispatch</a>
-              <a class="btn btn-primary" href="#request" data-track="form_start_emergency">Request Callback</a>
+              <a class="btn btn-emergency" href="tel:+13155550100" data-track="click_call_hero_emergency">Call Dispatch</a>
+              <a class="btn btn-primary" href="#request" data-track="click_callback_hero_emergency">Request Callback</a>
             </div>
             <div class="callout-bar">
               <strong>Response-time promise:</strong> urgent requests are triaged immediately and ETA updates are shared during intake whenever dispatch capacity allows.
@@ -65,7 +65,7 @@
                 <textarea id="em-issue" name="issue" required placeholder="Describe the problem (e.g., No heat, water leak, AC not running)"></textarea>
                 <span class="form-error" id="em-issue-error" aria-live="polite"></span>
               </div>
-              <button class="btn btn-primary" type="submit" data-track="form_submit_emergency">Send Emergency Request</button>
+              <button class="btn btn-primary" type="submit" data-track="submit_form_request_emergency">Send Emergency Request</button>
               <p class="form-success" aria-live="polite"></p>
             </form>
           </aside>
@@ -90,7 +90,7 @@
             <span class="eyebrow">Need Immediate Contact?</span>
             <h2>Call Instead Of Waiting</h2>
             <p>If the issue is active or worsening, call dispatch directly instead of relying only on the form.</p>
-            <a class="btn btn-emergency" href="tel:+13155550100" data-track="call_backup_emergency">Call Dispatch Now</a>
+            <a class="btn btn-emergency" href="tel:+13155550100" data-track="click_call_backup_emergency">Call Dispatch Now</a>
           </article>
         </div>
       </section>
@@ -117,8 +117,8 @@
     </footer>
 
     <div class="sticky-mobile-cta" aria-label="Mobile emergency actions">
-      <a class="btn btn-emergency" href="tel:+13155550100" data-track="call_click_mobile_emergency">Call Dispatch</a>
-      <a class="btn btn-primary" href="#request" data-track="form_start_mobile_emergency">Callback</a>
+      <a class="btn btn-emergency" href="tel:+13155550100" data-track="click_call_sticky_mobile_emergency">Call Dispatch</a>
+      <a class="btn btn-primary" href="#request" data-track="click_callback_sticky_mobile_emergency">Callback</a>
     </div>
 
     <script src="../assets/js/system.js"></script>

@@ -9,7 +9,7 @@
     <title>Location Template</title>
     <link rel="stylesheet" href="../assets/css/system.css" />
   </head>
-  <body>
+  <body data-template="location">
     <a class="skip-link" href="#main">Skip to main content</a>
     <header class="site-header" role="banner">
       <div class="container header-row">
@@ -23,8 +23,8 @@
           </ul>
         </nav>
         <div class="header-cta">
-          <a class="btn btn-secondary" href="tel:+13155550100" data-track="call_click_header">Call</a>
-          <a class="btn btn-primary" href="#request" data-track="schedule_click_header">Schedule</a>
+          <a class="btn btn-secondary" href="tel:+13155550100" data-track="click_call_header_location">Call</a>
+          <a class="btn btn-primary" href="#request" data-track="click_schedule_header_location">Schedule</a>
         </div>
       </div>
     </header>
@@ -37,8 +37,8 @@
             <h1>HVAC Service In Syracuse, NY</h1>
             <p>Fast local dispatch for repair, maintenance, and replacement support.</p>
             <div class="grid-2">
-              <a class="btn btn-primary" href="#request" data-track="schedule_click_location">Schedule Visit</a>
-              <a class="btn btn-emergency" href="tel:+13155550100" data-track="call_click_location">Call Local Team</a>
+              <a class="btn btn-primary" href="#request" data-track="click_schedule_hero_location">Schedule Visit</a>
+              <a class="btn btn-emergency" href="tel:+13155550100" data-track="click_call_hero_location">Call Local Team</a>
             </div>
             <div class="callout-bar">
               <strong>Local proof:</strong> Syracuse-area routing helps reduce wait time, simplify scheduling, and keep follow-up communication local.
@@ -62,7 +62,7 @@
                 <input id="loc-neighborhood" name="neighborhood" type="text" required placeholder="e.g., Downtown or 13210" />
                 <span class="form-error" id="loc-neighborhood-error" aria-live="polite"></span>
               </div>
-              <button class="btn btn-primary" type="submit" data-track="form_submit_location">Submit</button>
+              <button class="btn btn-primary" type="submit" data-track="submit_form_request_location">Submit</button>
               <p class="form-success" aria-live="polite"></p>
             </form>
           </aside>
@@ -89,7 +89,7 @@
           <span class="eyebrow">Talk To Dispatch</span>
           <h2>Need Help Deciding What To Book?</h2>
           <p>Call for same-day availability, neighborhood coverage confirmation, or help choosing the right service type before you submit a request.</p>
-          <a class="btn btn-emergency" href="tel:+13155550100" data-track="call_strip_location">Call Syracuse Dispatch</a>
+          <a class="btn btn-emergency" href="tel:+13155550100" data-track="click_call_dispatch_location">Call Syracuse Dispatch</a>
         </div>
       </section>
 
@@ -133,8 +133,8 @@
     </footer>
 
     <div class="sticky-mobile-cta" aria-label="Mobile quick actions">
-      <a class="btn btn-emergency" href="tel:+13155550100" data-track="call_click_mobile">Call</a>
-      <a class="btn btn-primary" href="#request" data-track="schedule_click_mobile">Schedule</a>
+      <a class="btn btn-emergency" href="tel:+13155550100" data-track="click_call_sticky_mobile_location">Call</a>
+      <a class="btn btn-primary" href="#request" data-track="click_schedule_sticky_mobile_location">Schedule</a>
     </div>
 
     <script src="../assets/js/system.js"></script>
