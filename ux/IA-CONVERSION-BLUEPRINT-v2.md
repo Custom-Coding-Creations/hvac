@@ -129,7 +129,7 @@ This v2 artifact consolidates IA, URL strategy, journey logic, conversion entry 
 ### Event Taxonomy Standard
 Use format: action_object_context_template.
 - Example: click_call_header_homepage
-- Example: submit_form_emergency_abovefold_emergency
+- Example: submit_form_request_emergency
 - Example: click_cta_financing_servicecard_service
 
 ## Mobile-First Behavior Specification

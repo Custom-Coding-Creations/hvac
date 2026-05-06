@@ -270,6 +270,7 @@ describe("Analytics Tracking", () => {
   let trackingEvents = [];
   let trackingPayloads = [];
   let trackingHandler = null;
+  let requestSubmitSpy = null;
 
   beforeEach(() => {
     trackingEvents = [];
@@ -282,6 +283,12 @@ describe("Analytics Tracking", () => {
     };
     window.addEventListener("analytics:track", trackingHandler);
 
+    requestSubmitSpy = jest
+      .spyOn(HTMLFormElement.prototype, "requestSubmit")
+      .mockImplementation(function () {
+        return undefined;
+      });
+
     document.body.innerHTML = `
       <a href="#" data-track="call_click_header">Link</a>
       <button data-track="click_call_header_homepage">Button</button>
@@ -291,6 +298,11 @@ describe("Analytics Tracking", () => {
   });
 
   afterEach(() => {
+    if (requestSubmitSpy) {
+      requestSubmitSpy.mockRestore();
+      requestSubmitSpy = null;
+    }
+
     if (trackingHandler) {
       window.removeEventListener("analytics:track", trackingHandler);
       trackingHandler = null;
@@ -353,6 +365,8 @@ describe("Analytics Tracking", () => {
   });
 
   test("does not double-track submit button click plus submit event", () => {
+    const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation(() => {});
+
     document.body.innerHTML = `
       <form id="track-form">
         <button id="track-submit" type="submit" data-track="submit_form_request_homepage">Submit</button>
@@ -363,7 +377,7 @@ describe("Analytics Tracking", () => {
     const form = document.getElementById("track-form");
     const button = document.getElementById("track-submit");
 
-    button.dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true }));
+    button.dispatchEvent(new Event("click", { bubbles: true, cancelable: true }));
     form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
 
     const submitEvents = trackingEvents.filter((name) => {
@@ -371,6 +385,9 @@ describe("Analytics Tracking", () => {
     });
 
     expect(submitEvents).toHaveLength(1);
+    expect(consoleErrorSpy).not.toHaveBeenCalled();
+
+    consoleErrorSpy.mockRestore();
   });
 });
 
