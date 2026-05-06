@@ -92,12 +92,12 @@
 - [ ] Go/No-Go criteria with escape hatches
 
 **Evidence:**
-- [x] governance/PROGRAM-CHARTER-v1.md - complete with outcomes/scope/cadence
-- [x] governance/KPI-BASELINE-SHEET-v1.md - business/conversion/technical KPIs
-- [x] governance/WEEKLY-OPERATING-REVIEW-TEMPLATE.md - meeting structure
-- [x] governance/DECISION-LOG.md - D-001 through D-004 approved
-- [x] governance/RISK-REGISTER.md - R-001 through R-007 with mitigations
-- [x] governance/GO-NO-GO-CRITERIA.md - gates A, B, C with rule
+- [x] docs/program/PROGRAM-CHARTER.md - complete with outcomes/scope/cadence
+- [x] docs/program/KPI-BASELINE-SHEET.md - business/conversion/technical KPIs
+- [x] docs/program/WEEKLY-REVIEW-TEMPLATE.md - meeting structure
+- [x] docs/program/DECISION-LOG.md - D-001 through D-007 approved
+- [x] docs/program/RISK-REGISTER.md - R-001 through R-010 with mitigations
+- [x] docs/program/GO-NO-GO-CRITERIA.md - gates A-E with decision rule
 
 **Status:** ✅ COMPLETE
 

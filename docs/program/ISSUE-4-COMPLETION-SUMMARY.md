@@ -22,19 +22,19 @@ The Program Charter and KPI Governance package is **complete and operational**. 
 
 | File | Size | Description |
 |------|------|-------------|
-| **[PROGRAM-CHARTER.md](docs/program/PROGRAM-CHARTER.md)** | 15.6 KB | Complete program governance framework with objectives, scope, roles, decision rights, escalation protocol, success criteria |
-| **[KPI-BASELINE-SHEET.md](docs/program/KPI-BASELINE-SHEET.md)** | 22.1 KB | 19 KPIs with formulas, baselines, 30/90-day targets, owners, source of truth, reporting cadence. Includes 7 business KPIs, 4 conversion KPIs, 8 technical KPIs |
-| **[WEEKLY-REVIEW-TEMPLATE.md](docs/program/WEEKLY-REVIEW-TEMPLATE.md)** | 9.2 KB | Structured weekly operating review template with KPI tracking, risk review, decision tracking, action items |
-| **[DECISION-LOG.md](docs/program/DECISION-LOG.md)** | 13.8 KB | 7 decisions logged (D-001 through D-007) with rationale, alternatives, impact, approvals. Includes decision-making process and categories |
-| **[RISK-REGISTER.md](docs/program/RISK-REGISTER.md)** | 24.2 KB | 10 risks (R-001 through R-010) with likelihood, impact, mitigation strategies, contingency plans. Includes risk assessment matrix and review process |
-| **[GO-NO-GO-CRITERIA.md](docs/program/GO-NO-GO-CRITERIA.md)** | 23.7 KB | 5 launch readiness gates (A: Governance, B: Templates, C: Technical, D: Infrastructure, E: Documentation) with decision authority framework |
-| **[README.md](docs/program/README.md)** | 12.8 KB | Program documentation index with navigation, status dashboard, and usage guide |
+| **[PROGRAM-CHARTER.md](PROGRAM-CHARTER.md)** | 15.6 KB | Complete program governance framework with objectives, scope, roles, decision rights, escalation protocol, success criteria |
+| **[KPI-BASELINE-SHEET.md](KPI-BASELINE-SHEET.md)** | 22.1 KB | 19 KPIs with formulas, baselines, 30/90-day targets, owners, source of truth, reporting cadence. Includes 7 business KPIs, 4 conversion KPIs, 8 technical KPIs |
+| **[WEEKLY-REVIEW-TEMPLATE.md](WEEKLY-REVIEW-TEMPLATE.md)** | 9.2 KB | Structured weekly operating review template with KPI tracking, risk review, decision tracking, action items |
+| **[DECISION-LOG.md](DECISION-LOG.md)** | 13.8 KB | 7 decisions logged (D-001 through D-007) with rationale, alternatives, impact, approvals. Includes decision-making process and categories |
+| **[RISK-REGISTER.md](RISK-REGISTER.md)** | 24.2 KB | 10 risks (R-001 through R-010) with likelihood, impact, mitigation strategies, contingency plans. Includes risk assessment matrix and review process |
+| **[GO-NO-GO-CRITERIA.md](GO-NO-GO-CRITERIA.md)** | 23.7 KB | 5 launch readiness gates (A: Governance, B: Templates, C: Technical, D: Infrastructure, E: Documentation) with decision authority framework |
+| **[README.md](README.md)** | 12.8 KB | Program documentation index with navigation, status dashboard, and usage guide |
 
 ### Repository Navigation
 
 | File | Size | Description |
 |------|------|-------------|
-| **[README.md](README.md)** | 15.0 KB | Root README with complete repository navigation, quick start guides, program status, KPI summary, technology stack, and contact information |
+| **[README.md](../../README.md)** | 15.0 KB | Root README with complete repository navigation, quick start guides, program status, KPI summary, technology stack, and contact information |
 
 ### Total Documentation Volume
 - **8 new files** created
@@ -383,7 +383,7 @@ Infrastructure provisioning (environments, deployment automation, monitoring) is
 **Status:** Final  
 
 For full details, see:
-- [Program Documentation Index](docs/program/README.md)
-- [Root README](README.md)
-- [Risk Register](docs/program/RISK-REGISTER.md) (R-009, R-010)
-- [Go/No-Go Criteria](docs/program/GO-NO-GO-CRITERIA.md) (Gate D)
+- [Program Documentation Index](README.md)
+- [Root README](../../README.md)
+- [Risk Register](RISK-REGISTER.md) (R-009, R-010)
+- [Go/No-Go Criteria](GO-NO-GO-CRITERIA.md) (Gate D)
