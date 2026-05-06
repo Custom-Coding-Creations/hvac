@@ -1,6 +1,7 @@
 module.exports = {
   extends: ['stylelint-config-standard'],
   rules: {
+    'color-hex-length': null,
     'color-no-invalid-hex': true,
     'declaration-block-no-duplicate-properties': true,
     'selector-pseudo-element-no-unknown': true,

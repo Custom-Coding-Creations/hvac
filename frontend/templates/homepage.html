@@ -11,6 +11,12 @@
   </head>
   <body data-template="homepage">
     <a class="skip-link" href="#main">Skip to main content</a>
+    
+    <div class="emergency-banner" role="status" aria-live="polite">
+      <strong>24/7 Emergency Service Available</strong> — Technicians dispatched today. Call (315) 472-3557
+      <button class="emergency-banner-close" aria-label="Close emergency banner">×</button>
+    </div>
+
     <header class="site-header" role="banner">
       <div class="container header-row">
         <a class="brand" href="/"><img src="/assets/images/da39a3ee5e6b4b0d3255bfef95601890afd80709_logo-new.png" alt="Potter-Perrone HVAC & Plumbing Logo" style="height: 50px; width: auto;" /></a>
@@ -36,16 +42,26 @@
         <div class="container hero-grid">
           <div class="hero-copy">
             <span class="eyebrow">Since 1944</span>
-            <h1>Syracuse Trusts Potter-Perrone When Comfort Cannot Wait</h1>
+            <h1>24/7 Emergency HVAC Repair in Syracuse</h1>
             <p>
-              Potter Heating &amp; Air Conditioning and Perrone Plumbing have spent more than 80 years helping Central New York homes, facilities, and businesses stay safe, efficient, and fully operational.
+              Fast response times. Licensed technicians. Financing available. When your heating fails or AC breaks down, Potter-Perrone delivers experienced mechanical service within hours, not days.
             </p>
+            <div class="hero-financing">
+              <strong>Systems Starting at $89/mo</strong> — 0% financing available. Ask about payment plans.
+            </div>
             <p>
-              We combine emergency responsiveness, licensed mechanical expertise, and clear communication so customers understand exactly what is happening in their home or building before work begins.
+              80+ years of local trust. Same-day emergency dispatch. Licensed, certified technicians. Transparent pricing. Your comfort and safety are our priority.
             </p>
             <div class="hero-actions">
-              <a class="btn btn-primary" href="#request" data-track="click_schedule_hero_homepage">Book Service</a>
-              <a class="btn btn-emergency" href="tel:+13154723557" data-track="click_call_hero_homepage">Emergency Call</a>
+              <a class="btn btn-emergency" href="tel:+13154723557" data-track="click_call_hero_homepage" style="font-size: 1.05rem; padding: 0.75rem 1.5rem;">📞 Call Now: (315) 472-3557</a>
+              <a class="btn btn-primary" href="#request" data-track="click_schedule_hero_homepage">Schedule Service</a>
+            </div>
+            
+            <div class="trust-badge-row">
+              <div class="trust-badge">EPA Certified &amp; Licensed</div>
+              <div class="trust-badge">24/7 Emergency Response</div>
+              <div class="trust-badge">BBB Accredited</div>
+              <div class="trust-badge">Financing Available</div>
             </div>
             <div class="trust-strip">
               <article class="trust-card"><strong>Mechanical Leadership</strong><p>Trusted by homeowners, businesses, and institutional clients alike.</p></article>
@@ -325,8 +341,8 @@
     </footer>
 
     <div class="sticky-mobile-cta" aria-label="Mobile quick actions">
-      <a class="btn btn-emergency" href="tel:+13154723557" data-track="click_call_sticky_mobile_homepage">Call</a>
-      <a class="btn btn-primary" href="#request" data-track="click_schedule_sticky_mobile_homepage">Schedule</a>
+      <a class="btn btn-emergency" href="tel:+13154723557" data-track="click_call_sticky_mobile_homepage">📞 Call Now</a>
+      <a class="btn btn-primary" href="#request" data-track="click_schedule_sticky_mobile_homepage">Book Service</a>
     </div>
 
     <script src="../assets/js/system.js"></script>

@@ -605,9 +605,29 @@ function initializeAccordion() {
   });
 }
 
+function initializeEmergencyBanner() {
+  const banner = document.querySelector(".emergency-banner");
+  if (!banner) return;
+
+  const closeBtn = banner.querySelector(".emergency-banner-close");
+  if (!closeBtn) return;
+
+  closeBtn.addEventListener("click", function () {
+    banner.style.display = "none";
+    // Store in sessionStorage so banner stays closed during session
+    sessionStorage.setItem("emergencyBannerClosed", "true");
+  });
+
+  // Check if banner was closed in this session
+  if (sessionStorage.getItem("emergencyBannerClosed")) {
+    banner.style.display = "none";
+  }
+}
+
 function initialize() {
   initializeNavigation();
   initializeTracking();
+  initializeEmergencyBanner();
   initializeStickyMobileCta();
   initializeUrgentCtaPrioritization();
   initializeFormValidation();
