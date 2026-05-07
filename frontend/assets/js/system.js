@@ -726,18 +726,19 @@ function initializeAiAssistant() {
     panel.appendChild(quickList);
     panel.appendChild(composer);
 
-    const updateLauncherLabel = function (isOpen) {
-      launcher.textContent = isOpen ? "Minimize AI Chat" : "AI Chat";
-      launcher.setAttribute("aria-label", isOpen ? "Minimize AI chat" : "Open AI chat");
+    const updateLauncherLabel = function () {
+      launcher.textContent = "AI Chat";
+      launcher.setAttribute("aria-label", "Open AI chat");
       minimizeButton.setAttribute("aria-label", "Minimize AI chat");
     };
 
     const setPanelState = function (open, source) {
       const shouldOpen = !!open;
       panel.hidden = !shouldOpen;
+      launcher.hidden = shouldOpen;
       launcher.setAttribute("aria-expanded", String(shouldOpen));
       panel.dataset.state = shouldOpen ? "open" : "closed";
-      updateLauncherLabel(shouldOpen);
+      updateLauncherLabel();
 
       if (shouldOpen && !transcript.dataset.greetingSent) {
         appendMessage(
@@ -816,7 +817,7 @@ function initializeAiAssistant() {
         setPanelState(false, "default");
       }
     } else {
-      updateLauncherLabel(false);
+      updateLauncherLabel();
     }
 
     document.body.dataset.aiLauncherBound = "true";

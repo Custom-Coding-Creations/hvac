@@ -17,13 +17,22 @@ function tokenize(message) {
 }
 
 async function generateModelReply(message, template, serviceArea, knowledge) {
-  const apiKey = String(process.env.OPENAI_API_KEY || '').trim();
+  const apiKey = String(
+    process.env.OPENAI_API_KEY ||
+      process.env.AI_PROVIDER_KEY ||
+      process.env.AI_API_KEY ||
+      ''
+  ).trim();
   if (!apiKey) {
     return null;
   }
 
-  const endpoint = String(process.env.OPENAI_API_BASE || 'https://api.openai.com/v1/chat/completions').trim();
-  const model = String(process.env.OPENAI_MODEL || 'gpt-4o-mini').trim();
+  const endpoint = String(
+    process.env.OPENAI_API_BASE ||
+      process.env.AI_PROVIDER_URL ||
+      'https://api.openai.com/v1/chat/completions'
+  ).trim();
+  const model = String(process.env.OPENAI_MODEL || process.env.AI_PROVIDER_MODEL || 'gpt-4o-mini').trim();
 
   const phone = (knowledge && knowledge.facts && knowledge.facts.phones && knowledge.facts.phones[0]) || '(315) 472-3557';
   const knowledgeText = String((knowledge && knowledge.text) || '').slice(0, 9000);
