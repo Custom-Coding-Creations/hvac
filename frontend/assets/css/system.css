@@ -34,6 +34,7 @@ body {
   font-family: "Public Sans", "Segoe UI", sans-serif;
   color: var(--color-ink-900);
   background: linear-gradient(180deg, #f6f3eb 0%, #fff 30%);
+  overflow-x: clip;
 }
 
 html {
@@ -519,7 +520,7 @@ form[aria-busy="true"] button[type="submit"] {
 .ai-launcher {
   position: fixed;
   bottom: 20px;
-  right: 20px;
+  right: max(20px, env(safe-area-inset-right, 0px));
   z-index: 41;
   width: 56px;
   height: 56px;
@@ -556,9 +557,10 @@ form[aria-busy="true"] button[type="submit"] {
 .ai-launcher-panel {
   position: fixed;
   bottom: 90px;
-  right: 20px;
+  right: max(12px, env(safe-area-inset-right, 0px));
   z-index: 40;
-  width: 380px;
+  width: min(380px, calc(100vw - 24px));
+  max-width: calc(100vw - 24px);
   max-height: 600px;
   background: var(--color-paper-0);
   border-radius: var(--radius-lg);

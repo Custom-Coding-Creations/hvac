@@ -785,40 +785,9 @@ function initializeAiAssistant() {
     document.body.appendChild(panel);
     document.body.appendChild(launcher);
 
-    // Auto-open once on desktop so users immediately see the AI chat capability.
-    if (typeof window !== "undefined" && window.innerWidth >= 1024) {
-      let shouldAutoOpen = true;
-
-      try {
-        shouldAutoOpen = window.sessionStorage.getItem("aiChatSeen") !== "true";
-      } catch (_) {
-        shouldAutoOpen = true;
-      }
-
-      let sessionState = "";
-      try {
-        sessionState = window.sessionStorage.getItem("aiChatState") || "";
-      } catch (_) {
-        sessionState = "";
-      }
-
-      if (sessionState === "open") {
-        setPanelState(true, "session-restore");
-      } else if (sessionState === "closed") {
-        setPanelState(false, "session-restore");
-      } else if (shouldAutoOpen) {
-        setPanelState(true, "desktop-autopen");
-        try {
-          window.sessionStorage.setItem("aiChatSeen", "true");
-        } catch (_) {
-          // Ignore storage failures in privacy-restricted contexts.
-        }
-      } else {
-        setPanelState(false, "default");
-      }
-    } else {
-      updateLauncherLabel();
-    }
+    // Keep chat closed by default to avoid crowding content on desktop widths.
+    setPanelState(false, "default");
+    updateLauncherLabel();
 
     document.body.dataset.aiLauncherBound = "true";
   };
