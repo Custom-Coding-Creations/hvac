@@ -489,6 +489,141 @@ describe("Sticky Mobile CTA", () => {
   });
 });
 
+describe("AI Assistant", () => {
+  let trackingEvents = [];
+  let trackingHandler = null;
+
+  beforeEach(() => {
+    trackingEvents = [];
+    document.body.dataset.template = "service";
+    document.body.innerHTML = `
+      <main id="main">
+        <section>
+          <form data-validate="true" novalidate>
+            <div class="form-field">
+              <label for="svc-name">Name</label>
+              <input id="svc-name" name="name" type="text" required />
+              <span class="form-error" id="svc-name-error" aria-live="polite"></span>
+            </div>
+            <div class="form-field">
+              <label for="svc-phone">Phone</label>
+              <input id="svc-phone" name="phone" type="tel" required />
+              <span class="form-error" id="svc-phone-error" aria-live="polite"></span>
+            </div>
+            <div class="form-field">
+              <label for="svc-issue">Current Issue</label>
+              <select id="svc-issue" name="issue" required>
+                <option value="">Select one</option>
+                <option value="no-heat">No heat</option>
+                <option value="maintenance">Maintenance</option>
+                <option value="estimate">Estimate</option>
+              </select>
+              <span class="form-error" id="svc-issue-error" aria-live="polite"></span>
+            </div>
+            <button class="btn btn-primary" type="submit">Submit</button>
+            <p class="form-success" aria-live="polite"></p>
+          </form>
+        </section>
+      </main>
+    `;
+
+    trackingHandler = function (event) {
+      trackingEvents.push(event.detail.eventName);
+    };
+
+    window.addEventListener("analytics:track", trackingHandler);
+    window.SystemUI.initializeAiAssistant();
+  });
+
+  afterEach(() => {
+    if (trackingHandler) {
+      window.removeEventListener("analytics:track", trackingHandler);
+      trackingHandler = null;
+    }
+
+    document.body.removeAttribute("data-template");
+    delete window.HVAC_AI;
+  });
+
+  test("mounts launcher and inline assistant", () => {
+    expect(document.querySelector(".ai-launcher")).not.toBeNull();
+    expect(document.querySelector(".ai-launcher-panel")).not.toBeNull();
+    expect(document.querySelector(".ai-assistant")).not.toBeNull();
+  });
+
+  test("selecting a prompt populates the issue field and tracks selection", () => {
+    const issueField = document.getElementById("svc-issue");
+    const promptButton = Array.from(document.querySelectorAll(".ai-assistant-prompt")).find(
+      function (button) {
+        return button.textContent === "No heat";
+      }
+    );
+
+    promptButton.click();
+
+    expect(issueField.value).toBe("no-heat");
+    expect(trackingEvents).toContain("select_ai_prompt_service");
+  });
+
+  test("tracks AI lead creation on submit after prompt selection", () => {
+    const form = document.querySelector("form");
+    const promptButton = Array.from(document.querySelectorAll(".ai-assistant-prompt")).find(
+      function (button) {
+        return button.textContent === "Routine maintenance";
+      }
+    );
+
+    promptButton.click();
+    document.getElementById("svc-name").value = "Test User";
+    document.getElementById("svc-phone").value = "(315) 555-0100";
+    form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
+
+    expect(trackingEvents).toContain("create_ai_lead_service");
+  });
+
+  test("calls fetch with /ai/lead when endpoint is configured", () => {
+    // Re-init with endpoint configured.
+    window.HVAC_AI = { endpoint: "https://ai.example.com" };
+    const fetchMock = jest.fn().mockResolvedValue({ ok: true });
+    window.fetch = fetchMock;
+
+    document.body.innerHTML = `
+      <form data-validate="true" novalidate>
+        <input id="svc-name" name="name" type="text" value="" />
+        <input id="svc-phone" name="phone" type="tel" value="" />
+        <input id="svc-zip" name="zip" type="text" value="" />
+        <select id="svc-issue" name="issue">
+          <option value="">Select…</option>
+          <option value="no-heat">No heat</option>
+          <option value="maintenance">Routine maintenance</option>
+        </select>
+        <button type="submit">Submit</button>
+      </form>
+    `;
+    document.body.dataset.template = "service";
+    window.SystemUI.initializeAiAssistant();
+
+    const promptButton = Array.from(document.querySelectorAll(".ai-assistant-prompt")).find(
+      function (btn) { return btn.textContent === "No heat"; }
+    );
+    promptButton.click();
+
+    document.getElementById("svc-name").value = "Test User";
+    document.getElementById("svc-phone").value = "3155550100";
+
+    const form = document.querySelector("form");
+    form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
+
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    expect(fetchMock).toHaveBeenCalledWith(
+      expect.stringContaining("/ai/lead"),
+      expect.objectContaining({ method: "POST" })
+    );
+
+    delete window.fetch;
+  });
+});
+
 // Accessibility tests
 describe("Accessibility", () => {
   test("skip link is present in templates", () => {

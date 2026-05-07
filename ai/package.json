@@ -1,0 +1,30 @@
+{
+  "name": "hvac-ai-orchestration",
+  "version": "1.0.0",
+  "description": "Stack-agnostic AI orchestration layer for the HVAC website. Enriches leads with weather and AQI data, routes to webhook or email. Works without any CMS, CRM, or AI provider — adapters are optional plugins.",
+  "private": true,
+  "main": "server.js",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "test": "jest --runInBand",
+    "validate:syntax": "node --check server.js lib/rateLimit.js lib/validate.js lib/policy.js lib/tools/weather.js lib/tools/aqi.js lib/tools/serviceArea.js lib/adapters/webhook.js lib/adapters/email.js lib/routes/session.js lib/routes/lead.js lib/routes/handoff.js lib/routes/context.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.0.0",
+    "express": "^4.18.0",
+    "nodemailer": "^6.9.0"
+  },
+  "devDependencies": {
+    "jest": "^29.0.0"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "testMatch": [
+      "**/tests/**/*.test.js"
+    ]
+  }
+}

@@ -867,6 +867,91 @@ p {
   font-size: 0.95rem;
 }
 
+.ai-assistant {
+  display: grid;
+  gap: var(--space-4);
+  margin-bottom: var(--space-5);
+  border-color: rgb(0 191 255 / 20%);
+  background:
+    linear-gradient(135deg, rgb(0 191 255 / 8%), rgb(255 255 255 / 92%) 45%),
+    rgb(255 255 255 / 88%);
+}
+
+.ai-assistant-prompts {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.ai-assistant-prompt {
+  justify-content: flex-start;
+  text-align: left;
+  white-space: normal;
+}
+
+.ai-assistant-status {
+  margin-bottom: 0;
+  color: var(--color-ink-700);
+  font-size: 0.95rem;
+}
+
+.ai-launcher {
+  position: fixed;
+  right: var(--space-4);
+  bottom: 6.5rem;
+  z-index: 45;
+  border: 0;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--color-primary-600), var(--color-accent-600));
+  color: var(--color-paper-0);
+  box-shadow: var(--shadow-lg);
+  padding: 0.9rem 1.2rem;
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.ai-launcher-panel {
+  position: fixed;
+  right: var(--space-4);
+  bottom: 11.25rem;
+  width: min(24rem, calc(100% - 2rem));
+  z-index: 44;
+  display: grid;
+  gap: var(--space-4);
+  border-color: rgb(0 61 92 / 14%);
+  box-shadow: var(--shadow-lg);
+}
+
+.ai-launcher-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--space-3);
+}
+
+.ai-launcher-action {
+  width: 100%;
+  border: 1px solid var(--color-border-200);
+  border-radius: var(--radius-md);
+  background: var(--color-paper-0);
+  color: var(--color-ink-900);
+  font: inherit;
+  font-weight: 700;
+  padding: var(--space-3) var(--space-4);
+  text-align: left;
+  cursor: pointer;
+  transition: border-color var(--motion-base) var(--easing-standard),
+    transform var(--motion-base) var(--easing-standard),
+    box-shadow var(--motion-base) var(--easing-standard);
+}
+
+.ai-launcher-action:hover {
+  border-color: var(--color-accent-600);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
 form[aria-busy="true"] {
   opacity: 0.85;
   pointer-events: none;
@@ -933,6 +1018,12 @@ form[aria-busy="true"] button[type="submit"] {
   min-height: 40px;
   padding: 0.5rem 0.75rem;
   font-size: 0.95rem;
+}
+
+@media (min-width: 768px) {
+  .ai-assistant-prompts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 @media (min-width: 768px) {
@@ -1072,5 +1163,20 @@ form[aria-busy="true"] button[type="submit"] {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+}
+
+@media (max-width: 767px) {
+  .ai-launcher {
+    right: var(--space-3);
+    left: var(--space-3);
+    bottom: 5.5rem;
+  }
+
+  .ai-launcher-panel {
+    right: var(--space-3);
+    left: var(--space-3);
+    width: auto;
+    bottom: 10.5rem;
   }
 }

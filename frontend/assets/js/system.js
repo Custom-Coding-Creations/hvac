@@ -43,6 +43,129 @@ let _stickyCtaFocusInHandler = null;
 let _stickyCtaFocusOutHandler = null;
 let _stickyCtaResizeHandler = null;
 
+const assistantPromptCatalog = {
+  homepage: [
+    {
+      label: "No cooling right now",
+      summary: "AC stopped cooling and you need fast triage.",
+      issueValue: "Cooling",
+      urgency: "urgent",
+      handoff: "call",
+    },
+    {
+      label: "Heating issue",
+      summary: "Heat is weak or not turning on.",
+      issueValue: "Heating",
+      urgency: "urgent",
+      handoff: "call",
+    },
+    {
+      label: "Plumbing problem",
+      summary: "Water issue or plumbing repair request.",
+      issueValue: "Plumbing",
+      urgency: "standard",
+      handoff: "form",
+    },
+    {
+      label: "I want financing options",
+      summary: "You want to review financing before booking.",
+      issueValue: "Financing",
+      urgency: "standard",
+      handoff: "form",
+    },
+  ],
+  service: [
+    {
+      label: "No heat",
+      summary: "Heating system is down and likely needs urgent service.",
+      issueValue: "no-heat",
+      urgency: "urgent",
+      handoff: "call",
+    },
+    {
+      label: "No cooling",
+      summary: "Cooling system is down and likely needs urgent service.",
+      issueValue: "no-cooling",
+      urgency: "urgent",
+      handoff: "call",
+    },
+    {
+      label: "Routine maintenance",
+      summary: "You want a non-urgent visit or tune-up.",
+      issueValue: "maintenance",
+      urgency: "standard",
+      handoff: "form",
+    },
+    {
+      label: "Replacement estimate",
+      summary: "You want help deciding between repair and replacement.",
+      issueValue: "estimate",
+      urgency: "standard",
+      handoff: "form",
+    },
+  ],
+  location: [
+    {
+      label: "Check my service area",
+      summary: "Confirm whether your address or ZIP is inside the dispatch area.",
+      issueValue: "Service area check",
+      urgency: "standard",
+      handoff: "form",
+    },
+    {
+      label: "Need same-day availability",
+      summary: "You want the fastest local appointment or dispatch window.",
+      issueValue: "Same-day request",
+      urgency: "urgent",
+      handoff: "call",
+    },
+    {
+      label: "Need help choosing service",
+      summary: "You need help deciding what to book before submitting.",
+      issueValue: "Service selection help",
+      urgency: "standard",
+      handoff: "form",
+    },
+  ],
+  emergency: [
+    {
+      label: "No heat or no cooling",
+      summary: "Emergency heating or cooling outage detected.",
+      issueValue: "No heat or cooling emergency",
+      urgency: "urgent",
+      handoff: "call",
+    },
+    {
+      label: "Active leak",
+      summary: "Water leak or active plumbing emergency detected.",
+      issueValue: "Active leak emergency",
+      urgency: "urgent",
+      handoff: "call",
+    },
+    {
+      label: "Need a callback if line is busy",
+      summary: "Capture the emergency details for callback triage.",
+      issueValue: "Callback request",
+      urgency: "urgent",
+      handoff: "form",
+    },
+  ],
+};
+
+function createElement(tagName, className, textContent) {
+  const element = document.createElement(tagName);
+
+  if (className) {
+    element.className = className;
+  }
+
+  if (typeof textContent === "string") {
+    element.textContent = textContent;
+  }
+
+  return element;
+}
+
 function getTemplateContext() {
   if (document.body && document.body.dataset.template) {
     return String(document.body.dataset.template).toLowerCase();
@@ -177,6 +300,316 @@ function initializeNavigation() {
     }
   };
   window.addEventListener("resize", _navigationResizeHandler);
+}
+
+function initializeAiAssistant() {
+  if (!document.body) {
+    return;
+  }
+
+  const templateContext = getTemplateContext();
+  const assistantConfig = (window && window.HVAC_AI) || {};
+  const promptSet = assistantPromptCatalog[templateContext] || assistantPromptCatalog.homepage;
+
+  if (!promptSet || promptSet.length === 0) {
+    return;
+  }
+
+  const dispatchTrackingEvent = function (eventName, detail) {
+    if (typeof window.dispatchEvent !== "function") {
+      return;
+    }
+
+    window.dispatchEvent(
+      new CustomEvent("analytics:track", {
+        detail: Object.assign(
+          {
+            eventName: eventName,
+            sourceEventName: eventName,
+            templateContext: templateContext,
+          },
+          detail || {}
+        ),
+      })
+    );
+  };
+
+  const getLeadDestination = function () {
+    if (assistantConfig.endpoint) {
+      return "endpoint";
+    }
+
+    if (assistantConfig.webhookUrl) {
+      return "webhook";
+    }
+
+    return "fallback";
+  };
+
+  const buildLeadPayload = function (form, prompt) {
+    const formData = new FormData(form);
+    const payload = {
+      template: templateContext,
+      promptLabel: prompt.label,
+      summary: prompt.summary,
+      urgency: prompt.urgency,
+      handoff: prompt.handoff,
+      destination: getLeadDestination(),
+      capturedAt: new Date().toISOString(),
+      fields: {},
+    };
+
+    formData.forEach(function (value, key) {
+      payload.fields[key] = String(value || "");
+    });
+
+    return payload;
+  };
+
+  /**
+   * Fire-and-forget POST to the configured AI endpoint or webhook URL.
+   * Uses a 5-second AbortController timeout.  Any network error is silently
+   * swallowed so the standard form submission always goes through.
+   *
+   * @param {object} payload - Sanitised lead payload built by buildLeadPayload().
+   * @param {object} config  - window.HVAC_AI config object { endpoint, webhookUrl }.
+   */
+  const sendAiLead = function (payload, config) {
+    var baseUrl = config.endpoint || config.webhookUrl;
+    if (!baseUrl) {
+      return;
+    }
+
+    if (typeof window.fetch !== "function") {
+      return;
+    }
+
+    var controller = new window.AbortController();
+    var timer = window.setTimeout(function () {
+      controller.abort();
+    }, 5000);
+
+    var destination = config.endpoint
+      ? baseUrl.replace(/\/$/, "") + "/ai/lead"
+      : baseUrl;
+
+    window
+      .fetch(destination, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+        signal: controller.signal,
+      })
+      .then(function () {
+        window.clearTimeout(timer);
+      })
+      .catch(function () {
+        window.clearTimeout(timer);
+        // Silent fallback — the standard form submission still routes the lead.
+      });
+  };
+
+  const maybePopulateField = function (form, names, value) {
+    if (!value) {
+      return null;
+    }
+
+    for (let index = 0; index < names.length; index += 1) {
+      const field = form.querySelector("[name='" + names[index] + "']");
+
+      if (!field) {
+        continue;
+      }
+
+      field.value = value;
+      field.dispatchEvent(new Event("input", { bubbles: true }));
+      field.dispatchEvent(new Event("change", { bubbles: true }));
+      return field;
+    }
+
+    return null;
+  };
+
+  const attachInlineAssistant = function (form) {
+    if (!form || form.dataset.aiBound) {
+      return;
+    }
+
+    const shell = createElement("section", "ai-assistant panel", null);
+    shell.setAttribute("aria-label", "AI intake assistant");
+
+    const eyebrow = createElement("span", "eyebrow", "AI Intake Assistant");
+    const title = createElement("h3", null, "Start With Guided Triage");
+    const copy = createElement(
+      "p",
+      null,
+      "Choose the closest issue and the assistant will prepare the form for you, recommend the right next step, and keep the standard contact path available."
+    );
+    const promptList = createElement("div", "ai-assistant-prompts", null);
+    const status = createElement("p", "ai-assistant-status", "Select an option to start.");
+    status.setAttribute("aria-live", "polite");
+
+    shell.appendChild(eyebrow);
+    shell.appendChild(title);
+    shell.appendChild(copy);
+    shell.appendChild(promptList);
+    shell.appendChild(status);
+
+    promptSet.forEach(function (prompt) {
+      const button = createElement("button", "btn btn-secondary ai-assistant-prompt", prompt.label);
+      button.type = "button";
+
+      button.addEventListener("click", function () {
+        maybePopulateField(form, ["issue"], prompt.issueValue);
+        maybePopulateField(form, ["notes", "neighborhood"], prompt.summary);
+
+        if (prompt.handoff === "call") {
+          status.textContent =
+            "Urgent path detected. Calling dispatch is recommended, but you can still submit the form if needed.";
+        } else {
+          status.textContent =
+            "The form has been prepared with the selected issue. Add contact details and submit when ready.";
+        }
+
+        form.dataset.aiSelectedPrompt = prompt.label;
+        form.dataset.aiLeadPayload = JSON.stringify(buildLeadPayload(form, prompt));
+
+        dispatchTrackingEvent("select_ai_prompt_" + templateContext, {
+          promptLabel: prompt.label,
+          urgency: prompt.urgency,
+          handoff: prompt.handoff,
+        });
+
+        const firstEmpty = form.querySelector("input:not([type='hidden']):not([value]), textarea:empty, select");
+        if (firstEmpty && typeof firstEmpty.focus === "function") {
+          firstEmpty.focus();
+        }
+      });
+
+      promptList.appendChild(button);
+    });
+
+    form.insertAdjacentElement("beforebegin", shell);
+
+    form.addEventListener("submit", function () {
+      const selectedPrompt = String(form.dataset.aiSelectedPrompt || "");
+      if (!selectedPrompt) {
+        return;
+      }
+
+      // Re-build the payload with whatever the user filled in after prompt selection,
+      // so all fields are captured at submission time (not just at click time).
+      const matchedPrompt = promptSet.find(function (p) {
+        return p.label === selectedPrompt;
+      }) || { label: selectedPrompt, summary: "", urgency: "standard", handoff: "form" };
+
+      const freshPayload = buildLeadPayload(form, matchedPrompt);
+
+      // Non-blocking HTTP delivery — silent fallback on any error.
+      sendAiLead(freshPayload, assistantConfig);
+
+      dispatchTrackingEvent("create_ai_lead_" + templateContext, {
+        promptLabel: selectedPrompt,
+        destination: getLeadDestination(),
+      });
+
+      status.textContent =
+        "AI triage summary attached. If automation is unavailable, the normal form request still goes through.";
+    });
+
+    form.dataset.aiBound = "true";
+  };
+
+  const attachGlobalLauncher = function () {
+    const existingLauncher = document.querySelector(".ai-launcher");
+    const existingPanel = document.querySelector(".ai-launcher-panel");
+
+    if (!existingLauncher && !existingPanel) {
+      delete document.body.dataset.aiLauncherBound;
+    }
+
+    if (existingLauncher || document.body.dataset.aiLauncherBound) {
+      return;
+    }
+
+    const launcher = createElement("button", "ai-launcher", "Ask AI");
+    launcher.type = "button";
+    launcher.setAttribute("aria-expanded", "false");
+
+    const panel = createElement("aside", "ai-launcher-panel panel", null);
+    panel.hidden = true;
+    panel.setAttribute("aria-label", "AI quick help");
+
+    const panelTitle = createElement("h2", null, "Quick AI Guidance");
+    const panelCopy = createElement(
+      "p",
+      null,
+      "Use this assistant to route emergency calls, check service fit, or prefill the request form. It stays vendor-neutral and falls back to the site form if no automation endpoint is configured."
+    );
+    const panelList = createElement("ul", "ai-launcher-list", null);
+    const panelStatus = createElement(
+      "p",
+      "ai-assistant-status",
+      "AI can guide the intake flow now and hand the request to your future CRM, scheduler, or webhook later."
+    );
+    panelStatus.setAttribute("aria-live", "polite");
+
+    promptSet.slice(0, 3).forEach(function (prompt) {
+      const item = createElement("li", null, null);
+      const button = createElement("button", "ai-launcher-action", prompt.label);
+      button.type = "button";
+
+      button.addEventListener("click", function () {
+        const form = document.querySelector("form[data-validate='true']");
+
+        if (form) {
+          maybePopulateField(form, ["issue"], prompt.issueValue);
+          maybePopulateField(form, ["notes", "neighborhood"], prompt.summary);
+          form.dataset.aiSelectedPrompt = prompt.label;
+          panelStatus.textContent = "The guided intake was prepared below. Finish the form to continue.";
+
+          if (typeof form.scrollIntoView === "function") {
+            form.scrollIntoView({ behavior: "smooth", block: "start" });
+          }
+        } else {
+          panelStatus.textContent =
+            "No inline form was found on this page, so the assistant can only recommend the next action.";
+        }
+
+        dispatchTrackingEvent("click_ai_launcher_" + templateContext, {
+          promptLabel: prompt.label,
+          urgency: prompt.urgency,
+          handoff: prompt.handoff,
+        });
+      });
+
+      item.appendChild(button);
+      panelList.appendChild(item);
+    });
+
+    panel.appendChild(panelTitle);
+    panel.appendChild(panelCopy);
+    panel.appendChild(panelList);
+    panel.appendChild(panelStatus);
+
+    launcher.addEventListener("click", function () {
+      const isOpen = !panel.hidden;
+      panel.hidden = isOpen;
+      launcher.setAttribute("aria-expanded", String(!isOpen));
+
+      dispatchTrackingEvent("open_ai_assistant_" + templateContext, {
+        destination: getLeadDestination(),
+        state: isOpen ? "closed" : "open",
+      });
+    });
+
+    document.body.appendChild(panel);
+    document.body.appendChild(launcher);
+    document.body.dataset.aiLauncherBound = "true";
+  };
+
+  attachGlobalLauncher();
+  document.querySelectorAll("form[data-validate='true']").forEach(attachInlineAssistant);
 }
 
 function initializeTracking() {
@@ -627,6 +1060,7 @@ function initializeEmergencyBanner() {
 function initialize() {
   initializeNavigation();
   initializeTracking();
+  initializeAiAssistant();
   initializeEmergencyBanner();
   initializeStickyMobileCta();
   initializeUrgentCtaPrioritization();
@@ -647,6 +1081,7 @@ if (typeof window !== "undefined") {
     initialize: initialize,
     initializeNavigation: initializeNavigation,
     initializeTracking: initializeTracking,
+    initializeAiAssistant: initializeAiAssistant,
     initializeStickyMobileCta: initializeStickyMobileCta,
     initializeUrgentCtaPrioritization: initializeUrgentCtaPrioritization,
     initializeFormValidation: initializeFormValidation,

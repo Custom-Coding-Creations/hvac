@@ -63,10 +63,11 @@ jobs:
           set +e
 
           # Check for common secret patterns (use -E for extended regex)
-          grep -rE "api[_-]?key\s*=" frontend/ --include="*.js" --include="*.ts" --include="*.html" && echo "❌ Found potential hardcoded API key" && exit 1
-          grep -rE "password\s*=" frontend/ --include="*.js" --include="*.ts" --include="*.html" && echo "❌ Found potential hardcoded password" && exit 1
-          grep -r "VERCEL_TOKEN" frontend/ && echo "❌ Found VERCEL_TOKEN in code" && exit 1
-          grep -r "aws_secret" frontend/ && echo "❌ Found AWS secret in code" && exit 1
+          # Exclude node_modules to avoid false positives from installed packages.
+          grep -rE "api[_-]?key\s*=" frontend/ --include="*.js" --include="*.ts" --include="*.html" --exclude-dir=node_modules && echo "❌ Found potential hardcoded API key" && exit 1
+          grep -rE "password\s*=" frontend/ --include="*.js" --include="*.ts" --include="*.html" --exclude-dir=node_modules && echo "❌ Found potential hardcoded password" && exit 1
+          grep -r "VERCEL_TOKEN" frontend/ --exclude-dir=node_modules && echo "❌ Found VERCEL_TOKEN in code" && exit 1
+          grep -r "aws_secret" frontend/ --exclude-dir=node_modules && echo "❌ Found AWS secret in code" && exit 1
 
           set -e
           echo "✅ No hardcoded secrets detected"
