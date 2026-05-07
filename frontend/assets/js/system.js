@@ -739,6 +739,41 @@ function initializeAiAssistant() {
 
     document.body.appendChild(panel);
     document.body.appendChild(launcher);
+
+    // Auto-open once on desktop so users immediately see the AI chat capability.
+    if (typeof window !== "undefined" && window.innerWidth >= 1024) {
+      let shouldAutoOpen = true;
+
+      try {
+        shouldAutoOpen = window.sessionStorage.getItem("aiChatSeen") !== "true";
+      } catch (_) {
+        shouldAutoOpen = true;
+      }
+
+      if (shouldAutoOpen) {
+        panel.hidden = false;
+        launcher.setAttribute("aria-expanded", "true");
+
+        if (!transcript.dataset.greetingSent) {
+          appendMessage(
+            "assistant",
+            "Hi, I'm your HVAC AI assistant. Tell me what's going on and I will guide your next best step."
+          );
+          transcript.dataset.greetingSent = "true";
+        }
+
+        if (typeof input.focus === "function") {
+          input.focus();
+        }
+
+        try {
+          window.sessionStorage.setItem("aiChatSeen", "true");
+        } catch (_) {
+          // Ignore storage failures in privacy-restricted contexts.
+        }
+      }
+    }
+
     document.body.dataset.aiLauncherBound = "true";
   };
 

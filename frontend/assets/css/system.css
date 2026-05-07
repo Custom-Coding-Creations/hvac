@@ -1239,3 +1239,110 @@ form[aria-busy="true"] button[type="submit"] {
     bottom: 10.5rem;
   }
 }
+
+@media (min-width: 1024px) {
+  .container {
+    width: min(1420px, calc(100% - 4rem));
+  }
+
+  .header-row {
+    min-height: 84px;
+    gap: var(--space-6);
+  }
+
+  .primary-nav ul {
+    gap: var(--space-5);
+  }
+
+  .hero {
+    padding: clamp(5rem, 8vw, 7rem) 0 clamp(4rem, 6vw, 5rem);
+  }
+
+  .hero-grid {
+    grid-template-columns: minmax(0, 1.18fr) minmax(420px, 0.82fr);
+    gap: clamp(2rem, 4vw, 3.5rem);
+    align-items: start;
+  }
+
+  .hero-copy {
+    gap: var(--space-6);
+  }
+
+  .hero-copy > p {
+    max-width: 68ch;
+    font-size: 1.08rem;
+    line-height: 1.7;
+  }
+
+  .hero-actions {
+    gap: var(--space-4);
+  }
+
+  .trust-badge-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-4);
+  }
+
+  .section {
+    padding: clamp(4.25rem, 6vw, 6rem) 0;
+  }
+
+  .panel {
+    padding: clamp(1.6rem, 2vw, 2.15rem);
+  }
+
+  .request-layout {
+    grid-template-columns: minmax(0, 1.05fr) minmax(420px, 0.95fr);
+    gap: clamp(2rem, 4vw, 3.5rem);
+  }
+
+  .editorial-service-grid {
+    grid-template-columns: minmax(0, 1.2fr) repeat(2, minmax(0, 0.9fr));
+    gap: clamp(1.25rem, 2vw, 1.75rem);
+  }
+
+  .proof-layout {
+    grid-template-columns: minmax(0, 1.12fr) minmax(0, 0.88fr);
+    gap: clamp(1.5rem, 2.5vw, 2.2rem);
+  }
+
+  .ai-launcher {
+    right: 1.35rem;
+    bottom: 1.35rem;
+    z-index: 70;
+    padding: 0.9rem 1.25rem;
+    border: 1px solid rgb(255 255 255 / 30%);
+    box-shadow: 0 12px 34px rgb(0 61 92 / 36%);
+  }
+
+  .ai-launcher-panel {
+    right: 1.35rem;
+    bottom: 5.6rem;
+    width: min(30rem, calc(100% - 2.5rem));
+    max-height: min(70vh, 44rem);
+    overflow: hidden;
+    z-index: 69;
+  }
+
+  .ai-chat-transcript {
+    max-height: min(45vh, 21rem);
+  }
+}
+
+@media (min-width: 1280px) {
+  h1 {
+    font-size: clamp(3.1rem, 4.4vw, 4.7rem);
+  }
+
+  .hero-grid {
+    grid-template-columns: minmax(0, 1.22fr) minmax(460px, 0.78fr);
+  }
+
+  .service-showcase {
+    grid-template-columns: minmax(0, 1.15fr) repeat(2, minmax(0, 0.925fr));
+  }
+
+  .proof-grid {
+    gap: var(--space-6);
+  }
+}
