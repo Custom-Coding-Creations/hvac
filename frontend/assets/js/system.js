@@ -366,6 +366,14 @@ function initializeAiAssistant() {
     return payload;
   };
 
+  const getEndpointUrl = function (config, pathSuffix) {
+    if (!config || !config.endpoint) {
+      return "";
+    }
+
+    return String(config.endpoint).replace(/\/$/, "") + pathSuffix;
+  };
+
   /**
    * Fire-and-forget POST to the configured AI endpoint or webhook URL.
    * Uses a 5-second AbortController timeout.  Any network error is silently
@@ -389,9 +397,7 @@ function initializeAiAssistant() {
       controller.abort();
     }, 5000);
 
-    var destination = config.endpoint
-      ? baseUrl.replace(/\/$/, "") + "/ai/lead"
-      : baseUrl;
+    var destination = config.endpoint ? getEndpointUrl(config, "/lead") : baseUrl;
 
     window
       .fetch(destination, {
@@ -407,6 +413,72 @@ function initializeAiAssistant() {
         window.clearTimeout(timer);
         // Silent fallback — the standard form submission still routes the lead.
       });
+  };
+
+  const sendAiChat = function (message, config, context) {
+    if (!message || typeof window.fetch !== "function") {
+      return Promise.resolve(null);
+    }
+
+    var destination = getEndpointUrl(config, "/chat");
+    if (!destination) {
+      return Promise.resolve(null);
+    }
+
+    var controller = new window.AbortController();
+    var timer = window.setTimeout(function () {
+      controller.abort();
+    }, 6500);
+
+    return window
+      .fetch(destination, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          message: message,
+          template: templateContext,
+          context: context || {},
+        }),
+        signal: controller.signal,
+      })
+      .then(function (response) {
+        window.clearTimeout(timer);
+        if (!response || !response.ok) {
+          return null;
+        }
+
+        return response.json();
+      })
+      .catch(function () {
+        window.clearTimeout(timer);
+        return null;
+      });
+  };
+
+  const getLocalChatReply = function (message) {
+    var lower = String(message || "").toLowerCase();
+
+    if (/gas|leak|flood|no heat|no cooling|emergency|urgent/.test(lower)) {
+      return {
+        reply:
+          "This sounds urgent. I recommend calling dispatch now at (315) 472-3557. I can also prefill the form with an emergency issue if you'd like.",
+        suggestedPrompt: "No heat",
+      };
+    }
+
+    if (/financ|estimate|price|quote|replace/.test(lower)) {
+      return {
+        reply:
+          "I can guide a replacement estimate and financing path. Share your ZIP and system type, and I will prep the request details for a specialist follow-up.",
+        suggestedPrompt: "Replacement estimate",
+      };
+    }
+
+    return {
+      reply:
+        "I can help triage your issue, check service-area fit by ZIP, and prep your request form. Tell me what's happening with your heating, cooling, or plumbing.",
+      suggestedPrompt: "Routine maintenance",
+    };
   };
 
   const maybePopulateField = function (form, names, value) {
@@ -532,70 +604,132 @@ function initializeAiAssistant() {
       return;
     }
 
-    const launcher = createElement("button", "ai-launcher", "Ask AI");
+    const launcher = createElement("button", "ai-launcher", "AI Chat");
     launcher.type = "button";
     launcher.setAttribute("aria-expanded", "false");
 
     const panel = createElement("aside", "ai-launcher-panel panel", null);
     panel.hidden = true;
-    panel.setAttribute("aria-label", "AI quick help");
+    panel.setAttribute("aria-label", "AI chat assistant");
 
-    const panelTitle = createElement("h2", null, "Quick AI Guidance");
+    const panelTitle = createElement("h2", null, "HVAC AI Assistant");
     const panelCopy = createElement(
       "p",
       null,
-      "Use this assistant to route emergency calls, check service fit, or prefill the request form. It stays vendor-neutral and falls back to the site form if no automation endpoint is configured."
+      "Ask questions, describe symptoms, and the assistant will guide next steps and prep the request form."
     );
-    const panelList = createElement("ul", "ai-launcher-list", null);
-    const panelStatus = createElement(
-      "p",
-      "ai-assistant-status",
-      "AI can guide the intake flow now and hand the request to your future CRM, scheduler, or webhook later."
-    );
-    panelStatus.setAttribute("aria-live", "polite");
+    const transcript = createElement("div", "ai-chat-transcript", null);
+    transcript.setAttribute("role", "log");
+    transcript.setAttribute("aria-live", "polite");
+
+    const quickList = createElement("div", "ai-chat-quick-list", null);
+    const composer = createElement("form", "ai-chat-composer", null);
+    composer.noValidate = true;
+
+    const input = createElement("input", "ai-chat-input", null);
+    input.type = "text";
+    input.name = "ai-chat-message";
+    input.placeholder = "Describe your issue...";
+    input.setAttribute("aria-label", "Message the AI assistant");
+
+    const sendButton = createElement("button", "btn btn-primary ai-chat-send", "Send");
+    sendButton.type = "submit";
+
+    const appendMessage = function (role, text) {
+      const message = createElement(
+        "p",
+        "ai-chat-message ai-chat-message-" + role,
+        text
+      );
+      transcript.appendChild(message);
+      transcript.scrollTop = transcript.scrollHeight;
+    };
+
+    const handleSuggestedPrompt = function (label) {
+      if (!label) {
+        return;
+      }
+
+      const matchedPrompt = promptSet.find(function (prompt) {
+        return String(prompt.label || "").toLowerCase() === String(label).toLowerCase();
+      });
+      const form = document.querySelector("form[data-validate='true']");
+
+      if (!matchedPrompt || !form) {
+        return;
+      }
+
+      maybePopulateField(form, ["issue"], matchedPrompt.issueValue);
+      maybePopulateField(form, ["notes", "neighborhood"], matchedPrompt.summary);
+      form.dataset.aiSelectedPrompt = matchedPrompt.label;
+    };
+
+    const submitMessage = function (rawText) {
+      const text = String(rawText || "").trim();
+      if (!text) {
+        return;
+      }
+
+      appendMessage("user", text);
+      input.value = "";
+      sendButton.disabled = true;
+
+      dispatchTrackingEvent("send_ai_chat_" + templateContext, {
+        destination: getLeadDestination(),
+      });
+
+      sendAiChat(text, assistantConfig, { hasForm: !!document.querySelector("form[data-validate='true']") })
+        .then(function (result) {
+          const fallback = getLocalChatReply(text);
+          const reply = result && result.reply ? result.reply : fallback.reply;
+          const suggestedPrompt = result && result.suggestedPrompt ? result.suggestedPrompt : fallback.suggestedPrompt;
+
+          appendMessage("assistant", reply);
+          handleSuggestedPrompt(suggestedPrompt);
+        })
+        .finally(function () {
+          sendButton.disabled = false;
+        });
+    };
 
     promptSet.slice(0, 3).forEach(function (prompt) {
-      const item = createElement("li", null, null);
-      const button = createElement("button", "ai-launcher-action", prompt.label);
+      const button = createElement("button", "ai-launcher-action ai-chat-quick", prompt.label);
       button.type = "button";
 
       button.addEventListener("click", function () {
-        const form = document.querySelector("form[data-validate='true']");
-
-        if (form) {
-          maybePopulateField(form, ["issue"], prompt.issueValue);
-          maybePopulateField(form, ["notes", "neighborhood"], prompt.summary);
-          form.dataset.aiSelectedPrompt = prompt.label;
-          panelStatus.textContent = "The guided intake was prepared below. Finish the form to continue.";
-
-          if (typeof form.scrollIntoView === "function") {
-            form.scrollIntoView({ behavior: "smooth", block: "start" });
-          }
-        } else {
-          panelStatus.textContent =
-            "No inline form was found on this page, so the assistant can only recommend the next action.";
-        }
-
-        dispatchTrackingEvent("click_ai_launcher_" + templateContext, {
-          promptLabel: prompt.label,
-          urgency: prompt.urgency,
-          handoff: prompt.handoff,
-        });
+        input.value = prompt.summary;
+        submitMessage(prompt.summary);
       });
 
-      item.appendChild(button);
-      panelList.appendChild(item);
+      quickList.appendChild(button);
     });
+
+    composer.addEventListener("submit", function (event) {
+      event.preventDefault();
+      submitMessage(input.value);
+    });
+
+    composer.appendChild(input);
+    composer.appendChild(sendButton);
 
     panel.appendChild(panelTitle);
     panel.appendChild(panelCopy);
-    panel.appendChild(panelList);
-    panel.appendChild(panelStatus);
+    panel.appendChild(transcript);
+    panel.appendChild(quickList);
+    panel.appendChild(composer);
 
     launcher.addEventListener("click", function () {
       const isOpen = !panel.hidden;
       panel.hidden = isOpen;
       launcher.setAttribute("aria-expanded", String(!isOpen));
+
+      if (!isOpen && !transcript.dataset.greetingSent) {
+        appendMessage(
+          "assistant",
+          "Hi, I'm your HVAC AI assistant. Tell me what's going on and I will guide your next best step."
+        );
+        transcript.dataset.greetingSent = "true";
+      }
 
       dispatchTrackingEvent("open_ai_assistant_" + templateContext, {
         destination: getLeadDestination(),

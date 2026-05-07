@@ -581,7 +581,7 @@ describe("AI Assistant", () => {
     expect(trackingEvents).toContain("create_ai_lead_service");
   });
 
-  test("calls fetch with /ai/lead when endpoint is configured", () => {
+  test("calls fetch with /lead when endpoint is configured", () => {
     // Re-init with endpoint configured.
     window.HVAC_AI = { endpoint: "https://ai.example.com" };
     const fetchMock = jest.fn().mockResolvedValue({ ok: true });
@@ -616,9 +616,63 @@ describe("AI Assistant", () => {
 
     expect(fetchMock).toHaveBeenCalledTimes(1);
     expect(fetchMock).toHaveBeenCalledWith(
-      expect.stringContaining("/ai/lead"),
+      expect.stringContaining("/lead"),
       expect.objectContaining({ method: "POST" })
     );
+
+    delete window.fetch;
+  });
+
+  test("renders conversational chat and posts messages to /chat", async () => {
+    window.HVAC_AI = { endpoint: "https://ai.example.com/api" };
+    const fetchMock = jest.fn(function (url) {
+      if (String(url).includes("/chat")) {
+        return Promise.resolve({
+          ok: true,
+          json: function () {
+            return Promise.resolve({
+              reply: "Please call dispatch now.",
+              suggestedPrompt: "No heat",
+            });
+          },
+        });
+      }
+
+      return Promise.resolve({ ok: true, json: function () { return Promise.resolve({}); } });
+    });
+    window.fetch = fetchMock;
+
+    document.body.innerHTML = `
+      <form data-validate="true" novalidate>
+        <input id="svc-name" name="name" type="text" value="" />
+        <input id="svc-phone" name="phone" type="tel" value="" />
+        <select id="svc-issue" name="issue">
+          <option value="">Select…</option>
+          <option value="no-heat">No heat</option>
+          <option value="maintenance">Routine maintenance</option>
+        </select>
+        <button type="submit">Submit</button>
+      </form>
+    `;
+    document.body.dataset.template = "service";
+
+    window.SystemUI.initializeAiAssistant();
+    document.querySelector(".ai-launcher").click();
+
+    const chatInput = document.querySelector(".ai-chat-input");
+    const chatForm = document.querySelector(".ai-chat-composer");
+    chatInput.value = "There is a gas smell";
+    chatForm.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
+
+    await Promise.resolve();
+    await Promise.resolve();
+
+    expect(fetchMock).toHaveBeenCalledWith(
+      expect.stringContaining("/chat"),
+      expect.objectContaining({ method: "POST" })
+    );
+    expect(document.querySelectorAll(".ai-chat-message").length).toBeGreaterThan(1);
+    expect(document.querySelectorAll(".ai-chat-message-assistant").length).toBeGreaterThan(0);
 
     delete window.fetch;
   });
