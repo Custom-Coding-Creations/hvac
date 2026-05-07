@@ -612,7 +612,15 @@ function initializeAiAssistant() {
     panel.hidden = true;
     panel.setAttribute("aria-label", "AI chat assistant");
 
+    const panelHeader = createElement("div", "ai-launcher-panel-header", null);
     const panelTitle = createElement("h2", null, "HVAC AI Assistant");
+    const minimizeButton = createElement("button", "ai-launcher-minimize", "Minimize");
+    minimizeButton.type = "button";
+    minimizeButton.setAttribute("aria-label", "Minimize AI chat");
+
+    panelHeader.appendChild(panelTitle);
+    panelHeader.appendChild(minimizeButton);
+
     const panelCopy = createElement(
       "p",
       null,
@@ -712,18 +720,26 @@ function initializeAiAssistant() {
     composer.appendChild(input);
     composer.appendChild(sendButton);
 
-    panel.appendChild(panelTitle);
+    panel.appendChild(panelHeader);
     panel.appendChild(panelCopy);
     panel.appendChild(transcript);
     panel.appendChild(quickList);
     panel.appendChild(composer);
 
-    launcher.addEventListener("click", function () {
-      const isOpen = !panel.hidden;
-      panel.hidden = isOpen;
-      launcher.setAttribute("aria-expanded", String(!isOpen));
+    const updateLauncherLabel = function (isOpen) {
+      launcher.textContent = isOpen ? "Minimize AI Chat" : "AI Chat";
+      launcher.setAttribute("aria-label", isOpen ? "Minimize AI chat" : "Open AI chat");
+      minimizeButton.setAttribute("aria-label", "Minimize AI chat");
+    };
 
-      if (!isOpen && !transcript.dataset.greetingSent) {
+    const setPanelState = function (open, source) {
+      const shouldOpen = !!open;
+      panel.hidden = !shouldOpen;
+      launcher.setAttribute("aria-expanded", String(shouldOpen));
+      panel.dataset.state = shouldOpen ? "open" : "closed";
+      updateLauncherLabel(shouldOpen);
+
+      if (shouldOpen && !transcript.dataset.greetingSent) {
         appendMessage(
           "assistant",
           "Hi, I'm your HVAC AI assistant. Tell me what's going on and I will guide your next best step."
@@ -731,10 +747,38 @@ function initializeAiAssistant() {
         transcript.dataset.greetingSent = "true";
       }
 
+      if (shouldOpen && typeof input.focus === "function") {
+        input.focus();
+      }
+
+      try {
+        window.sessionStorage.setItem("aiChatState", shouldOpen ? "open" : "closed");
+      } catch (_) {
+        // Ignore storage failures in privacy-restricted contexts.
+      }
+
       dispatchTrackingEvent("open_ai_assistant_" + templateContext, {
         destination: getLeadDestination(),
-        state: isOpen ? "closed" : "open",
+        state: shouldOpen ? "open" : "closed",
+        source: source || "unknown",
       });
+    };
+
+    launcher.addEventListener("click", function () {
+      setPanelState(panel.hidden, "launcher");
+    });
+
+    minimizeButton.addEventListener("click", function () {
+      setPanelState(false, "panel-minimize");
+    });
+
+    panel.addEventListener("keydown", function (event) {
+      if (event.key !== "Escape") {
+        return;
+      }
+
+      event.preventDefault();
+      setPanelState(false, "escape");
     });
 
     document.body.appendChild(panel);
@@ -750,28 +794,29 @@ function initializeAiAssistant() {
         shouldAutoOpen = true;
       }
 
-      if (shouldAutoOpen) {
-        panel.hidden = false;
-        launcher.setAttribute("aria-expanded", "true");
+      let sessionState = "";
+      try {
+        sessionState = window.sessionStorage.getItem("aiChatState") || "";
+      } catch (_) {
+        sessionState = "";
+      }
 
-        if (!transcript.dataset.greetingSent) {
-          appendMessage(
-            "assistant",
-            "Hi, I'm your HVAC AI assistant. Tell me what's going on and I will guide your next best step."
-          );
-          transcript.dataset.greetingSent = "true";
-        }
-
-        if (typeof input.focus === "function") {
-          input.focus();
-        }
-
+      if (sessionState === "open") {
+        setPanelState(true, "session-restore");
+      } else if (sessionState === "closed") {
+        setPanelState(false, "session-restore");
+      } else if (shouldAutoOpen) {
+        setPanelState(true, "desktop-autopen");
         try {
           window.sessionStorage.setItem("aiChatSeen", "true");
         } catch (_) {
           // Ignore storage failures in privacy-restricted contexts.
         }
+      } else {
+        setPanelState(false, "default");
       }
+    } else {
+      updateLauncherLabel(false);
     }
 
     document.body.dataset.aiLauncherBound = "true";
