@@ -911,17 +911,25 @@ p {
   cursor: pointer;
 }
 
+.ai-launcher[hidden] {
+  display: none;
+}
+
 .ai-launcher-panel {
   position: fixed;
   right: max(var(--space-4), env(safe-area-inset-right, 0px));
   bottom: 11.25rem;
   width: min(24rem, calc(100vw - 2rem));
-  max-width: calc(100vw - 2rem);
+  max-width: calc(100vw - 2rem));
   z-index: 44;
   display: grid;
   gap: var(--space-4);
   border-color: rgb(0 61 92 / 14%);
   box-shadow: var(--shadow-lg);
+}
+
+.ai-launcher-panel[hidden] {
+  display: none;
 }
 
 .ai-launcher-list {
