@@ -210,6 +210,92 @@ describe("Form Validation", () => {
     zipForm.dispatchEvent(new Event("submit", { bubbles: true }));
     expect(zipField.getAttribute("aria-invalid")).not.toBe("true");
   });
+
+  test("shows success only when API request succeeds", async () => {
+    document.body.innerHTML = `
+      <form data-validate="true" novalidate>
+        <div class="form-field">
+          <label for="test-name">Name</label>
+          <input id="test-name" name="name" type="text" required />
+          <span class="form-error" id="test-name-error" aria-live="polite"></span>
+        </div>
+        <div class="form-field">
+          <label for="test-phone">Phone</label>
+          <input id="test-phone" name="phone" type="tel" required />
+          <span class="form-error" id="test-phone-error" aria-live="polite"></span>
+        </div>
+        <button class="btn btn-primary" type="submit">Submit</button>
+        <p class="form-success" aria-live="polite"></p>
+      </form>
+    `;
+
+    window.HVAC_AI = { endpoint: "/api" };
+    const originalFetch = window.fetch;
+    const fetchSpy = jest.fn().mockResolvedValue({ ok: true, status: 200 });
+    window.fetch = fetchSpy;
+    const form = document.querySelector("form");
+    const success = document.querySelector(".form-success");
+    document.getElementById("test-name").value = "Test User";
+    document.getElementById("test-phone").value = "(315) 555-0100";
+
+    window.SystemUI.initializeFormValidation();
+    form.dispatchEvent(new Event("submit", { bubbles: true }));
+
+    await Promise.resolve();
+    await Promise.resolve();
+    await new Promise(function (resolve) {
+      setTimeout(resolve, 0);
+    });
+
+    expect(fetchSpy).toHaveBeenCalledTimes(1);
+    expect(success.textContent).toBe("Request sent. Our team will contact you shortly.");
+
+    window.fetch = originalFetch;
+  });
+
+  test("shows explicit failure message when API request fails", async () => {
+    document.body.innerHTML = `
+      <form data-validate="true" novalidate>
+        <div class="form-field">
+          <label for="test-name">Name</label>
+          <input id="test-name" name="name" type="text" required />
+          <span class="form-error" id="test-name-error" aria-live="polite"></span>
+        </div>
+        <div class="form-field">
+          <label for="test-phone">Phone</label>
+          <input id="test-phone" name="phone" type="tel" required />
+          <span class="form-error" id="test-phone-error" aria-live="polite"></span>
+        </div>
+        <button class="btn btn-primary" type="submit">Submit</button>
+        <p class="form-success" aria-live="polite"></p>
+      </form>
+    `;
+
+    window.HVAC_AI = { endpoint: "/api" };
+    const originalFetch = window.fetch;
+    const fetchSpy = jest.fn().mockRejectedValue(new Error("network error"));
+    window.fetch = fetchSpy;
+    const form = document.querySelector("form");
+    const success = document.querySelector(".form-success");
+    document.getElementById("test-name").value = "Test User";
+    document.getElementById("test-phone").value = "(315) 555-0100";
+
+    window.SystemUI.initializeFormValidation();
+    form.dispatchEvent(new Event("submit", { bubbles: true }));
+
+    await Promise.resolve();
+    await Promise.resolve();
+    await new Promise(function (resolve) {
+      setTimeout(resolve, 0);
+    });
+
+    expect(fetchSpy).toHaveBeenCalledTimes(1);
+    expect(success.textContent).toBe(
+      "We could not send your request online right now. Please call (315) 472-3557 for immediate help."
+    );
+
+    window.fetch = originalFetch;
+  });
 });
 
 // Accordion tests

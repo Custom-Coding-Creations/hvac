@@ -1280,6 +1280,86 @@ function initializeUrgentCtaPrioritization() {
 }
 
 function initializeFormValidation() {
+  const getLeadDestinationFromConfig = function (config) {
+    if (config && config.endpoint) {
+      return "endpoint";
+    }
+
+    if (config && config.webhookUrl) {
+      return "webhook";
+    }
+
+    return "fallback";
+  };
+
+  const buildLeadPayloadFromForm = function (form, templateContext, config) {
+    const formData = new FormData(form);
+    const fields = {};
+
+    formData.forEach(function (value, key) {
+      fields[key] = String(value || "");
+    });
+
+    const issueText = String(fields.issue || fields.notes || "").trim();
+    const promptLabel = String(form.dataset.aiSelectedPrompt || issueText || "Website form request");
+    const urgencySignals = /gas|odor|smell|leak|flood|burst|no heat|no cooling|emergency|urgent|asap|immediately|right now/i;
+    const urgency = urgencySignals.test(issueText) ? "urgent" : "standard";
+    const summary = issueText
+      ? "Customer submitted website form: " + issueText
+      : "Customer submitted website request form.";
+
+    return {
+      template: templateContext,
+      promptLabel: promptLabel,
+      summary: summary,
+      urgency: urgency,
+      handoff: urgency === "urgent" ? "call" : "form",
+      destination: getLeadDestinationFromConfig(config),
+      capturedAt: new Date().toISOString(),
+      fields: fields,
+    };
+  };
+
+  const submitLeadPayload = function (payload, config) {
+    if (!payload || typeof window.fetch !== "function") {
+      return Promise.resolve({ ok: false, status: 0, reason: "unavailable" });
+    }
+
+    const baseUrl = (config && (config.endpoint || config.webhookUrl)) || "";
+    if (!baseUrl) {
+      return Promise.resolve({ ok: false, status: 0, reason: "unavailable" });
+    }
+
+    const destination = config.endpoint
+      ? String(config.endpoint).replace(/\/$/, "") + "/lead"
+      : String(baseUrl);
+
+    const controller = new window.AbortController();
+    const timer = window.setTimeout(function () {
+      controller.abort();
+    }, 7000);
+
+    return window
+      .fetch(destination, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+        signal: controller.signal,
+      })
+      .then(function (response) {
+        window.clearTimeout(timer);
+        return {
+          ok: !!(response && response.ok),
+          status: response ? response.status : 0,
+          reason: response && response.ok ? "ok" : "http",
+        };
+      })
+      .catch(function () {
+        window.clearTimeout(timer);
+        return { ok: false, status: 0, reason: "network" };
+      });
+  };
+
   document.querySelectorAll("form[data-validate='true']").forEach(function (form) {
     if (form.dataset.validationBound) {
       return;
@@ -1370,30 +1450,50 @@ function initializeFormValidation() {
       }
 
       form.setAttribute("aria-busy", "true");
+      if (success) {
+        success.textContent = "Sending your request...";
+      }
 
-      window.setTimeout(function () {
-        if (success) {
-          success.textContent = "Request sent. Our team will contact you shortly.";
-        }
-        form.reset();
-        form.removeAttribute("aria-busy");
-        if (submit) {
-          submit.disabled = false;
-        }
-      }, 250);
-      });
+      const templateContext = getTemplateContext();
+      const assistantConfig = (window && window.HVAC_AI) || {};
+      const leadPayload = buildLeadPayloadFromForm(form, templateContext, assistantConfig);
+
+      submitLeadPayload(leadPayload, assistantConfig)
+        .then(function (result) {
+          if (result && result.ok) {
+            if (success) {
+              success.textContent = "Request sent. Our team will contact you shortly.";
+            }
+            form.reset();
+            delete form.dataset.aiSelectedPrompt;
+            delete form.dataset.aiLeadPayload;
+            return;
+          }
+
+          if (success) {
+            success.textContent =
+              "We could not send your request online right now. Please call (315) 472-3557 for immediate help.";
+          }
+        })
+        .finally(function () {
+          form.removeAttribute("aria-busy");
+          if (submit) {
+            submit.disabled = false;
+          }
+        });
+    });
 
     form.querySelectorAll("[required]").forEach(function (field) {
-        field.addEventListener("input", function () {
+      field.addEventListener("input", function () {
         field.removeAttribute("aria-invalid");
         const message = document.getElementById(field.id + "-error");
         if (message) {
           message.textContent = "";
         }
-        });
+      });
     });
 
-      form.dataset.validationBound = "true";
+    form.dataset.validationBound = "true";
   });
 }
 
