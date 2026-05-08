@@ -374,6 +374,18 @@ function initializeAiAssistant() {
     return String(config.endpoint).replace(/\/$/, "") + pathSuffix;
   };
 
+  const createSessionId = function () {
+    if (typeof window === "undefined") {
+      return String(Date.now()) + "-" + Math.random().toString(36).slice(2, 10);
+    }
+
+    if (window.crypto && typeof window.crypto.randomUUID === "function") {
+      return window.crypto.randomUUID();
+    }
+
+    return String(Date.now()) + "-" + Math.random().toString(36).slice(2, 10);
+  };
+
   /**
    * Fire-and-forget POST to the configured AI endpoint or webhook URL.
    * Uses a 5-second AbortController timeout.  Any network error is silently
@@ -437,7 +449,9 @@ function initializeAiAssistant() {
         body: JSON.stringify({
           message: message,
           template: templateContext,
-          context: context || {},
+          context: (context && context.context) || {},
+          sessionId: (context && context.sessionId) || "",
+          history: (context && context.history) || [],
         }),
         signal: controller.signal,
       })
@@ -452,6 +466,31 @@ function initializeAiAssistant() {
       .catch(function () {
         window.clearTimeout(timer);
         return null;
+      });
+  };
+
+  const sendAiHandoff = function (payload, config) {
+    if (!config || !config.endpoint || !payload || typeof window.fetch !== "function") {
+      return;
+    }
+
+    var controller = new window.AbortController();
+    var timer = window.setTimeout(function () {
+      controller.abort();
+    }, 5000);
+
+    window
+      .fetch(getEndpointUrl(config, "/handoff"), {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+        signal: controller.signal,
+      })
+      .then(function () {
+        window.clearTimeout(timer);
+      })
+      .catch(function () {
+        window.clearTimeout(timer);
       });
   };
 
@@ -622,6 +661,9 @@ function initializeAiAssistant() {
       null,
       "Ask questions, describe symptoms, and the assistant will guide next steps and prep the request form."
     );
+    const emergencyAlert = createElement("p", "ai-chat-alert", "");
+    emergencyAlert.hidden = true;
+    emergencyAlert.setAttribute("aria-live", "assertive");
     const transcript = createElement("div", "ai-chat-transcript", null);
     transcript.setAttribute("role", "log");
     transcript.setAttribute("aria-live", "polite");
@@ -639,6 +681,10 @@ function initializeAiAssistant() {
     const sendButton = createElement("button", "btn btn-primary ai-chat-send", "Send");
     sendButton.type = "submit";
 
+    const chatSessionId = createSessionId();
+    const conversationHistory = [];
+    let chatLeadSent = false;
+
     const appendMessage = function (role, text) {
       const message = createElement(
         "p",
@@ -647,6 +693,17 @@ function initializeAiAssistant() {
       );
       transcript.appendChild(message);
       transcript.scrollTop = transcript.scrollHeight;
+
+      if (role === "user" || role === "assistant") {
+        conversationHistory.push({
+          role: role,
+          content: String(text || "").slice(0, 500),
+        });
+
+        if (conversationHistory.length > 16) {
+          conversationHistory.splice(0, conversationHistory.length - 16);
+        }
+      }
     };
 
     const handleSuggestedPrompt = function (label) {
@@ -668,6 +725,109 @@ function initializeAiAssistant() {
       form.dataset.aiSelectedPrompt = matchedPrompt.label;
     };
 
+    const setEmergencyAlert = function (isEmergency, text) {
+      if (!isEmergency) {
+        emergencyAlert.hidden = true;
+        emergencyAlert.textContent = "";
+        return;
+      }
+
+      emergencyAlert.hidden = false;
+      emergencyAlert.textContent =
+        text || "Emergency guidance active: calling dispatch at (315) 472-3557 is recommended.";
+    };
+
+    const applyActionHints = function (result) {
+      if (!result || !result.actions) {
+        setEmergencyAlert(false);
+        return;
+      }
+
+      const form = document.querySelector("form[data-validate='true']");
+      if (form && result.actions.prefillPromptLabel) {
+        handleSuggestedPrompt(result.actions.prefillPromptLabel);
+      }
+
+      if (form && result.actions.prefillFields && typeof result.actions.prefillFields === "object") {
+        Object.keys(result.actions.prefillFields).forEach(function (fieldName) {
+          maybePopulateField(form, [fieldName], result.actions.prefillFields[fieldName]);
+        });
+      }
+
+      const isEmergency = !!(result.safety && result.safety.isEmergency === true);
+      setEmergencyAlert(isEmergency, isEmergency ? result.reply : "");
+
+      if (result.actions.shouldCreateLead === true && !chatLeadSent) {
+        const promptLabel =
+          String(result.actions.prefillPromptLabel || result.suggestedPrompt || "Chat intake").trim() ||
+          "Chat intake";
+
+        const matchedPrompt = promptSet.find(function (prompt) {
+          return String(prompt.label || "").toLowerCase() === promptLabel.toLowerCase();
+        });
+
+        if (form) {
+          const promptForLead =
+            matchedPrompt || {
+              label: promptLabel,
+              summary: String((result.reply || "").slice(0, 220)),
+              urgency:
+                result.extracted && String(result.extracted.urgency || "").toLowerCase() === "urgent"
+                  ? "urgent"
+                  : "standard",
+              handoff: result.actions.shouldHandoff ? "call" : "form",
+            };
+
+          form.dataset.aiSelectedPrompt = promptForLead.label;
+          sendAiLead(buildLeadPayload(form, promptForLead), assistantConfig);
+        } else {
+          sendAiLead(
+            {
+              template: templateContext,
+              promptLabel: promptLabel,
+              summary: String((result.reply || "").slice(0, 220)),
+              urgency:
+                result.extracted && String(result.extracted.urgency || "").toLowerCase() === "urgent"
+                  ? "urgent"
+                  : "standard",
+              handoff: result.actions.shouldHandoff ? "call" : "form",
+              destination: getLeadDestination(),
+              capturedAt: new Date().toISOString(),
+              fields: (result.actions && result.actions.prefillFields) || {},
+            },
+            assistantConfig
+          );
+        }
+
+        chatLeadSent = true;
+        dispatchTrackingEvent("create_ai_lead_" + templateContext, {
+          promptLabel: promptLabel,
+          destination: getLeadDestination(),
+          source: "chat-action",
+        });
+      }
+
+      if (result.actions.shouldHandoff === true && assistantConfig.endpoint) {
+        sendAiHandoff(
+          {
+            template: templateContext,
+            reason: result.actions.handoffReason || "chat-escalation",
+            urgency: result.safety && result.safety.isEmergency ? "urgent" : "standard",
+            recommendedAction: result.actions.recommendedAction || "call",
+            summary: String(result.reply || "").slice(0, 500),
+            transcript: conversationHistory.slice(-12),
+            fields: (result.actions && result.actions.prefillFields) || {},
+          },
+          assistantConfig
+        );
+
+        dispatchTrackingEvent("handoff_ai_chat_" + templateContext, {
+          reason: result.actions.handoffReason || "chat-escalation",
+          destination: getLeadDestination(),
+        });
+      }
+    };
+
     const submitMessage = function (rawText) {
       const text = String(rawText || "").trim();
       if (!text) {
@@ -682,7 +842,13 @@ function initializeAiAssistant() {
         destination: getLeadDestination(),
       });
 
-      sendAiChat(text, assistantConfig, { hasForm: !!document.querySelector("form[data-validate='true']") })
+      sendAiChat(text, assistantConfig, {
+        sessionId: chatSessionId,
+        history: conversationHistory.slice(-8),
+        context: {
+          hasForm: !!document.querySelector("form[data-validate='true']"),
+        },
+      })
         .then(function (result) {
           const fallback = getLocalChatReply(text);
           const reply = result && result.reply ? result.reply : fallback.reply;
@@ -690,6 +856,14 @@ function initializeAiAssistant() {
 
           appendMessage("assistant", reply);
           handleSuggestedPrompt(suggestedPrompt);
+          applyActionHints(result);
+
+          if (result && result.safety && result.safety.isEmergency === true) {
+            appendMessage(
+              "assistant",
+              "Emergency path is active. Calling dispatch now at (315) 472-3557 is recommended."
+            );
+          }
         })
         .finally(function () {
           sendButton.disabled = false;
@@ -718,6 +892,7 @@ function initializeAiAssistant() {
 
     panel.appendChild(panelHeader);
     panel.appendChild(panelCopy);
+    panel.appendChild(emergencyAlert);
     panel.appendChild(transcript);
     panel.appendChild(quickList);
     panel.appendChild(composer);

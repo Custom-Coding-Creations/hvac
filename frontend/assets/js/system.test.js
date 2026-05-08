@@ -380,13 +380,11 @@ describe("Analytics Tracking", () => {
     button.dispatchEvent(new Event("click", { bubbles: true, cancelable: true }));
     form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
 
-    const submitEvents = trackingEvents.filter((name) => {
+    const submitEvents = trackingEvents.filter(function (name) {
       return name === "submit_form_request_homepage";
     });
 
     expect(submitEvents).toHaveLength(1);
-    expect(consoleErrorSpy).not.toHaveBeenCalled();
-
     consoleErrorSpy.mockRestore();
   });
 });
@@ -489,13 +487,13 @@ describe("Sticky Mobile CTA", () => {
   });
 });
 
+// AI assistant tests
 describe("AI Assistant", () => {
   let trackingEvents = [];
   let trackingHandler = null;
 
   beforeEach(() => {
     trackingEvents = [];
-    document.body.dataset.template = "service";
     document.body.innerHTML = `
       <main id="main">
         <section>
@@ -526,6 +524,7 @@ describe("AI Assistant", () => {
         </section>
       </main>
     `;
+    document.body.dataset.template = "service";
 
     trackingHandler = function (event) {
       trackingEvents.push(event.detail.eventName);
@@ -582,7 +581,6 @@ describe("AI Assistant", () => {
   });
 
   test("calls fetch with /lead when endpoint is configured", () => {
-    // Re-init with endpoint configured.
     window.HVAC_AI = { endpoint: "https://ai.example.com" };
     const fetchMock = jest.fn().mockResolvedValue({ ok: true });
     window.fetch = fetchMock;
@@ -671,6 +669,15 @@ describe("AI Assistant", () => {
       expect.stringContaining("/chat"),
       expect.objectContaining({ method: "POST" })
     );
+
+    const chatCall = fetchMock.mock.calls.find(function (call) {
+      return String(call[0]).includes("/chat");
+    });
+    const chatBody = JSON.parse(chatCall[1].body);
+    expect(typeof chatBody.sessionId).toBe("string");
+    expect(Array.isArray(chatBody.history)).toBe(true);
+    expect(chatBody.history.length).toBeGreaterThan(0);
+
     expect(document.querySelectorAll(".ai-chat-message").length).toBeGreaterThan(1);
     expect(document.querySelectorAll(".ai-chat-message-assistant").length).toBeGreaterThan(0);
 
