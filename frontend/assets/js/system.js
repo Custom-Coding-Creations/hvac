@@ -614,12 +614,8 @@ function initializeAiAssistant() {
 
     const panelHeader = createElement("div", "ai-launcher-panel-header", null);
     const panelTitle = createElement("h2", null, "HVAC AI Assistant");
-    const minimizeButton = createElement("button", "ai-launcher-minimize", "Minimize");
-    minimizeButton.type = "button";
-    minimizeButton.setAttribute("aria-label", "Minimize AI chat");
 
     panelHeader.appendChild(panelTitle);
-    panelHeader.appendChild(minimizeButton);
 
     const panelCopy = createElement(
       "p",
@@ -726,19 +722,22 @@ function initializeAiAssistant() {
     panel.appendChild(quickList);
     panel.appendChild(composer);
 
-    const updateLauncherLabel = function () {
-      launcher.textContent = "AI Chat";
-      launcher.setAttribute("aria-label", "Open AI chat");
-      minimizeButton.setAttribute("aria-label", "Minimize AI chat");
+    const updateLauncherLabel = function (isOpen) {
+      if (isOpen) {
+        launcher.textContent = "Close";
+        launcher.setAttribute("aria-label", "Close AI chat");
+      } else {
+        launcher.textContent = "AI Chat";
+        launcher.setAttribute("aria-label", "Open AI chat");
+      }
     };
 
     const setPanelState = function (open, source) {
       const shouldOpen = !!open;
       panel.hidden = !shouldOpen;
-      launcher.hidden = shouldOpen;
       launcher.setAttribute("aria-expanded", String(shouldOpen));
       panel.dataset.state = shouldOpen ? "open" : "closed";
-      updateLauncherLabel();
+      updateLauncherLabel(shouldOpen);
 
       if (shouldOpen && !transcript.dataset.greetingSent) {
         appendMessage(
@@ -767,10 +766,6 @@ function initializeAiAssistant() {
 
     launcher.addEventListener("click", function () {
       setPanelState(panel.hidden, "launcher");
-    });
-
-    minimizeButton.addEventListener("click", function () {
-      setPanelState(false, "panel-minimize");
     });
 
     panel.addEventListener("keydown", function (event) {
