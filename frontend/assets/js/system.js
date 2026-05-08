@@ -494,29 +494,114 @@ function initializeAiAssistant() {
       });
   };
 
-  const getLocalChatReply = function (message) {
+  const getLocalChatReply = function (message, history) {
     var lower = String(message || "").toLowerCase();
+    var historyLower = (history || []).map(function(h) { return String(h.content || "").toLowerCase(); }).join(" ");
 
-    if (/gas|leak|flood|no heat|no cooling|emergency|urgent/.test(lower)) {
+    // Safety-critical issues - immediate escalation
+    if (/gas\s+(?:smell|leak|odor)|smell\s+gas|rotten\s+egg|sulfur\s+smell/.test(lower)) {
       return {
-        reply:
-          "This sounds urgent. I recommend calling dispatch now at (315) 472-3557. I can also prefill the form with an emergency issue if you'd like.",
-        suggestedPrompt: "No heat",
+        reply: "This is a serious safety issue. Evacuate the building immediately and call your gas utility from outside. After they clear the system, contact Potter-Perrone dispatch at (315) 472-3557 for HVAC inspection.",
+        suggestedPrompt: "Emergency dispatch"
       };
     }
 
-    if (/financ|estimate|price|quote|replace/.test(lower)) {
+    if (/active\s+leak|water\s+(?:flood|pouring)|burst\s+pipe|flooding/.test(lower)) {
       return {
-        reply:
-          "I can guide a replacement estimate and financing path. Share your ZIP and system type, and I will prep the request details for a specialist follow-up.",
-        suggestedPrompt: "Replacement estimate",
+        reply: "This requires immediate action. If safe, locate and shut off your water main to minimize damage. Then call Potter-Perrone dispatch at (315) 472-3557 for emergency plumbing support.",
+        suggestedPrompt: "Emergency dispatch"
       };
     }
 
+    // Heating emergencies
+    if (/no\s+heat|not\s+(?:heating|working)|furnace\s+(?:down|broke|stopped)|won't\s+turn\s+on|furnace\s+won't|heating\s+system\s+down|won't\s+start/.test(lower)) {
+      return {
+        reply: "No heat in cold weather is urgent. First, verify your thermostat is set to HEAT and above room temperature. Check if the furnace breaker is ON and look for a reset button on the unit. If these don't fix it, call Potter-Perrone dispatch at (315) 472-3557 - we handle same-day emergency heating.",
+        suggestedPrompt: "Emergency heating"
+      };
+    }
+
+    // Cooling issues (warm/not cooling)
+    if (/(?:ac|air\s+(?:cond|cool)|cooling)\s+(?:warm|not\s+(?:cooling|working)|broken|down|stopped|blowing\s+warm)|short.cycling|weak\s+(?:ac|cooling)/.test(lower)) {
+      return {
+        reply: "Set your thermostat to COOL mode and below room temperature. Make sure the outdoor AC unit can run freely. Check your air filter for clogs. If the AC still won't cool, call Potter-Perrone at (315) 472-3557 - we offer same-day AC diagnostics.",
+        suggestedPrompt: "Emergency cooling"
+      };
+    }
+
+    // Plumbing issues
+    if (/drain\s+(?:backup|clogged|slow)|water\s+(?:drain|backup)|clogged|backed\s+up|slow\s+drain/.test(lower)) {
+      return {
+        reply: "Try plunging the affected drain firmly 10-15 times. If it doesn't clear, a plumbing snake might help. Multiple slow drains can indicate a main line issue. When you're ready, call Potter-Perrone at (315) 472-3557 for professional drain cleaning.",
+        suggestedPrompt: "Drain service"
+      };
+    }
+
+    if (/water\s+(?:drip|leak|dropping)|leak|leaking|dripping|puddle|wet\s+floor|under\s+sink/.test(lower)) {
+      return {
+        reply: "Locate where the water is coming from and place buckets to catch drips. For under-sink leaks, check if you can tighten the connection fitting. For ceiling leaks or unknown sources, call Potter-Perrone dispatch at (315) 472-3557 - water damage gets worse the longer it waits.",
+        suggestedPrompt: "Emergency plumbing"
+      };
+    }
+
+    // General HVAC maintenance and diagnostics
+    if (/(?:noise|sound|smell|odor|vibrat)/.test(lower) && /(?:furnace|ac|hvac|unit|system)/.test(lower)) {
+      return {
+        reply: "Unusual sounds, smells, or vibrations from your HVAC system should be checked soon. This could indicate wear, debris, or a refrigerant issue. Call Potter-Perrone at (315) 472-3557 to schedule a diagnostic visit.",
+        suggestedPrompt: "System diagnostic"
+      };
+    }
+
+    if (/thermostat|temperature/.test(lower)) {
+      return {
+        reply: "If your thermostat isn't responding, try replacing the batteries first (if wireless). Check that the breaker is ON. If it still doesn't work or reads wrong, the thermostat may need replacement. We can help with that - call (315) 472-3557.",
+        suggestedPrompt: "Thermostat service"
+      };
+    }
+
+    if (/maintenance|tune.?up|inspection|check.?up/.test(lower)) {
+      return {
+        reply: "Regular maintenance before heating or cooling season keeps systems running efficiently and extends their life. We offer seasonal inspections with filter replacement, performance checks, and optimization. Call (315) 472-3557 to book.",
+        suggestedPrompt: "Maintenance visit"
+      };
+    }
+
+    // Pricing and estimates
+    if (/estimate|quote|price|cost|how\s+much|financing|payment/.test(lower)) {
+      return {
+        reply: "We provide free estimates for repairs and replacements. Pricing depends on your system type and the work needed. We also offer financing options with 0% available for qualifying work. Submit the form with your details and we'll follow up with a customized estimate.",
+        suggestedPrompt: "Get estimate"
+      };
+    }
+
+    // Service area / coverage
+    if (/service\s+area|coverage|zip|location|address|where/.test(lower)) {
+      return {
+        reply: "We serve Syracuse and the surrounding Central New York region. To verify your specific location, share your ZIP code and we'll check coverage. Call (315) 472-3557 if you're in a remote area - we may still be able to help.",
+        suggestedPrompt: "Check service area"
+      };
+    }
+
+    // Hours and availability
+    if (/hour|open|close|when|available|schedule|appointment/.test(lower)) {
+      return {
+        reply: "We're open Mon-Fri 7am-5pm for standard service. Emergency dispatch is available 24/7 for urgent heating, cooling, and plumbing issues. Call (315) 472-3557 or submit a request form for quick scheduling.",
+        suggestedPrompt: "Schedule service"
+      };
+    }
+
+    // Company info
+    if (/who|about|company|history|experience|licensed/.test(lower)) {
+      return {
+        reply: "Potter-Perrone has served Syracuse since 1944 - over 80 years of trusted HVAC and plumbing expertise. We're fully licensed, EPA-certified, and BBB accredited. All our technicians are trained professionals backed by our satisfaction guarantee.",
+        suggestedPrompt: "Our services"
+      };
+    }
+
+    // Default fallback
     return {
-      reply:
-        "I can help triage your issue, check service-area fit by ZIP, and prep your request form. Tell me what's happening with your heating, cooling, or plumbing.",
-      suggestedPrompt: "Routine maintenance",
+      reply: "I can help with heating, cooling, plumbing issues, diagnostics, maintenance, estimates, and emergency dispatch. Tell me what's happening with your HVAC or plumbing system, and I'll guide your next best step.",
+      suggestedPrompt: "Describe your issue"
     };
   };
 
@@ -852,7 +937,7 @@ function initializeAiAssistant() {
       })
         .then(function (result) {
           const isDegraded = !(result && result.reply);
-          const fallback = getLocalChatReply(text);
+          const fallback = getLocalChatReply(text, conversationHistory);
           const reply = result && result.reply ? result.reply : fallback.reply;
           const suggestedPrompt = result && result.suggestedPrompt ? result.suggestedPrompt : fallback.suggestedPrompt;
 

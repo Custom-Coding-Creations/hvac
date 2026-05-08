@@ -57,7 +57,10 @@ const HVAC_PLUMBING_KB = {
     patterns: [
       'no heat', 'not heating', 'furnace down', 'heating broke',
       'cold house', 'thermostat not working', 'pilot light',
-      'won\'t turn on', 'boiler down'
+      'won\'t turn on', 'boiler down', 'heat won\'t turn on',
+      'furnace not working', 'furnace stopped', 'heating system down',
+      'weak heat', 'heat is weak', 'not enough heat', 'furnace issue',
+      'short-cycling heat', 'heating intermittent', 'blower not working'
     ],
     urgency: 'urgent',
     symptoms: 'No heat or heating system not responding',
@@ -82,7 +85,11 @@ const HVAC_PLUMBING_KB = {
     patterns: [
       'no cooling', 'ac not working', 'air conditioner broken', 'ac down',
       'not cooling', 'thermostat cooling not working', 'compressor off',
-      'no air conditioning', 'room too hot'
+      'no air conditioning', 'room too hot', 'ac won\'t cool',
+      'weak cooling', 'cooling not working', 'ac stopped',
+      'air conditioner not working', 'short-cycling cooling',
+      'ac is warm', 'air is warm', 'ac blowing warm',
+      'unit running but not cooling', 'ac issue', 'cooling system down'
     ],
     urgency: 'urgent',
     symptoms: 'Air conditioning system not cooling',
