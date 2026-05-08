@@ -1,0 +1,47 @@
+Retrieving project…
+Fetching deployments in coding-krakken-projects
+> Deployments for coding-krakken-projects/hvac [380ms]
+
+  Age     Project                          Deployment                                                    Status             Environment     Duration     Username               
+  4m      coding-krakken-projects/hvac     https://hvac-fwf6hnzjs-coding-krakken-projects.vercel.app     ● Initializing     Production      ?            coding-connoisseur     
+  1h      coding-krakken-projects/hvac     https://hvac-qmad7yozb-coding-krakken-projects.vercel.app     ● Ready            Production      7s           coding-connoisseur     
+  2h      coding-krakken-projects/hvac     https://hvac-i3cn2xijk-coding-krakken-projects.vercel.app     ● Ready            Production      8s           coding-connoisseur     
+  2h      coding-krakken-projects/hvac     https://hvac-2fgbmkpna-coding-krakken-projects.vercel.app     ● Ready            Production      8s           coding-connoisseur     
+  2h      coding-krakken-projects/hvac     https://hvac-5onvmq77r-coding-krakken-projects.vercel.app     ● Ready            Production      7s           coding-connoisseur     
+  13h     coding-krakken-projects/hvac     https://hvac-lv2m41iy5-coding-krakken-projects.vercel.app     ● Ready            Production      8s           coding-connoisseur     
+  13h     coding-krakken-projects/hvac     https://hvac-82mtgrsyo-coding-krakken-projects.vercel.app     ● Ready            Production      7s           coding-connoisseur     
+  13h     coding-krakken-projects/hvac     https://hvac-8qztjpclm-coding-krakken-projects.vercel.app     ● Ready            Production      9s           coding-connoisseur     
+  13h     coding-krakken-projects/hvac     https://hvac-3x143babw-coding-krakken-projects.vercel.app     ● Ready            Production      8s           coding-connoisseur     
+  13h     coding-krakken-projects/hvac     https://hvac-rn7m6ey29-coding-krakken-projects.vercel.app     ● Ready            Production      12s          coding-connoisseur     
+  14h     coding-krakken-projects/hvac     https://hvac-4ri37zq57-coding-krakken-projects.vercel.app     ● Ready            Production      7s           coding-connoisseur     
+  14h     coding-krakken-projects/hvac     https://hvac-3zp7okwes-coding-krakken-projects.vercel.app     ● Ready            Production      7s           coding-connoisseur     
+  1d      coding-krakken-projects/hvac     https://hvac-34gq360jp-coding-krakken-projects.vercel.app     ● Ready            Production      7s           coding-connoisseur     
+  1d      coding-krakken-projects/hvac     https://hvac-5rxgl1j6v-coding-krakken-projects.vercel.app     ● Ready            Production      6s           coding-connoisseur     
+  1d      coding-krakken-projects/hvac     https://hvac-hwf7a3dzd-coding-krakken-projects.vercel.app     ● Ready            Production      7s           coding-connoisseur     
+  1d      coding-krakken-projects/hvac     https://hvac-eo6tdscw4-coding-krakken-projects.vercel.app     ● Ready            Production      7s           coding-connoisseur     
+  2d      coding-krakken-projects/hvac     https://hvac-aojxanccu-coding-krakken-projects.vercel.app     ● Ready            Production      6s           coding-connoisseur     
+  2d      coding-krakken-projects/hvac     https://hvac-5aam97xfq-coding-krakken-projects.vercel.app     ● Ready            Production      6s           coding-connoisseur     
+  2d      coding-krakken-projects/hvac     https://hvac-masai8gwi-coding-krakken-projects.vercel.app     ● Ready            Production      7s           coding-connoisseur     
+  2d      coding-krakken-projects/hvac     https://hvac-k90cuztft-coding-krakken-projects.vercel.app     ● Ready            Production      7s           coding-connoisseur     
+
+https://hvac-fwf6hnzjs-coding-krakken-projects.vercel.app
+https://hvac-qmad7yozb-coding-krakken-projects.vercel.app
+https://hvac-i3cn2xijk-coding-krakken-projects.vercel.app
+https://hvac-2fgbmkpna-coding-krakken-projects.vercel.app
+https://hvac-5onvmq77r-coding-krakken-projects.vercel.app
+https://hvac-lv2m41iy5-coding-krakken-projects.vercel.app
+https://hvac-82mtgrsyo-coding-krakken-projects.vercel.app
+https://hvac-8qztjpclm-coding-krakken-projects.vercel.app
+https://hvac-3x143babw-coding-krakken-projects.vercel.app
+https://hvac-rn7m6ey29-coding-krakken-projects.vercel.app
+https://hvac-4ri37zq57-coding-krakken-projects.vercel.app
+https://hvac-3zp7okwes-coding-krakken-projects.vercel.app
+https://hvac-34gq360jp-coding-krakken-projects.vercel.app
+https://hvac-5rxgl1j6v-coding-krakken-projects.vercel.app
+https://hvac-hwf7a3dzd-coding-krakken-projects.vercel.app
+https://hvac-eo6tdscw4-coding-krakken-projects.vercel.app
+https://hvac-aojxanccu-coding-krakken-projects.vercel.app
+https://hvac-5aam97xfq-coding-krakken-projects.vercel.app
+https://hvac-masai8gwi-coding-krakken-projects.vercel.app
+https://hvac-k90cuztft-coding-krakken-projects.vercel.app
+> To display the next page, run `vercel ls --next 1778121323525`
