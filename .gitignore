@@ -2,3 +2,4 @@
 frontend/dist
 .vercel
 ai/.env
+frontend/.env
