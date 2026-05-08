@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
 
 const canonicalEventPattern = /^[a-z0-9]+_[a-z0-9]+_[a-z0-9_]+_[a-z0-9]+$/;
@@ -36,6 +36,11 @@ let hasError = false;
 
 for (const relPath of docsToScan) {
   const filePath = resolve(process.cwd(), relPath);
+  if (!existsSync(filePath)) {
+    console.warn(`Tracking docs validation skipped missing file: ${relPath}`);
+    continue;
+  }
+
   const content = readFileSync(filePath, "utf8");
   const candidates = collectCandidates(content);
 

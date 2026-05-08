@@ -684,6 +684,7 @@ function initializeAiAssistant() {
     const chatSessionId = createSessionId();
     const conversationHistory = [];
     let chatLeadSent = false;
+    let degradedModeAnnounced = false;
 
     const appendMessage = function (role, text) {
       const message = createElement(
@@ -850,9 +851,25 @@ function initializeAiAssistant() {
         },
       })
         .then(function (result) {
+          const isDegraded = !(result && result.reply);
           const fallback = getLocalChatReply(text);
           const reply = result && result.reply ? result.reply : fallback.reply;
           const suggestedPrompt = result && result.suggestedPrompt ? result.suggestedPrompt : fallback.suggestedPrompt;
+
+          if (isDegraded && !degradedModeAnnounced) {
+            appendMessage(
+              "assistant",
+              "Live AI is temporarily unavailable. I can still provide local triage guidance and route you to dispatch."
+            );
+            degradedModeAnnounced = true;
+          }
+
+          if (isDegraded) {
+            dispatchTrackingEvent("degraded_ai_chat_" + templateContext, {
+              destination: getLeadDestination(),
+              reason: "chat-endpoint-unavailable",
+            });
+          }
 
           appendMessage("assistant", reply);
           handleSuggestedPrompt(suggestedPrompt);
@@ -951,6 +968,19 @@ function initializeAiAssistant() {
       event.preventDefault();
       setPanelState(false, "escape");
     });
+
+    panel.addEventListener(
+      "wheel",
+      function (event) {
+        if (panel.hidden) {
+          return;
+        }
+
+        transcript.scrollTop += event.deltaY;
+        event.preventDefault();
+      },
+      { passive: false }
+    );
 
     document.body.appendChild(panel);
     document.body.appendChild(launcher);
@@ -1280,6 +1310,25 @@ function initializeUrgentCtaPrioritization() {
 }
 
 function initializeFormValidation() {
+  const dispatchDeliveryTelemetry = function (eventName, templateContext, detail) {
+    if (typeof window.dispatchEvent !== "function") {
+      return;
+    }
+
+    window.dispatchEvent(
+      new CustomEvent("analytics:track", {
+        detail: Object.assign(
+          {
+            eventName: eventName,
+            sourceEventName: eventName,
+            templateContext: templateContext,
+          },
+          detail || {}
+        ),
+      })
+    );
+  };
+
   const getLeadDestinationFromConfig = function (config) {
     if (config && config.endpoint) {
       return "endpoint";
@@ -1461,6 +1510,11 @@ function initializeFormValidation() {
       submitLeadPayload(leadPayload, assistantConfig)
         .then(function (result) {
           if (result && result.ok) {
+            dispatchDeliveryTelemetry("success_ai_lead_delivery_" + templateContext, templateContext, {
+              destination: getLeadDestinationFromConfig(assistantConfig),
+              status: result.status,
+            });
+
             if (success) {
               success.textContent = "Request sent. Our team will contact you shortly.";
             }
@@ -1469,6 +1523,12 @@ function initializeFormValidation() {
             delete form.dataset.aiLeadPayload;
             return;
           }
+
+          dispatchDeliveryTelemetry("fail_ai_lead_delivery_" + templateContext, templateContext, {
+            destination: getLeadDestinationFromConfig(assistantConfig),
+            status: result && result.status ? result.status : 0,
+            reason: result && result.reason ? result.reason : "unknown",
+          });
 
           if (success) {
             success.textContent =
