@@ -278,6 +278,12 @@ npm test
 
 See **[Implementation Guide](frontend/IMPLEMENTATION-GUIDE.md)** for detailed setup instructions.
 
+### Vercel Deployment Guard
+- Set the Vercel project Root Directory to the repository root (`.`), not `ai/` or `frontend/`.
+- Keep the production config in [vercel.json](/home/obsidian/Projects/hvac/vercel.json), which serves the static site from `frontend/` via `outputDirectory` and exposes root API handlers from `api/`.
+- Do not reintroduce an `experimentalServices` entry for `ai` in the root Vercel config unless you intentionally want the deployment to run in services mode instead of serving the website at `/`.
+- If `/` starts returning 404 while build logs mention `server.js` as the root entrypoint, the project is likely pointed at the AI service again.
+
 ---
 
 ## 📞 Contact and Support

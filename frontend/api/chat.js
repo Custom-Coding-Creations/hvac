@@ -190,6 +190,22 @@ async function generateModelReply(message, template, serviceArea, knowledge, his
   });
 
   try {
+    const systemPrompt = 'You are an intelligent HVAC and plumbing customer service assistant for Potter-Perrone. ' +
+      'Your primary goal is to understand customer needs and provide helpful, practical guidance tailored to their specific situation. ' +
+      'You exercise independent judgment and reasoning to provide dynamic, personalized responses - NOT generic preset answers. ' +
+      'Follow these principles:\n' +
+      '1. SAFETY FIRST: If you detect gas odor, active leaks, severe temperature issues, or emergency keywords, prioritize immediate dispatch escalation to ' + phone + '\n' +
+      '2. LISTENING: Acknowledge the customer\'s specific situation before providing guidance\n' +
+      '3. DIAGNOSTIC HELP: Ask clarifying questions when needed to better understand the problem\n' +
+      '4. PRACTICAL STEPS: Suggest safe, actionable steps the customer can try immediately\n' +
+      '5. CONVERSION: Naturally guide toward scheduling service or connecting with a dispatcher\n' +
+      '6. HONESTY: Only use business facts from provided context. Do not fabricate pricing, warranties, or availability.\n' +
+      '\nBusiness context:\n' +
+      'Potter-Perrone dispatch: ' + phone + '\n' +
+      'Hours: Mon-Fri 7am-5pm, Emergency 24/7\n' +
+      'Service area: Syracuse and surrounding Central New York areas\n\n' +
+      'Business knowledge:\n' + knowledgeText;
+
     const response = await fetch(endpoint, {
       method: 'POST',
       headers: {
@@ -199,20 +215,12 @@ async function generateModelReply(message, template, serviceArea, knowledge, his
       signal: controller.signal,
       body: JSON.stringify({
         model,
-        temperature: 0.2,
+        temperature: 0.7,
         max_tokens: MAX_MODEL_TOKENS,
         messages: [
           {
             role: 'system',
-            content:
-              'You are an HVAC/plumbing triage assistant for Potter-Perrone. Follow strict safety-first behavior. ' +
-              'If gas odor, active leak, severe no-heat/no-cooling, or explicit emergency intent appears, prioritize immediate phone escalation. ' +
-              'Use only known business facts from provided context. Do not fabricate pricing, availability windows, or guarantees. ' +
-              'Keep answers concise, practical, and conversion-oriented.' +
-              '\nDispatch phone: ' +
-              phone +
-              '\nKnowledge context:\n' +
-              knowledgeText,
+            content: systemPrompt,
           },
         ]
           .concat(historyMessages)
@@ -222,15 +230,11 @@ async function generateModelReply(message, template, serviceArea, knowledge, his
             content:
               'Customer message: ' +
               String(message || '') +
-              '\nTemplate: ' +
-              template +
-              '\nService area check: ' +
-              JSON.stringify(serviceArea || {}) +
-              '\nPolicy decision: ' +
-              JSON.stringify(policyDecision || {}) +
-              '\nExtracted entities: ' +
-              JSON.stringify(extracted || {}) +
-              '\nRespond with concise actionable guidance and include emergency escalation when needed.',
+              '\n\nContext: Service template is ' + template + ', ' +
+              'detected issue category is ' + extracted.inferredIssue + 
+              ', urgency level is ' + extracted.urgency +
+              ', service area eligible: ' + (serviceArea && serviceArea.eligible) +
+              '\n\nProvide a helpful, natural response that directly addresses their situation. Be conversational and genuine.',
           },
         ]),
       }),
@@ -453,9 +457,17 @@ module.exports = async function handler(req, res) {
     confidence: extracted.confidence,
   });
 
-  const modelReply = extracted.isEmergency
-    ? null
-    : await generateModelReply(message, template, serviceArea, knowledge, history, policyDecision, extracted);
+  // Try AI model first for dynamic responses, fall back to preset only if model unavailable
+  let modelReply = null;
+  let responseMode = 'fallback';
+  
+  if (!extracted.isEmergency) {
+    modelReply = await generateModelReply(message, template, serviceArea, knowledge, history, policyDecision, extracted);
+    if (modelReply) {
+      responseMode = 'model';
+    }
+  }
+  
   const finalReply = modelReply || base.reply;
   const actionHints = buildActionHints(extracted, policyDecision, serviceArea);
 
@@ -464,7 +476,7 @@ module.exports = async function handler(req, res) {
     reply: finalReply,
     suggestedPrompt: base.suggestedPrompt,
     policyDecision: policyDecision,
-    mode: modelReply ? 'model' : 'fallback',
+    mode: responseMode,
     safety: {
       isEmergency: !!extracted.isEmergency,
       signals: extracted.safetySignals,
