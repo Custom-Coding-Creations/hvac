@@ -580,6 +580,9 @@ describe("AI Assistant", () => {
 
   beforeEach(() => {
     trackingEvents = [];
+    window.sessionStorage.removeItem("aiChatSeen");
+    window.sessionStorage.removeItem("aiChatState");
+    window.sessionStorage.removeItem("aiChatSize");
     document.body.innerHTML = `
       <main id="main">
         <section>
@@ -627,6 +630,9 @@ describe("AI Assistant", () => {
     }
 
     document.body.removeAttribute("data-template");
+    window.sessionStorage.removeItem("aiChatSeen");
+    window.sessionStorage.removeItem("aiChatState");
+    window.sessionStorage.removeItem("aiChatSize");
     delete window.HVAC_AI;
   });
 
@@ -768,6 +774,29 @@ describe("AI Assistant", () => {
     expect(document.querySelectorAll(".ai-chat-message-assistant").length).toBeGreaterThan(0);
 
     delete window.fetch;
+  });
+
+  test("toggles maximize mode and persists chat size preference", () => {
+    const panel = document.querySelector(".ai-launcher-panel");
+    const toggle = document.querySelector(".ai-launcher-panel-toggle");
+
+    expect(toggle).not.toBeNull();
+    expect(panel.dataset.size).toBe("default");
+    expect(toggle.getAttribute("aria-pressed")).toBe("false");
+
+    toggle.click();
+
+    expect(panel.dataset.size).toBe("maximized");
+    expect(toggle.getAttribute("aria-pressed")).toBe("true");
+    expect(toggle.textContent).toBe("Restore");
+    expect(window.sessionStorage.getItem("aiChatSize")).toBe("maximized");
+
+    toggle.click();
+
+    expect(panel.dataset.size).toBe("default");
+    expect(toggle.getAttribute("aria-pressed")).toBe("false");
+    expect(toggle.textContent).toBe("Maximize");
+    expect(window.sessionStorage.getItem("aiChatSize")).toBe("default");
   });
 });
 

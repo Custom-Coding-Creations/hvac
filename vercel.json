@@ -67,15 +67,15 @@
   "rewrites": [
     {
       "source": "/service/:slug",
-      "destination": "/templates/service-template"
+      "destination": "/templates/service-template.html"
     },
     {
       "source": "/location/:slug",
-      "destination": "/templates/location-template"
+      "destination": "/templates/location-template.html"
     },
     {
       "source": "/emergency",
-      "destination": "/templates/emergency-landing"
+      "destination": "/templates/emergency-landing.html"
     }
   ]
 }

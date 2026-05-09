@@ -735,11 +735,19 @@ function initializeAiAssistant() {
     const panel = createElement("aside", "ai-launcher-panel panel", null);
     panel.hidden = true;
     panel.setAttribute("aria-label", "AI chat assistant");
+    panel.dataset.size = "default";
 
     const panelHeader = createElement("div", "ai-launcher-panel-header", null);
-    const panelTitle = createElement("h2", null, "HVAC AI Assistant");
+    const panelTitle = createElement("h2", "ai-launcher-panel-title", "HVAC AI Assistant");
+    const panelHeaderActions = createElement("div", "ai-launcher-panel-actions", null);
+    const sizeToggleButton = createElement("button", "ai-launcher-panel-toggle", "Maximize");
+    sizeToggleButton.type = "button";
+    sizeToggleButton.setAttribute("aria-pressed", "false");
+    sizeToggleButton.setAttribute("aria-label", "Maximize chat window");
 
     panelHeader.appendChild(panelTitle);
+    panelHeaderActions.appendChild(sizeToggleButton);
+    panelHeader.appendChild(panelHeaderActions);
 
     const panelCopy = createElement(
       "p",
@@ -770,6 +778,7 @@ function initializeAiAssistant() {
     const conversationHistory = [];
     let chatLeadSent = false;
     let degradedModeAnnounced = false;
+    let panelSize = "default";
 
     const appendMessage = function (role, text) {
       const message = createElement(
@@ -1009,6 +1018,36 @@ function initializeAiAssistant() {
       }
     };
 
+    const updatePanelSizeLabel = function () {
+      const isMaximized = panelSize === "maximized";
+      panel.dataset.size = isMaximized ? "maximized" : "default";
+      sizeToggleButton.textContent = isMaximized ? "Restore" : "Maximize";
+      sizeToggleButton.setAttribute("aria-pressed", String(isMaximized));
+      sizeToggleButton.setAttribute(
+        "aria-label",
+        isMaximized ? "Restore default chat window size" : "Maximize chat window"
+      );
+    };
+
+    const setPanelSize = function (nextSize, source) {
+      panelSize = nextSize === "maximized" ? "maximized" : "default";
+      updatePanelSizeLabel();
+
+      try {
+        window.sessionStorage.setItem("aiChatSize", panelSize);
+      } catch (_) {
+        // Ignore storage failures in privacy-restricted contexts.
+      }
+
+      if (source && source !== "init") {
+        dispatchTrackingEvent("resize_ai_assistant_" + templateContext, {
+          destination: getLeadDestination(),
+          size: panelSize,
+          source: source,
+        });
+      }
+    };
+
     const setPanelState = function (open, source) {
       const shouldOpen = !!open;
       panel.hidden = !shouldOpen;
@@ -1045,6 +1084,10 @@ function initializeAiAssistant() {
       setPanelState(panel.hidden, "launcher");
     });
 
+    sizeToggleButton.addEventListener("click", function () {
+      setPanelSize(panelSize === "maximized" ? "default" : "maximized", "toggle");
+    });
+
     panel.addEventListener("keydown", function (event) {
       if (event.key !== "Escape") {
         return;
@@ -1069,6 +1112,14 @@ function initializeAiAssistant() {
 
     document.body.appendChild(panel);
     document.body.appendChild(launcher);
+
+    try {
+      panelSize = window.sessionStorage.getItem("aiChatSize") === "maximized" ? "maximized" : "default";
+    } catch (_) {
+      panelSize = "default";
+    }
+
+    setPanelSize(panelSize, "init");
 
     // Auto-open once on desktop so users immediately see the AI chat capability.
     if (typeof window !== "undefined" && window.innerWidth >= 1024) {
