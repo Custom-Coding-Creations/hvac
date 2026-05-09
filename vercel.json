@@ -77,5 +77,11 @@
       "source": "/emergency",
       "destination": "/templates/emergency-landing"
     }
-  ]
+  ],
+  "experimentalServices": {
+    "ai": {
+      "entrypoint": "ai",
+      "routePrefix": "/ai"
+    }
+  }
 }
