@@ -921,7 +921,7 @@ p {
   bottom: 11.25rem;
   width: min(24rem, calc(100vw - 2rem));
   max-width: calc(100vw - 2rem);
-  max-height: min(70vh, 44rem);
+  max-height: min(82dvh, 56rem);
   z-index: 44;
   display: grid;
   grid-template-rows: auto auto auto minmax(8rem, 1fr) auto auto;
@@ -1269,6 +1269,7 @@ form[aria-busy="true"] button[type="submit"] {
     left: var(--space-3);
     width: auto;
     bottom: 10.5rem;
+    max-height: min(74dvh, calc(100dvh - 11.5rem));
   }
 }
 
@@ -1351,13 +1352,13 @@ form[aria-busy="true"] button[type="submit"] {
     right: 1.35rem;
     bottom: 5.6rem;
     width: min(30rem, calc(100% - 2.5rem));
-    max-height: min(70vh, 44rem);
+    max-height: min(84dvh, 58rem);
     overflow: hidden;
     z-index: 69;
   }
 
   .ai-chat-transcript {
-    max-height: min(45vh, 21rem);
+    max-height: none;
   }
 }
 
